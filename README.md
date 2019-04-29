@@ -1,5 +1,5 @@
-# boxedgames
-boxedgames proposes a method for securely distributing your game-binaries at scale for only 5% of the network cost
+# Containerized game servers
+Containerized-game-servers proposes a method for securely distributing your game-binaries at scale for only 5% of the network cost
 
 In this project/blog, we utilize [Docker multi-stage](https://docs.docker.com/develop/develop-images/multistage-build/) builds for containerizing the game assets builds. We use CodeBuild toolset to manage the build and deploy the updates of game-engines like AWS Lumberyard as ready-to-play dedicated game servers. We provide a deployment example for AWS Lumberyard Multiplayer Sample that is deployed to an EKS cluster. We show that frequent changes in the game binaries require less than 1% of the data transfer required by full image replication to the nodes that run the game-server instances. This is a significant improvement in build and integration time. We also show that the image being deployed is always the latest image which allows centralized control into the code to be scheduled upon distribution. 
 

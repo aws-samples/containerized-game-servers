@@ -6,6 +6,10 @@ phases:
       docker: 18
   pre_build:
     commands:
+      - cd Game_Engine_Linux_Bin
+      - assemble.sh
+      - mv BinLinux64.Dedicated
+      - cd ../
       - gunzip BinLinux64.Dedicated.tar.gz
       - AWS_DEFAULT_REGION=us-west-2
       - IMAGE_TAG=latest

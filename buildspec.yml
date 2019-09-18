@@ -7,7 +7,7 @@ phases:
   pre_build:
     commands:
       - cd Game_Engine_Linux_Bin
-      - assemble.sh
+      - ./assemble.sh
       - mv BinLinux64.Dedicated
       - cd ../
       - gunzip BinLinux64.Dedicated.tar.gz

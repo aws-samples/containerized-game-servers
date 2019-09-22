@@ -4,7 +4,7 @@ RUN /assemble.sh
 
 #FROM ubuntu:18.04
 FROM ubuntu:latest
-#RUN apt-get update -y
+RUN apt-get update -y
 RUN apt-get install -y python python-pip 
 #RUN apt-get install -y net-tools vim
 #RUN apt-get install -y libc++-dev

@@ -20,6 +20,7 @@ sqs_cli=boto3.resource('sqs',region_name='us-west-2')
 
 # Get the queue
 queuename=os.environ['QUEUENAME']
+print 'queuename='+queuename
 queue = sqs_cli.get_queue_by_name(QueueName=queuename)
 
 # Get the server group
@@ -38,8 +39,7 @@ def publish_game_server_status(status,server_type):
     try:
        # Send the message to the queue 
        response = queue.send_message(
-           MessageBody=str(data),
-           MessageGroupId='gsGrp_'+region
+           MessageBody=str(data)
        )
 
        # The response is NOT a resource, but gives you a message ID and MD5

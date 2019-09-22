@@ -7,13 +7,16 @@ import subprocess
 import boto3
 import json
 import signal
+from datetime import datetime
 from ec2_metadata import ec2_metadata
 
 # global variables 
-region='us-west'
+region='us-west-2'
 public_hostname=''
 public_port=''
 private_ipv4=''
+
+now=datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
 # Get the service resource
 sqs_cli=boto3.resource('sqs',region_name='us-west-2')
@@ -34,7 +37,7 @@ def sigterm_handler(_signo, _stack_frame):
 def publish_game_server_status(status,server_type):
     print 'in publish_game_server_status with hostname='+public_hostname+' port='+str(public_port)+' region='+region+' status='+status+' type='+server_type
     data=[]
-    data.append({'public_hostname':public_hostname,'public_port':public_port,'region':region,'status':status,'type':server_type})
+    data.append({'public_hostname':public_hostname,'datetime':now,'public_port':public_port,'region':region,'status':status,'type':server_type})
     print str(data)
     try:
        # Send the message to the queue 

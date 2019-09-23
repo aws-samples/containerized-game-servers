@@ -18,7 +18,7 @@ You will connect your git repo to your CodeBuild, the CI system we use. Therefor
 This script will provision AWS objects like Docker image registry thru ECR to store the game-server images as well as other workloads we deploy on EKS. It will also create SQS queues for the game-server to report status e.g., `init` or `terminating`. Finally, we will create few DynamoDB tables to persist system events. 
 
 ## Creating the game-server CI pipeline
-Create a CodeBuild project that builds a docker image off of the game-server binaries and assets we forked in [step 1](Environment Preparation/1). 
+Create a CodeBuild project that builds a docker image off of the game-server binaries and assets we forked in [step 1](Environment Preparation/1). Before creating the project. Make sure you have the region in [buildspec.yml](buildspec.yml) correct. Should be `eu-north-1`
 For creating the CodeBuild project follow the steps in the CodeBuild console. 
 1. Create build project Under project config choose your favorite name. 
 2. For the source config use GitHub and point to your GitHub repo you forked. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
@@ -152,3 +152,45 @@ The autoscale inline policy will look like:
 141               value: us-east-1
 14
 ```
+
+
+   4.3 Deploy cluster autoscaler by executing:
+   ```bash
+   kubectl apply -f eks/specs/cluster_autoscaler.yml
+   ```
+   Review the logs by discovering the pods name
+   ```bash
+   kubectl logs `kubectl get po -n kube-system| grep cluster-autoscaler| awk '{print $1}'` -n kube-system
+   ```
+   
+5. Deploy to EKS the game-server image we created using the CI pipeline
+    5.1 Discover the SQS queue that a game-server publishes its status. 
+    ```bash
+    aws sqs list-queues| grep gameserver
+    ```
+    e.g., `gameserver-GSQueue-53KMDTED5ML4`
+    
+    Populate the `QUEUENAME` in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+    
+    5.2 Discover the image registry url of the game-server image created by the CI pipline. 
+    ```bash
+    aws ecr describe-repositories | jq '.repositories[].repositoryUri'| grep multiplayersample
+    ```
+    Populate the `image` value in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+    e.g.,
+    ```yaml
+    ...
+            - name: QUEUENAME
+          value: "gameserver-dynamodb-table-GSQueue-53KMDTED5ML4"
+        image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/multiplayersample-build
+        imagePullPolicy: Always
+    ...
+    ```
+    
+    5.3 Deploy the game-server to EKS
+    ```bash
+    kubectl create -f eks/specs/game-server.yaml
+    ```
+    
+   
+   

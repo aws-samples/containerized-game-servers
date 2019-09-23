@@ -13,4 +13,8 @@ You will connect your git repo to your CodeBuild, the CI system we use. Therefor
 2. Execute TBD the [create_aws_objects.sh](/workshop/env_prep/create_aws_objects.sh). 
 This script will provision AWS objects like Docker image registry thru ECR to store the game-server images as well as other workloads we deploy on EKS. It will also create SQS queues for the game-server to report status e.g., `init` or `terminating`. Finally, we will create few DynamoDB tables to persist system events. 
 
-3. 
+## Creating the game-server CI pipeline
+Create a CodeBuild project that builds a docker image off of the game-server binaries and assets we forked in [step 1](Environment Preparation/1). 
+For creating the CodeBuild project follow the steps in the CodeBuild console. 
+1. Create build project Under project config choose your favorite name. For the source config use GitHub and point to your GitHub repo you forked. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
+Under `Service Role` choose `New service role` use the name offered. Finally choose the `Use buildspec file`, and click on the create project button. 

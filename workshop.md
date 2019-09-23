@@ -58,6 +58,95 @@ eksctl create cluster -f eks/specs/cluster-w-gs-mixed-nodegroup.yaml
 ***while the cluster is being created, pls check the status of the game-server pipeline created in the previous section (Creating the game-server CI pipeline). Review the pipeline status. Both Source and Build steps should be green. If not, ask for help from one of the moderators.***
 
 3. Enable the game-servers to perform actions like publishing status to SQS(the queues created at the env prep section) or autoscaling i.e., spin-up or spin-down nodes when needed. 
-* Discover the IAM role attached to the node-group created with the cluster. 
 
+    3.1 Discover the IAM role attached to the node-group created with the cluster by searching roles in the IAM console with the following pattern:`eksctl-CLUSTER_NAME-NODEGROUP_NAME-NodeInstanceRole` capture the IAM role and add the following Inline policy.
+    
+    3.2 Create the following inline policies 
+    
+***SQS*** - DeleteMessage, GetQueueUrl, ReceiveMessage, and SendMessage to gameserver-GSQueue and spotint-SpotQueue created in the first section of the workshop. The queue names can be retrieved via `aws sqs list-queues`. The SQS inline policy will look like:
 
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "sqs:DeleteMessage",
+                "sqs:GetQueueUrl",
+                "sqs:ReceiveMessage",
+                "sqs:SendMessage"
+            ],
+            "Resource": [
+                "arn:aws:sqs:us-east-1:356566070122:gameserver-dynamodb-table-GSQueue-guid",
+                "arn:aws:sqs:us-east-1:356566070122:spotint-dynamodb-table-SpotQueue-guid"
+            ]
+        }
+    ]
+}
+```
+***CloudWatch*** - PutMetricData. The cloudwatch policy will look like:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "cloudwatch:PutMetricData",
+            "Resource": "*"
+        }
+    ]
+}
+
+```
+***EC2 Auto Scaling*** - DescribeAutoScalingGroups, DescribeAutoScalingInstances, SetDesiredCapacity, TerminateInstanceInAutoScalingGroup. Discover the ASG ARN by executing:
+```bash
+aws autoscaling describe-auto-scaling-groups|jq '.AutoScalingGroups[].AutoScalingGroupARN'
+```
+
+The autoscale inline policy will look like:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:SetDesiredCapacity",
+                "autoscaling:TerminateInstanceInAutoScalingGroup"
+            ],
+            "Resource": "arn:aws:autoscaling:us-east-1:num:autoScalingGroup:guid:autoScalingGroupName/eksctl-gs-us-east-1-nodegroup-mixed-instances-1-NodeGroup-guid"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeAutoScalingGroups"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+4. The last step is deploying cluster-autoscaler so new EC2 instances can be added or remove per the demand for game/chat servers dictated by autopilot. The spec for cluster-autoscaler is [cluster_autoscaler.yml](/workshop/eks/specs/cluster_autoscaler.yml).
+    4.1 Discover the autoscaling name to configure in 
+```bash
+aws autoscaling describe-auto-scaling-groups|jq '.AutoScalingGroups[].AutoScalingGroupName'
+```
+    4.2 Edit [cluster_autoscaler.yml](/workshop/eks/specs/cluster_autoscaler.yml) by adding the asg name to line #138 `--nodes=2:100:` and modify the `AWS_REGION` value. e.g.,
+
+```yaml
+137             - --skip-nodes-with-local-storage=false
+138             - --nodes=2:100:eksctl-gs-us-east-1-nodegroup-mixed-instances-1-NodeGroup-1OKJ9VHZ6C9ZI
+139           env:
+140             - name: AWS_REGION
+141               value: us-west-2
+14
+```

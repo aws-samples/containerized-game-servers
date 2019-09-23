@@ -11,7 +11,7 @@ from datetime import datetime
 from ec2_metadata import ec2_metadata
 
 region=os.environ['AWS_DEFAULT_REGION']
-print('Region is:{}'.format(region)
+print('Region is:{}'.format(region))
 
 # global variables 
 public_hostname=''

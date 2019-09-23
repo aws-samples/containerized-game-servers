@@ -33,10 +33,11 @@ For creating the CodeBuild project follow the steps in the CodeBuild console.
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "ecr:CompleteLayerUpload",
+                "ecr:InitiateLayerUpload",
                 "ecr:UploadLayerPart",
-                "ecr:InitiateLayerUpload"
-            ],
+                "ecr:CompleteLayerUpload",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:PutImage"            ],
             "Resource": "arn:aws:ecr:region:account:repository/multiplayersample-build"
         },
         {

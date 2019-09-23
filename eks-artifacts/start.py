@@ -10,16 +10,20 @@ import signal
 from datetime import datetime
 from ec2_metadata import ec2_metadata
 
+region=os.environ['AWS_DEFAULT_REGION']
+print('Region is:{}'.format(region)
+
 # global variables 
-region='us-west-2'
 public_hostname=''
 public_port=''
 private_ipv4=''
 
+
+
 now=datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
 # Get the service resource
-sqs_cli=boto3.resource('sqs',region_name='us-west-2')
+sqs_cli=boto3.resource('sqs',region_name=region)
 
 # Get the queue
 queuename=os.environ['QUEUENAME']

@@ -1,5 +1,5 @@
 # AWS Loft in Stockholm
-This page describes the steps to be executed in the workshop. We assume you have github repository under you control and an AWS account. If you haven't done so, pls install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and git tools using your favorite distribution.  
+This page describes the steps to be executed in the workshop. We assume you have a Github account under your control and an AWS account. If you haven't done so, pls install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and git tools using your favorite distribution.  
 
 ***Safety Tip -***
 *pls pay attention to the AWS region you are using in your scripts. The workshop designed to be executed in the Stockholm region but can be modifed to other supported AWS regions* 

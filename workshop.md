@@ -16,5 +16,7 @@ This script will provision AWS objects like Docker image registry thru ECR to st
 ## Creating the game-server CI pipeline
 Create a CodeBuild project that builds a docker image off of the game-server binaries and assets we forked in [step 1](Environment Preparation/1). 
 For creating the CodeBuild project follow the steps in the CodeBuild console. 
-1. Create build project Under project config choose your favorite name. For the source config use GitHub and point to your GitHub repo you forked. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
-Under `Service Role` choose `New service role` use the name offered. Finally choose the `Use buildspec file`, and click on the create project button. 
+1. Create build project Under project config choose your favorite name. 
+2. For the source config use GitHub and point to your GitHub repo you forked. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
+3. Under `Service Role` choose `New service role` use the name offered. Finally choose the `Use buildspec file`, and click on the create project button. 
+4. 

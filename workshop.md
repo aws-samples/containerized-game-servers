@@ -32,6 +32,17 @@ For creating the CodeBuild project follow the steps in the CodeBuild console.
         {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
+            "Action": [
+                "ecr:InitiateLayerUpload",
+                "ecr:UploadLayerPart",
+                "ecr:CompleteLayerUpload",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:PutImage"            ],
+            "Resource": "arn:aws:ecr:region:account:repository/multiplayersample-build"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
             "Action": "ecr:GetAuthorizationToken",
             "Resource": "*"
         }
@@ -137,12 +148,12 @@ The autoscale inline policy will look like:
 
 4. The last step is deploying cluster-autoscaler so new EC2 instances can be added or remove per the demand for game/chat servers dictated by autopilot. The spec for cluster-autoscaler is [cluster_autoscaler.yml](/workshop/eks/specs/cluster_autoscaler.yml).
 
-    4.1 Discover the autoscaling name to configure by executing 
+   4.1 Discover the autoscaling name to configure by executing 
     ```
     aws autoscaling describe-auto-scaling-groups|jq '.AutoScalingGroups[].AutoScalingGroupName'
     ```
     
-    4.2 Edit [cluster_autoscaler.yml](/workshop/eks/specs/cluster_autoscaler.yml) by adding the asg name to line #138 `--nodes=2:100:` and modify the `AWS_REGION` value. e.g.,
+   4.2 Edit [cluster_autoscaler.yml](/workshop/eks/specs/cluster_autoscaler.yml) by adding the asg name to line #138 `--nodes=2:100:` and modify the `AWS_REGION` value. e.g.,
 
 ```yaml
 137             - --skip-nodes-with-local-storage=false

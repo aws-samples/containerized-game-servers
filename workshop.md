@@ -1,5 +1,9 @@
 # AWS Loft in Stockholm
-This page describes the steps to be executed in the workshop. We assume you have a Github account under your control and an AWS account. If you haven't done so, pls install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and git tools using your favorite distribution.  
+This page describes the steps to be executed in the workshop. We assume you have a Github account under your control and an AWS account. If you haven't done so, pls install the following:
+1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html). 
+2. Install git tools using your favorite distribution.   
+3. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) A CLI tool that allows you to administrate k8s clusters.
+4. Install [eksctl tool](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html). A CLI tool that allows you to create EKS clusters.
 
 ***Safety Tip -***
 *pls pay attention to the AWS region you are using in your scripts. The workshop designed to be executed in the Stockholm region but can be modifed to other supported AWS regions* 
@@ -18,5 +22,42 @@ Create a CodeBuild project that builds a docker image off of the game-server bin
 For creating the CodeBuild project follow the steps in the CodeBuild console. 
 1. Create build project Under project config choose your favorite name. 
 2. For the source config use GitHub and point to your GitHub repo you forked. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
-3. Under `Service Role` choose `New service role` use the name offered. Finally choose the `Use buildspec file`, and click on the create project button. 
-4. 
+3. Under `Service Role` choose `New service role` use the name offered and capture it for the next step. Finally choose the `Use buildspec file`, and click on the create project button. 
+4. After the CodeBuild project has been created we need to grant the service permissions to authenticate ECR so it can push the game-server images. Therefore, go to IAM console and search the service role created with the project and add inline policy that allows `Elastic Container Registry` to execute `GetAuthorizationToken`. The JSON policy should look like:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "ecr:GetAuthorizationToken",
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+4. By now we have our game binaries and assets in GitHub and our build scripts in CodeBuild. The next step is to pipeline the build process so it will be triggered by updates made to the game binaries and assets. We do it be adding a CodePipeline project. 
+Start with Create pipeline, ***choose the service role we created*** and modified in the CodeBuild project. 
+The source stage will use the code commit details and use the defaults. The build provider should be CodeBuild pointing to the project we just created. Skip the deploy step as EKS will handle that for us. Review and create pipeline. At this point, the pipeline will perform the first build and push the game-server binaries to ECR. This step should take 10-15 minutes so please move to the next step.
+
+## The EKS cluster setup and sample workload deployment
+The recommended EKS cluster setup is listed in https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html 
+For that you need to install `eksctl`
+1. Install [eksctl tool](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) on your local machine.
+2. Configure the cluster spec and execute the create cluster command.
+***make sure the region configured is the region you run the workshop. `eu-north-1` in our example.***
+We also assume you have an ssh public key set in your machine. e.g., `~/.ssh/id_rsa.pub` in such case you can ssh to the EC2 instacne directly. Otherwise configure the value `publicKeyPath` in [cluster-w-gs-mixed-nodegroup.yaml](/workshop/eks/specs/cluster-w-gs-mixed-nodegroup.yaml)
+To create the cluster by executing:
+```bash
+eksctl create cluster -f eks/specs/cluster-w-gs-mixed-nodegroup.yaml
+```
+
+***while the cluster is being created, pls check the status of the game-server pipeline created in the previous section (Creating the game-server CI pipeline). Review the pipeline status. Both Source and Build steps should be green. If not, ask for help from one of the moderators.***
+
+3. Enable the game-servers to perform actions like publishing status to SQS(the queues created at the env prep section) or autoscaling i.e., spin-up or spin-down nodes when needed. 
+* Discover the IAM role attached to the node-group created with the cluster. 
+
+

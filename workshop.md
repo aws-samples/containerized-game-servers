@@ -174,20 +174,23 @@ The autoscale inline policy will look like:
    kubectl logs `kubectl get po -n kube-system| grep cluster-autoscaler| awk '{print $1}'` -n kube-system
    ```
 ## Sample workload and autopilot deployment
-   1. Deploy to EKS the game-server image we created using the CI pipeline
-   1.1 Discover the SQS queue that a game-server publishes its status. 
+   In this section we deploy to EKS the game-server image we created using the CI pipeline
+   1. Discover the SQS queue that a game-server publishes its status. 
     
     ```bash
     aws sqs list-queues| grep gameserver
     ```
+    
    e.g., `gameserver-GSQueue-53KMDTED5ML4`
     
    Populate the `QUEUENAME` in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
     
-   1.2 Discover the image registry url of the game-server image created by the CI pipline. 
-    ```bash
+   2. Discover the image registry url of the game-server image created by the CI pipline. 
+   
+   ```bash
     aws ecr describe-repositories | jq '.repositories[].repositoryUri'| grep multiplayersample
-    ```
+   ```
+   
    Populate the `image` value in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
     e.g.,
     ```yaml
@@ -207,7 +210,7 @@ The autoscale inline policy will look like:
     
    After few minutes the game-server image we built will be deployed and running in the EKS cluster. To view the game-server execute:
     
-    ```bash
+    ```
     kubectl get po
     ```
    Next optional step is to connect a game client and play the game. The game play is left to the reader to review [Lumberyard Sample Projects and Levels](https://docs.aws.amazon.com/lumberyard/latest/userguide/sample-projects-levels-intro.html) 
@@ -218,13 +221,12 @@ The autoscale inline policy will look like:
    Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
    To deploy autopilot execute:
    
-   ```bash
+   ```
    kubectl apply -f autopilot-client.yaml
    ```
-   
    After the pod is scheduled check its stdour/err by executing:
    
-   ```bash
+   ```
    kubectl logs `kubectl get po | grep autopilot| awk '{print $1}'`
    ```
    

@@ -1,4 +1,4 @@
-# AWS Loft in Stockholm
+# AWS Loft Gaming Day (Stockholm, Oct. 2019)
 This page describes the steps to be executed in the workshop. We assume you have a Github account under your control and an AWS account. If you haven't done so, pls install the following:
 1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html). 
 2. Install git tools using your favorite distribution.   
@@ -54,7 +54,7 @@ For creating the CodeBuild project follow the steps in the CodeBuild console.
 Start with Create pipeline, ***choose the service role we created*** and modified in the CodeBuild project. 
 The source stage will use the code commit details and use the defaults. The build provider should be CodeBuild pointing to the project we just created. Skip the deploy step as EKS will handle that for us. Review and create pipeline. At this point, the pipeline will perform the first build and push the game-server binaries to ECR. This step should take 10-15 minutes so please move to the next step.
 
-## The EKS cluster setup and sample workload deployment
+## The EKS cluster setup 
 The recommended EKS cluster setup is listed in https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html 
 For that you need to install `eksctl`
 1. Install [eksctl tool](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) on your local machine.
@@ -173,21 +173,25 @@ The autoscale inline policy will look like:
    ```bash
    kubectl logs `kubectl get po -n kube-system| grep cluster-autoscaler| awk '{print $1}'` -n kube-system
    ```
-   
-5. Deploy to EKS the game-server image we created using the CI pipeline
-    5.1 Discover the SQS queue that a game-server publishes its status. 
+## Sample workload and autopilot deployment
+   In this section we deploy to EKS the game-server image we created using the CI pipeline
+   1. Discover the SQS queue that a game-server publishes its status. 
+    
     ```bash
     aws sqs list-queues| grep gameserver
     ```
-    e.g., `gameserver-GSQueue-53KMDTED5ML4`
     
-    Populate the `QUEUENAME` in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+   e.g., `gameserver-GSQueue-53KMDTED5ML4`
     
-    5.2 Discover the image registry url of the game-server image created by the CI pipline. 
-    ```bash
+   Populate the `QUEUENAME` in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+    
+   2. Discover the image registry url of the game-server image created by the CI pipline. 
+   
+   ```bash
     aws ecr describe-repositories | jq '.repositories[].repositoryUri'| grep multiplayersample
-    ```
-    Populate the `image` value in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+   ```
+   
+   Populate the `image` value in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
     e.g.,
     ```yaml
     ...
@@ -198,16 +202,33 @@ The autoscale inline policy will look like:
     ...
     ```
     
-    5.3 Deploy the game-server to EKS
+   1.3 Deploy the game-server to EKS
+   
     ```bash
     kubectl create -f eks/specs/game-server.yaml
     ```
-    After few minutes the game-server image we built will be deployed and running in the EKS cluster. To view the game-server execute:
-    ```bash
+    
+   After few minutes the game-server image we built will be deployed and running in the EKS cluster. To view the game-server execute:
+    
+    ```
     kubectl get po
     ```
-    Next optional step is to connect a game client and play the game. The game play is left to the reader to review [Lumberyard Sample Projects and Levels](https://docs.aws.amazon.com/lumberyard/latest/userguide/sample-projects-levels-intro.html) 
+  Next optional step is to connect a game client and play the game. The game play is left to the reader to review [Lumberyard Sample Projects and Levels](https://docs.aws.amazon.com/lumberyard/latest/userguide/sample-projects-levels-intro.html) 
    
-   Our next step will deploy the game-server autopilot for prediction-based game-server auto-scale. 
+  Our next step will deploy the game-server autopilot for prediction-based game-server auto-scale. 
    
+  1.4 Deploy the autopilot client to EKS
+  Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
+   To deploy autopilot execute:
    
+   ```
+   kubectl apply -f autopilot-client.yaml
+   ```
+   
+   After the pod is scheduled check its stdour/err by executing:
+   
+   ```
+   kubectl logs `kubectl get po | grep autopilot| awk '{print $1}'`
+   ```
+   
+   After few minutes, we can start seeing metrics populated in cloudwatch.

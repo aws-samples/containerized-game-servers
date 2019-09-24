@@ -64,7 +64,7 @@ done
 
 echo $(date): ${http_status}
 
-MESSAGE="[{'status': 'spot termination','instance_az': ${INSTANCE_AZ},'instance_group':${INSTANCE_GROUP},'time':${TIME_ST}, 'instance_type': ${INSTANCE_TYPE}, 'public_hostname': ${NODE_NAME}, 'public_port': NA, 'region': ${AWS_DEFAULT_REGION}]"
+MESSAGE="instance_az:${INSTANCE_AZ},instance_group:${INSTANCE_GROUP},time:${TIME_ST},instance_type:${INSTANCE_TYPE},public_hostname:${NODE_NAME},region:${AWS_DEFAULT_REGION}"
 echo MESSAGE=$MESSAGE
 aws sqs send-message --queue-url ${QUEUE_URL} --message-body "${MESSAGE}" 
 

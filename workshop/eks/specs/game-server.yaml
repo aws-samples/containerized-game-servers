@@ -25,7 +25,7 @@ spec:
         - name: GROUP
           value: "multiplayersample-grp1"
         - name: QUEUENAME
-          value: "gameserver-dynamodb-table-GSQueue-53KMDTED5ML4"
+          value: "gameserver-q-GSQueue-12FMJRONVKXBQ"
         image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/multiplayersample-build
         imagePullPolicy: Always
         name: multiplayersample

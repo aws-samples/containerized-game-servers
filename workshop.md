@@ -202,6 +202,12 @@ The autoscale inline policy will look like:
     ```bash
     kubectl create -f eks/specs/game-server.yaml
     ```
-    
+    After few minutes the game-server image we built will be deployed and running in the EKS cluster. To view the game-server execute:
+    ```bash
+    kubectl get po
+    ```
+    Next optional step is to connect a game client and play the game. The game play is left to the reader to review [Lumberyard Sample Projects and Levels] (https://docs.aws.amazon.com/lumberyard/latest/userguide/sample-projects-levels-intro.html) 
+   
+   Our next step will deploy the game-server autopilot for prediction-based game-server auto-scale. 
    
    

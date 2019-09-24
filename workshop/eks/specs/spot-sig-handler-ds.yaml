@@ -70,9 +70,9 @@ spec:
         command: ["/start.sh"]
         env:
         - name: AWS_DEFAULT_REGION
-          value: "us-east-1"
+          value: "us-west-2"
         - name: QUEUE_URL
-          value: "https://queue.amazonaws.com/356566070122/spotint-dynamodb-table-SpotQueue-F1JVL5N6WYG4"
+          value: "https://sqs.us-west-2.amazonaws.com/356566070122/spotint-SpotQueue-1W0Z6VKBYFZXK"
         - name: POD_NAME
           valueFrom:
             fieldRef:

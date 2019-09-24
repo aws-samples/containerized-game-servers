@@ -65,14 +65,14 @@ spec:
       hostNetwork: true
       containers:
       - name: spot-interrupt-handler
-        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/spot-sig-handler:latest
+        image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/spot-sig-handler:latest
         imagePullPolicy: Always
         command: ["/start.sh"]
         env:
         - name: AWS_DEFAULT_REGION
           value: "us-east-1"
         - name: QUEUE_URL
-          value: "https://queue.amazonaws.com/356566070122/spotint-dynamodb-table-SpotQueue-F1JVL5N6WYG4"
+          value: "https://sqs.us-east-1.amazonaws.com/356566070122/spotint-dynamodb-table-SpotQueue-F1JVL5N6WYG4"
         - name: POD_NAME
           valueFrom:
             fieldRef:

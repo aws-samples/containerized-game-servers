@@ -1,4 +1,4 @@
-# AWS Loft in Stockholm
+# AWS Loft Gaming Day (Stockholm, Oct. 2019)
 This page describes the steps to be executed in the workshop. We assume you have a Github account under your control and an AWS account. If you haven't done so, pls install the following:
 1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html). 
 2. Install git tools using your favorite distribution.   

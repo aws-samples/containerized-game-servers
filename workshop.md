@@ -15,7 +15,7 @@ You will connect your git repo to your CodeBuild, the CI system we use. Therefor
 This script will provision AWS objects like Docker image registry thru ECR to store the game-server images as well as other workloads we deploy on EKS. It will also create SQS queues for the game-server to report status e.g., `init` or `terminating`. Finally, we will create few DynamoDB tables to persist system events. 
 
 ***Safety Tip -***
-*pls pay attention to the AWS region you are using in your scripts. The workshop designed to be executed in the Stockholm region but can be modifed to other supported AWS regions* 
+*pls pay attention to the AWS region you are using in your scripts. The workshop designed to be executed in the Frankfurt region but can be modifed to other supported AWS regions* 
 
 
 ## Creating the game-server CI pipeline

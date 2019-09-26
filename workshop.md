@@ -63,7 +63,7 @@ For that you need to install `eksctl`
 We also assume you have an ssh public key set in your machine. e.g., `~/.ssh/id_rsa.pub` in such case you can ssh to the EC2 instacne directly. Otherwise configure the value `publicKeyPath` in [cluster-w-gs-mixed-nodegroup.yaml](/workshop/eks/specs/cluster-w-gs-mixed-nodegroup.yaml)
 To create the cluster by executing:
 ```bash
-eksctl create cluster -f eks/specs/cluster-w-gs-mixed-nodegroup.yaml
+eksctl create cluster -f eks/specs/cluster.yaml
 ```
 
 ***while the cluster is being created, pls check the status of the game-server pipeline created in the previous section (Creating the game-server CI pipeline). Review the pipeline status. Both Source and Build steps should be green. If not, ask for help from one of the moderators.***

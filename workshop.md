@@ -178,9 +178,7 @@ The autoscale inline policy will look like:
    In this section we deploy to EKS the game-server image we created using the CI pipeline
    1. Discover the SQS queue that a game-server publishes its status. 
     
-    ```bash
     aws sqs list-queues| grep gameserver
-    ```
     
    e.g., `gameserver-GSQueue-53KMDTED5ML4`
     
@@ -188,9 +186,7 @@ The autoscale inline policy will look like:
     
    2. Discover the image registry url of the game-server image created by the CI pipline. 
    
-   ```bash
     aws ecr describe-repositories | jq '.repositories[].repositoryUri'| grep multiplayersample
-   ```
    
    Populate the `image` value in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
     e.g.,

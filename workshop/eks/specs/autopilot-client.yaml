@@ -78,9 +78,9 @@ spec:
         - name: DEMAND_URL
           value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine24h"
         - name: MODEL_URL
-          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/us-east-1"
+          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-west-1"
         - name: AWS_DEFAULT_REGION
-          value: "us-east-1"
+          value: "eu-west-1"
         - name: DEPLOY_NAME
           value: "multiplayersample"
         - name: CURRENT_SIZE_METRIC_NAME
@@ -94,7 +94,7 @@ spec:
         - name: NODE_GROUP
           value: "mixed-instances-1"
         - name: QUEUE_URL
-          value: "https://queue.amazonaws.com/356566070122/gameserver-dynamodb-table-GSQueue-53KMDTED5ML4"
+          value: "https://sqs.eu-west-1.amazonaws.com/356566070122/gameserver-q-GSQueue-15OXUDHW963DK"
         - name: POD_NAME
           valueFrom:
             fieldRef:

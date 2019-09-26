@@ -1,17 +1,6 @@
 # AWS Loft Gaming Day (Stockholm, Oct. 2019)
 This page describes the steps to be executed in the workshop. We assume you have a Github account under your control and an AWS account. 
 
-
-
-If you haven't done so, pls install the following:
-1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html). 
-2. Install git tools using your favorite distribution.   
-3. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) A CLI tool that allows you to administrate k8s clusters.
-4. Install [eksctl tool](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html). A CLI tool that allows you to create EKS clusters.
-
-***Safety Tip -***
-*pls pay attention to the AWS region you are using in your scripts. The workshop designed to be executed in the Stockholm region but can be modifed to other supported AWS regions* 
-
 ## Environment Preparation 
 In reality we are going to use two different git repos. The first is the repo that holds game-server binaries. This repo is decoupled from repositories that handles deployment and operations as it hooked to a CI system so we dont want every change in the game binaires to impact deployments of other artifacts e.g. SQS queus, DynamoDB tables. Therefore, the second repo include the “control plane” components that allocate and schedule the gameservers. e.g. Kubernetes specs, SQS queus, and DynamoDB tables. In this workshop, we are going to use one repo only.
 
@@ -20,14 +9,14 @@ In reality we are going to use two different git repos. The first is the repo th
 You will connect your git repo to your CodeBuild, the CI system we use. Therefore, you can't use git branches. 
 2. Create a Cloud9 Environment in `eu-central-1` (Frankfurt region). Using the [link](https://us-west-2.console.aws.amazon.com/cloud9/home?region=eu-central-1). Name it `games-loft-workshop`. Choose the `t2.micro` instance. Cloud will spin up an EC2 instance in your account in `eu-central-1`. 
 3. Create an admin role to assign the cloud9 workspace so we can provision the required resources (EKS cluster, SQS queues, DynamoDB tables, ECR registries and more). Click [here](https://console.aws.amazon.com/iam/home?region=eu-central-1#/roles$new?step=type). Under ***Choose the service that will use this role*** choose EC2. Click next and add the first role **AdministratorAccess**. Finally, assign this role to the EC2 instance that runs your Cloud9 workspace. Go to the [EC2 instances page](https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#Instances:sort=instanceId) and choose the instance that its name starts with *aws-cloud9*. Then *Actions->Instance Settings->Attach/Replace IAM Role* and assign the role created.
-* Cloud9 normally manages IAM credentials dynamically. This isn’t currently compatible with the EKS IAM authentication, so we will disable it and rely on the IAM role instead. Therefore, we are going to disable the assigned Cloud9 credentials as indicated in the ![image] below(/images/cloud9-iam-disable.png)
-
-
-
-
-
-3. Execute TBD the [create_aws_objects.sh](/workshop/env_prep/create_aws_objects.sh). 
+* Cloud9 normally manages IAM credentials dynamically. This isn’t currently compatible with the EKS IAM authentication, so we will disable it and rely on the IAM role instead. Therefore, we are going to disable the assigned Cloud9 credentials as indicated in the ![image](/images/cloud9-iam-disable.png) below. 
+4. Execute the script [workspace_prep.sh](/workshop/env_prep/workspace_prep.sh) via the Cloud9 workspace. *Please note that there few prompts during the ssh key generator install*
+5. Execute the script [create_aws_objects.sh](/workshop/env_prep/create_aws_objects.sh) via the Cloud9 workspace.
 This script will provision AWS objects like Docker image registry thru ECR to store the game-server images as well as other workloads we deploy on EKS. It will also create SQS queues for the game-server to report status e.g., `init` or `terminating`. Finally, we will create few DynamoDB tables to persist system events. 
+
+***Safety Tip -***
+*pls pay attention to the AWS region you are using in your scripts. The workshop designed to be executed in the Stockholm region but can be modifed to other supported AWS regions* 
+
 
 ## Creating the game-server CI pipeline
 Create a CodeBuild project that builds a docker image off of the game-server binaries and assets we forked in [step 1](Environment Preparation/1). Before creating the project. Make sure you have the region in [buildspec.yml](buildspec.yml) correct. Should be `eu-north-1`

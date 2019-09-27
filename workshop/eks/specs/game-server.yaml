@@ -27,7 +27,7 @@ spec:
         - name: GROUP
           value: "multiplayersample"
         - name: QUEUENAME
-          value: "TBDgameserver-q-GSQueue-15OXUDHW963DK"
+          value: "gameserver-q-GSQueue-15OXUDHW963DK"
         image: 356566070122.dkr.ecr.eu-central-1.amazonaws.com/multiplayersample-build
         imagePullPolicy: Always
         name: multiplayersample

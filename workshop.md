@@ -60,7 +60,7 @@ The recommended EKS cluster setup is listed in https://docs.aws.amazon.com/eks/l
 For that you need to install `eksctl`
 1. Install [eksctl tool](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) on your local machine.
 2. Configure the cluster spec and execute the create cluster command.
-***make sure the region configured is the region you run the workshop. `eu-north-1` in our example.***
+***make sure the region configured is the region you run the workshop. `eu-central-1` in our example.***
 We also assume you have an ssh public key set in your machine. e.g., `~/.ssh/id_rsa.pub` in such case you can ssh to the EC2 instacne directly. Otherwise configure the value `publicKeyPath` in [cluster-w-gs-mixed-nodegroup.yaml](/workshop/eks/specs/cluster-w-gs-mixed-nodegroup.yaml)
 To create the cluster by executing:
 ```bash
@@ -229,4 +229,4 @@ The autoscale inline policy will look like:
    kubectl logs `kubectl get po | grep autopilot| awk '{print $1}'`
    ```
    
-   After few minutes, we can start seeing metrics populated in cloudwatch.
+   After few minutes, we can start seeing metrics populated in cloudwatch

@@ -25,7 +25,7 @@ spec:
         - name: AWS_DEFAULT_REGION
           value: "eu-central-1"
         - name: GROUP
-          value: "multiplayersample-grp1"
+          value: "multiplayersample"
         - name: QUEUENAME
           value: "TBDgameserver-q-GSQueue-15OXUDHW963DK"
         image: 356566070122.dkr.ecr.eu-central-1.amazonaws.com/multiplayersample-build

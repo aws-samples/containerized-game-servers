@@ -69,6 +69,8 @@ spec:
         imagePullPolicy: Always
         command: ["/start.sh"]
         env:
+        - name: DEPLOY_NAME
+          value: "multiplayersample"
         - name: AWS_DEFAULT_REGION
           value: "eu-central-1"
         - name: QUEUE_URL

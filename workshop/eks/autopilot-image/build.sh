@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source account.conf
-region="eu-west-1"
+source ../account.conf
+region="eu-central-1"
 repo='.dkr.ecr.'$region'.amazonaws.com/autopilot:latest'
 repo_url=$account$repo
 

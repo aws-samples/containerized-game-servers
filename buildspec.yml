@@ -6,7 +6,7 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_DEFAULT_REGION=eu-central-1
       - IMAGE_TAG=latest
       - AWS_ACCOUNT_ID=356566070122
       - IMAGE_REPO_NAME=multiplayersample-build

@@ -71,16 +71,16 @@ spec:
       serviceAccountName: autopilot
       containers:
       - name: autopilot
-        image: 356566070122.dkr.ecr.us-central-1.amazonaws.com/autopilot:latest
+        image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/autopilot:latest
         imagePullPolicy: Always
         command: ["/start.sh"]
         env:
         - name: DEMAND_URL
-          value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine1h"
+          value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine24h"
         - name: MODEL_URL
-          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-central-1"
+          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/us-east-1"
         - name: AWS_DEFAULT_REGION
-          value: "eu-central-1"
+          value: "us-east-1"
         - name: DEPLOY_NAME
           value: "multiplayersample"
         - name: CURRENT_SIZE_METRIC_NAME
@@ -88,7 +88,7 @@ spec:
         - name: NEW_SIZE_METRIC_NAME
           value: "new_size"
         - name: FREQUENCY
-          value: "60"
+          value: "2700"
         - name: MIN_GS_NUM
           value: "10"
         - name: NODE_GROUP

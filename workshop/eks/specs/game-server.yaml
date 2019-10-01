@@ -1,3 +1,55 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gs-terminator
+  namespace: default
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - "*"
+  verbs:
+  - "*"
+- apiGroups:
+  - rbac.authorization.k8s.io
+  - extensions
+  - apps
+  resources:
+  - "*"
+  verbs:
+  - "*"
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  - pods
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gs-terminator
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gs-terminator
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: gs-terminator
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: gs-terminator
+  apiGroup: rbac.authorization.k8s.io
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -16,26 +68,44 @@ spec:
       labels:
         app: multiplayersample
     spec:
+      serviceAccountName: gs-terminator
       nodeSelector:
         alpha.eksctl.io/nodegroup-name: mixed-instances-1
       containers:
-      - env:
-        - name: CONSOLE_ADDR
-          value: "52.10.30.199"
-        - name: AWS_DEFAULT_REGION
-          value: "eu-central-1"
-        - name: GROUP
-          value: "multiplayersample"
-        - name: QUEUENAME
-          value: "TBDgameserver-q-GSQueue-15OXUDHW963DK"
-        image: 356566070122.dkr.ecr.eu-central-1.amazonaws.com/multiplayersample-build
+      - name: multiplayersample
+        image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/multiplayersample-build
         imagePullPolicy: Always
-        name: multiplayersample
         command: ["/start.py"]
+        env:
+          - name: CONSOLE_ADDR
+            value: "52.10.30.199"
+          - name: AWS_DEFAULT_REGION
+            value: "us-east-1"
+          - name: GROUP
+            value: "multiplayersample"
+          - name: QUEUENAME
+            value: "gameserver-q-GSQueue-12FMJRONVKXBQ"
         resources:
           requests:
             cpu: 500m
             memory: 512Mi
-      hostNetwork: true
+      - name: terminator
+        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/gs-term
+        imagePullPolicy: Always
+        command: ["/start.sh"]
+        env:
+          - name: TTL
+            value: "600"
+          - name: FREQUENCY
+            value: "60"
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
+      hostNetwork: true

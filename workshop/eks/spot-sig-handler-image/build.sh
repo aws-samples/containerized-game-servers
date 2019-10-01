@@ -1,7 +1,10 @@
 #!/bin/bash
 
+
+region=us-east-1
+
 source ../account.conf
-region=us-west-2
+
 repo='.dkr.ecr.'$region'.amazonaws.com/spot-sig-handler:latest'
 repo_url=$account$repo
 

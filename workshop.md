@@ -19,7 +19,7 @@ This script will provision AWS objects like Docker image registry thru ECR to st
 
 
 ## Creating the game-server CI pipeline
-Create a CodeBuild project that builds a docker image off of the game-server binaries and assets we forked in [step 1](Environment Preparation/1). Before creating the project. Make sure you have the region in [buildspec.yml](buildspec.yml) correct. Should be `eu-central-1`
+Create a CodeBuild project that builds a docker image off of the game-server binaries and assets we forked in [step 1](Environment Preparation/1). Before creating the project. Make sure you have the region and account number in [buildspec.yml](buildspec.yml) correct. Should be `eu-central-1` and your AWS account number.
 For creating the CodeBuild project follow the steps in the CodeBuild console. 
 1. Create build project Under project config choose your favorite name. 
 2. For the source config use GitHub and point to your GitHub repo you forked. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
@@ -216,6 +216,7 @@ The autoscale inline policy will look like:
    
   1.4 Deploy the autopilot client to EKS
   Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
+  First build and push the autopilot image to ECR. Using the Cloud9 terminal, execute [build.sh](/workshop/eks/autopilot-image/build.sh). In the [autopilot-client.yaml](/workshop/eks/specs/autopilot-client.yaml), configure the queue name configured above for the game-server spec.
    To deploy autopilot execute:
    
    ```

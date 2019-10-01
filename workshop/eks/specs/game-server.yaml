@@ -23,12 +23,12 @@ spec:
         - name: CONSOLE_ADDR
           value: "52.10.30.199"
         - name: AWS_DEFAULT_REGION
-          value: "eu-central-1"
+          value: "us-west-2"
         - name: GROUP
           value: "multiplayersample"
         - name: QUEUENAME
-          value: "TBDgameserver-q-GSQueue-15OXUDHW963DK"
-        image: 356566070122.dkr.ecr.eu-central-1.amazonaws.com/multiplayersample-build
+          value: "gameserver-GSQueue-ZQR24E3NU18E"
+        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/multiplayersample-build
         imagePullPolicy: Always
         name: multiplayersample
         command: ["/start.py"]

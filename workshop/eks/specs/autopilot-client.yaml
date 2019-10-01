@@ -71,16 +71,16 @@ spec:
       serviceAccountName: autopilot
       containers:
       - name: autopilot
-        image: 356566070122.dkr.ecr.us-central-1.amazonaws.com/autopilot:latest
+        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/autopilot:latest
         imagePullPolicy: Always
         command: ["/start.sh"]
         env:
         - name: DEMAND_URL
           value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine1h"
         - name: MODEL_URL
-          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-central-1"
+          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/us-west-2"
         - name: AWS_DEFAULT_REGION
-          value: "eu-central-1"
+          value: "us-west-2"
         - name: DEPLOY_NAME
           value: "multiplayersample"
         - name: CURRENT_SIZE_METRIC_NAME
@@ -94,7 +94,7 @@ spec:
         - name: NODE_GROUP
           value: "mixed-instances-1"
         - name: QUEUE_URL
-          value: "TBD/gameserver-q-GSQueue-15OXUDHW963DK"
+          value: "gameserver-GSQueue-ZQR24E3NU18E"
         - name: POD_NAME
           valueFrom:
             fieldRef:

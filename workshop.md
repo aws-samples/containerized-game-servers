@@ -174,11 +174,13 @@ The autoscale inline policy will look like:
    ```bash
    kubectl logs `kubectl get po -n kube-system| grep cluster-autoscaler| awk '{print $1}'` -n kube-system
    ```
-## Sample workload and autopilot deployment
+## Sample workload deployment
    In this section we deploy to EKS the game-server image we created using the CI pipeline
    1. Discover the SQS queue that a game-server publishes its status. 
     
+    ```bash
     aws sqs list-queues| grep gameserver
+    ```
     
    e.g., `gameserver-GSQueue-53KMDTED5ML4`
     
@@ -186,7 +188,9 @@ The autoscale inline policy will look like:
     
    2. Discover the image registry url of the game-server image created by the CI pipline. 
    
+   ```bash
     aws ecr describe-repositories | jq '.repositories[].repositoryUri'| grep multiplayersample
+   ```
    
    Populate the `image` value in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
     e.g.,
@@ -201,22 +205,20 @@ The autoscale inline policy will look like:
     
    1.3 Deploy the game-server to EKS
    
-    
+    ```bash
     kubectl create -f eks/specs/game-server.yaml
-    
+    ```
     
    After few minutes the game-server image we built will be deployed and running in the EKS cluster. To view the game-server execute:
     
-    
+    ```
     kubectl get po
-    
+    ```
   Next optional step is to connect a game client and play the game. The game play is left to the reader to review [Lumberyard Sample Projects and Levels](https://docs.aws.amazon.com/lumberyard/latest/userguide/sample-projects-levels-intro.html) 
    
   Our next step will deploy the game-server autopilot for prediction-based game-server auto-scale. 
-   
-  1.4 Deploy the autopilot client to EKS
-  Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
-  First build and push the autopilot image to ECR. Using the Cloud9 terminal, execute [build.sh](/workshop/eks/autopilot-image/build.sh). In the [autopilot-client.yaml](/workshop/eks/specs/autopilot-client.yaml), configure the queue name configured above for the game-server spec.
+ ## Deploy game-server autopilot  
+Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. In this workshop, we are going to focus only on the client side only. The client is backed by a model that learns usage patterns and adopt the predictions based on emerging game-server allocation in a specific cluster. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
    To deploy autopilot execute:
    
    ```
@@ -229,4 +231,9 @@ The autoscale inline policy will look like:
    kubectl logs `kubectl get po | grep autopilot| awk '{print $1}'`
    ```
    
-   After few minutes, we can start seeing metrics populated in cloudwatch.
+   After few minutes, we can start seeing metrics populated in cloudwatch. 
+   Using CloudWatch console, discover the `multiplayersample` CloudWatch namespace under Custom Namespaces. There are five metrics that help us to assess the system health. 
+   * `num_of_gs` - Describes the predicated number of game-server that was set on the cluster.  
+   * `current_gs_demand` - Describes the current demand for game-servers by players. 
+   * `num_of_nodes` - Describes the number of EC2 instances allocated. 
+   * `false-positive` - Counter of cases where the predictions `num_of_gs` was smaller than `current_gs_demand` and could cause live session interruption.

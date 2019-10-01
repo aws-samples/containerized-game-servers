@@ -237,3 +237,8 @@ Now that we have the game server running, we can schedule the autopilot client t
    * `current_gs_demand` - Describes the current demand for game-servers by players. 
    * `num_of_nodes` - Describes the number of EC2 instances allocated. 
    * `false-positive` - Counter of cases where the predictions `num_of_gs` was smaller than `current_gs_demand` and could cause live session interruption.
+   1. Create a line graph that includes `num_of_gs` and `current_gs_demand` to assess the prediction quality. Set the metric data aggregation to 5min **(Statistics=Average)**  
+   2. Create a line graph that includes `num_of_gs` and `num_of_nodes` to assess the correlation between game-server allocation and EC2 instances allocation. Set the metric data aggregation to 5min **(Statistics=Average)** 
+   3. Create a line graph that aggregates the number of **false positives** by the autopilot model. Set the metric aggregation to 5min **(Statistics=Sum)**
+   Resulted ![CloudWatch Dashboard](/images/ap-cloudwatch-dashboard.png)
+   

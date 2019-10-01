@@ -65,16 +65,16 @@ spec:
       hostNetwork: true
       containers:
       - name: spot-interrupt-handler
-        image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/spot-sig-handler:latest
+        image: 356566070122.dkr.ecr.eu-west-1.amazonaws.com/spot-sig-handler:latest
         imagePullPolicy: Always
         command: ["/start.sh"]
         env:
         - name: DEPLOY_NAME
           value: "multiplayersample"
         - name: AWS_DEFAULT_REGION
-          value: "us-east-1"
+          value: "eu-west-1"
         - name: QUEUE_URL
-          value: "https://sqs.us-east-1.amazonaws.com/356566070122/spotint-dynamodb-table-SpotQueue-F1JVL5N6WYG4"
+          value: "https://eu-west-1.queue.amazonaws.com/356566070122/spotint-q-SpotQueue-O1ZGQ00EOOPZ"
         - name: POD_NAME
           valueFrom:
             fieldRef:

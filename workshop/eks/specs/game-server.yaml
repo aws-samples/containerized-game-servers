@@ -34,8 +34,8 @@ spec:
         command: ["/start.py"]
         resources:
           requests:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 128m
+            memory: 128Mi
       hostNetwork: true
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30

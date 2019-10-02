@@ -80,11 +80,17 @@ spec:
           - name: CONSOLE_ADDR
             value: "52.10.30.199"
           - name: AWS_DEFAULT_REGION
-            value: "eu-west-1"
+            valueFrom:
+              configMapKeyRef:
+                name: region-config
+                key: aws.default.region
           - name: GROUP
             value: "multiplayersample"
           - name: QUEUENAME
-            value: "gameserver-q-GSQueue-15OXUDHW963DK"
+            valueFrom:
+              configMapKeyRef:
+                name: region-config
+                key: game.server.queue.name
         resources:
           requests:
             cpu: 500m

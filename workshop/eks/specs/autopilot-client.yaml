@@ -71,7 +71,7 @@ spec:
       serviceAccountName: autopilot
       containers:
       - name: autopilot
-        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/autopilot:latest
+        image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/autopilot:latest
         imagePullPolicy: Always
         command: ["/start.sh"]
         env:

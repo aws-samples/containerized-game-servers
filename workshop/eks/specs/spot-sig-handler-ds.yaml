@@ -65,7 +65,7 @@ spec:
       hostNetwork: true
       containers:
       - name: spot-interrupt-handler
-        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/spot-sig-handler:latest
+        image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/spot-sig-handler:latest
         imagePullPolicy: Always
         command: ["/start.sh"]
         env:

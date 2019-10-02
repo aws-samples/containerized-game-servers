@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: region-config
+  namespace: default
+data:
+  aws.default.region: us-east-1
+  game.server.queue.name:  gameserver-q-GSQueue-12FMJRONVKXBQ
+  game.server.queue.url: https://queue.amazonaws.com/356566070122/gameserver-q-GSQueue-12FMJRONVKXBQ
+  spot.int.queue.url: https://queue.amazonaws.com/356566070122/spotint-dynamodb-table-SpotQueue-F1JVL5N6WYG4

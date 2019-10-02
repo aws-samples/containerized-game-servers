@@ -71,14 +71,14 @@ spec:
       serviceAccountName: autopilot
       containers:
       - name: autopilot
-        image: 356566070122.dkr.ecr.eu-west-1.amazonaws.com/autopilot:latest
+        image: 356566070122.dkr.ecr.eu-central-1.amazonaws.com/autopilot:latest
         imagePullPolicy: Always
         command: ["/start.sh"]
         env:
         - name: DEMAND_URL
-          value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine24h"
+          value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine1h"
         - name: MODEL_URL
-          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-west-1"
+          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-central-1"
         - name: AWS_DEFAULT_REGION
           valueFrom:
             configMapKeyRef:

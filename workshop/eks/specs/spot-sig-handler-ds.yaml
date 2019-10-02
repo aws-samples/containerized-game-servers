@@ -72,9 +72,15 @@ spec:
         - name: DEPLOY_NAME
           value: "multiplayersample"
         - name: AWS_DEFAULT_REGION
-          value: "eu-west-1"
+          valueFrom:
+            configMapKeyRef:
+              name: region-config
+              key: aws.default.region
         - name: QUEUE_URL
-          value: "https://eu-west-1.queue.amazonaws.com/356566070122/spotint-q-SpotQueue-O1ZGQ00EOOPZ"
+          valueFrom:
+            configMapKeyRef:
+              name: region-config
+              key: spot.int.queue.url
         - name: POD_NAME
           valueFrom:
             fieldRef:

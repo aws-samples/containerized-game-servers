@@ -74,7 +74,7 @@ echo $(date): ${http_status}
 
 pods2bterm=`kubectl get po -o wide | grep ${NODE_NAME} | grep {DEPLOY_NAME} | awk '{print $1}'`
 
-for pod in pods2bterm
+for pod in $pods2bterm
 do
   MESSAGE="pod:${pod},instance_az:${INSTANCE_AZ},instance_group:${INSTANCE_GROUP},time:${TIME_ST},instance_type:${INSTANCE_TYPE},public_hostname:${NODE_NAME},region:${AWS_DEFAULT_REGION}"
   echo MESSAGE=$MESSAGE

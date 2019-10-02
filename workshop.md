@@ -60,7 +60,7 @@ The recommended EKS cluster setup is listed in https://docs.aws.amazon.com/eks/l
 For that you need to install `eksctl`
 1. Install [eksctl tool](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) on your local machine.
 2. Configure the cluster spec and execute the create cluster command.
-***make sure the region configured is the region you run the workshop. `eu-north-1` in our example.***
+***make sure the region configured is the region you run the workshop. `eu-central-1` in our example.***
 We also assume you have an ssh public key set in your machine. e.g., `~/.ssh/id_rsa.pub` in such case you can ssh to the EC2 instacne directly. Otherwise configure the value `publicKeyPath` in [cluster-w-gs-mixed-nodegroup.yaml](/workshop/eks/specs/cluster-w-gs-mixed-nodegroup.yaml)
 To create the cluster by executing:
 ```bash
@@ -71,7 +71,11 @@ eksctl create cluster -f eks/specs/cluster.yaml
 
 3. Enable the game-servers to perform actions like publishing status to SQS(the queues created at the env prep section) or autoscaling i.e., spin-up or spin-down nodes when needed. 
 
-    3.1 Discover the IAM role attached to the node-group created with the cluster by searching roles in the IAM console with the following pattern:`eksctl-CLUSTER_NAME-NODEGROUP_NAME-NodeInstanceRole` capture the IAM role and add the following Inline policy.
+    3.1 Discover the IAM role attached to the node-group created with the cluster by searching roles in the IAM console with the following pattern:`eksctl-CLUSTER_NAME-NODEGROUP_NAME-NodeInstanceRole`. e.g.,
+    ```bash
+    aws iam list-roles| grep eksctl-gs-eu-central-1-nodegroup-NodeInstanceRole | grep RoleName
+    ```
+    capture the IAM role and add the following Inline policy.
     
     3.2 Create the following inline policies 
     
@@ -161,7 +165,7 @@ The autoscale inline policy will look like:
 138             - --nodes=2:100:eksctl-gs-us-east-1-nodegroup-mixed-instances-1-NodeGroup-guid
 139           env:
 140             - name: AWS_REGION
-141               value: us-east-1
+141               value: eu-central-1
 14
 ```
 
@@ -176,6 +180,19 @@ The autoscale inline policy will look like:
    ```
 ## Sample workload deployment
    In this section we deploy to EKS the game-server image we created using the CI pipeline
+   We are going to populate a ConfigMap object that includes the regional resources. 
+   ```yaml
+   apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: region-config
+  namespace: default
+data:
+  aws.default.region: eu-west-1
+  game.server.queue.name:  gameserver-q-GSQueue-15OXUDHW963DK
+  game.server.queue.url: https://eu-west-1.queue.amazonaws.com/356566070122/gameserver-q-GSQueue-15OXUDHW963DK
+  spot.int.queue.url: https://eu-west-1.queue.amazonaws.com/356566070122/spotint-q-SpotQueue-O1ZGQ00EOOPZ
+```
    1. Discover the SQS queue that a game-server publishes its status. 
     
     ```bash
@@ -184,7 +201,7 @@ The autoscale inline policy will look like:
     
    e.g., `gameserver-GSQueue-53KMDTED5ML4`
     
-   Populate the `QUEUENAME` in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+   Populate the `game.server.queue.name` in [region-config.yaml](/workshop/eks/specs/region-config.yaml)
     
    2. Discover the image registry url of the game-server image created by the CI pipline. 
    
@@ -192,7 +209,7 @@ The autoscale inline policy will look like:
     aws ecr describe-repositories | jq '.repositories[].repositoryUri'| grep multiplayersample
    ```
    
-   Populate the `image` value in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+   Populate the `image` value in [region-config.yaml](/workshop/eks/specs/region-config.yaml)
     e.g.,
     ```yaml
     ...
@@ -206,6 +223,7 @@ The autoscale inline policy will look like:
    1.3 Deploy the game-server to EKS
    
     ```bash
+    kubectl create -f eks/specs/region-config.yaml
     kubectl create -f eks/specs/game-server.yaml
     ```
     

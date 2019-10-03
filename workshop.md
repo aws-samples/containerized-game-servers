@@ -174,7 +174,7 @@ The autoscale inline policy will look like:
    ```bash
    kubectl logs `kubectl get po -n kube-system| grep cluster-autoscaler| awk '{print $1}'` -n kube-system
    ```
-## Sample workload and autopilot deployment
+## Sample workload deployment
    In this section we deploy to EKS the game-server image we created using the CI pipeline
    1. Discover the SQS queue that a game-server publishes its status. 
     
@@ -213,10 +213,9 @@ The autoscale inline policy will look like:
   Next optional step is to connect a game client and play the game. The game play is left to the reader to review [Lumberyard Sample Projects and Levels](https://docs.aws.amazon.com/lumberyard/latest/userguide/sample-projects-levels-intro.html) 
    
   Our next step will deploy the game-server autopilot for prediction-based game-server auto-scale. 
-   
-  1.4 Deploy the autopilot client to EKS
-  Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
-  First build and push the autopilot image to ECR. Using the Cloud9 terminal, execute [build.sh](/workshop/eks/autopilot-image/build.sh). In the [autopilot-client.yaml](/workshop/eks/specs/autopilot-client.yaml), configure the queue name configured above for the game-server spec.
+
+ ## Deploy game-server autopilot  
+Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. In this workshop, we are going to focus only on the client side only. The client is backed by a model that learns usage patterns and adopt the predictions based on emerging game-server allocation in a specific cluster. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
    To deploy autopilot execute:
    
    ```

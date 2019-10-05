@@ -9,10 +9,10 @@ To continue from the point we left in the workshop, we have a set of k8s specs a
 2. Modify `post_eks_deploy.sh` to include the right region and the preferred name for the role to be assigned e.g., "codebuild-cd-"${AWS_REGION}. 
       Execute post_eks_deploy.sh. 
 
-3. Create a CodeBuild project that builds a docker image off of the game-server binaries and assets we forked in [step 1](Environment Preparation/1). Before creating the project. Make sure you have the region and account number in [buildspec.yml](buildspec.yml) correct. Should be `eu-central-1` and your AWS account number.
+3. Create a CodeBuild project that apply changes made in the kube specs or config maps. Before creating the project. Make sure you have the region and account number in [cd-buildspec.yml](cd-buildspec.yml) correct. Should be `eu-central-1` and your AWS account number.
 For creating the CodeBuild project follow the steps in the CodeBuild console. 
 	1. Create build project Under project config choose your favorite name. 
-	2. For the source config use GitHub and point to your GitHub repo you forked. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
+	2. For the source config use CodeCommit and point to your CodeCommit repo you created in the first step. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
 	3. Under `Service Role` choose `New service role` use the name offered and capture it for the next step. 
 4. Finally configure the cd-buildspec.yaml file. 
 Discover the role created by the CodeBuild project. Its name is codebuild-{codebuild name}-service-role. Add inline policy that adds eks:DescribeCluster as follow:

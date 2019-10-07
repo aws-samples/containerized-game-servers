@@ -172,7 +172,7 @@ The autoscale inline policy will look like:
 
    4.3 Deploy cluster autoscaler by executing:
    ```bash
-   kubectl apply -f eks/specs/cluster_autoscaler.yml
+   kubectl apply -f eks/specs/cluster_autoscaler_deploy.yaml
    ```
    Review the logs by discovering the pods name
    ```bash
@@ -224,7 +224,7 @@ data:
    
     ```bash
     kubectl create -f eks/specs/region-config.yaml
-    kubectl create -f eks/specs/game-server.yaml
+    kubectl create -f eks/specs/game-server-deploy.yaml
     ```
     
    After few minutes the game-server image we built will be deployed and running in the EKS cluster. To view the game-server execute:
@@ -238,9 +238,12 @@ data:
  ## Deploy game-server autopilot  
 Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. In this workshop, we are going to focus only on the client side only. The client is backed by a model that learns usage patterns and adopt the predictions based on emerging game-server allocation in a specific cluster. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
    To deploy autopilot execute:
-   
+   1. Build and deploy the image to ECR.
    ```
-   kubectl apply -f autopilot-client.yaml
+   cd ~/workshop/eks/autopilot-image
+   ./build.sh
+   ```
+   kubectl apply -f autopilot-client-deploy.yaml
    ```
    
    After the pod is scheduled check its stdour/err by executing:

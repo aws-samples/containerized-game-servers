@@ -242,7 +242,7 @@ Now that we have the game server running, we can schedule the autopilot client t
    ```
    cd ~/workshop/eks/autopilot-image
    ./build.sh
-   ```
+   
    kubectl apply -f autopilot-client-deploy.yaml
    ```
    

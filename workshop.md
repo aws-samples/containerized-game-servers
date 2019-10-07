@@ -263,3 +263,5 @@ Now that we have the game server running, we can schedule the autopilot client t
    3. Create a line graph that aggregates the number of **false positives** by the autopilot model. Set the metric aggregation to 5min **(Statistics=Sum)**
    Resulted ![CloudWatch Dashboard](/images/ap-cloudwatch.png)
    
+## Configre CD pipeline
+[how to configure CD pipeline](config-cd-pipeline.md)

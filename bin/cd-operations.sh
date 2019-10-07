@@ -1,5 +1,7 @@
 #!/bin/sh
 
+pwd 
+
 configmaplist=`find ./workshop/eks/specs -name "*-config.yaml"`
 for configmap in $configmaplist
 do

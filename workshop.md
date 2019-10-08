@@ -60,7 +60,7 @@ The recommended EKS cluster setup is listed in https://docs.aws.amazon.com/eks/l
 For that you need to install `eksctl`
 1. Install [eksctl tool](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) on your local machine.
 2. Configure the cluster spec and execute the create cluster command.
-***make sure the region configured is the region you run the workshop. `eu-north-1` in our example.***
+***make sure the region configured is the region you run the workshop. `eu-central-1` in our example.***
 We also assume you have an ssh public key set in your machine. e.g., `~/.ssh/id_rsa.pub` in such case you can ssh to the EC2 instacne directly. Otherwise configure the value `publicKeyPath` in [cluster-w-gs-mixed-nodegroup.yaml](/workshop/eks/specs/cluster-w-gs-mixed-nodegroup.yaml)
 To create the cluster by executing:
 ```bash
@@ -71,7 +71,11 @@ eksctl create cluster -f eks/specs/cluster.yaml
 
 3. Enable the game-servers to perform actions like publishing status to SQS(the queues created at the env prep section) or autoscaling i.e., spin-up or spin-down nodes when needed. 
 
-    3.1 Discover the IAM role attached to the node-group created with the cluster by searching roles in the IAM console with the following pattern:`eksctl-CLUSTER_NAME-NODEGROUP_NAME-NodeInstanceRole` capture the IAM role and add the following Inline policy.
+    3.1 Discover the IAM role attached to the node-group created with the cluster by searching roles in the IAM console with the following pattern:`eksctl-CLUSTER_NAME-NODEGROUP_NAME-NodeInstanceRole`. e.g.,
+    ```bash
+    aws iam list-roles| grep eksctl-gs-eu-central-1-nodegroup-NodeInstanceRole | grep RoleName
+    ```
+    capture the IAM role and add the following Inline policy.
     
     3.2 Create the following inline policies 
     
@@ -161,34 +165,51 @@ The autoscale inline policy will look like:
 138             - --nodes=2:100:eksctl-gs-us-east-1-nodegroup-mixed-instances-1-NodeGroup-guid
 139           env:
 140             - name: AWS_REGION
-141               value: us-east-1
+141               value: eu-central-1
 14
 ```
 
 
    4.3 Deploy cluster autoscaler by executing:
    ```bash
-   kubectl apply -f eks/specs/cluster_autoscaler.yml
+   kubectl apply -f eks/specs/cluster_autoscaler_deploy.yaml
    ```
    Review the logs by discovering the pods name
    ```bash
    kubectl logs `kubectl get po -n kube-system| grep cluster-autoscaler| awk '{print $1}'` -n kube-system
    ```
-## Sample workload and autopilot deployment
+## Sample workload deployment
    In this section we deploy to EKS the game-server image we created using the CI pipeline
+   We are going to populate a ConfigMap object that includes the regional resources. 
+   ```yaml
+   apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: region-config
+  namespace: default
+data:
+  aws.default.region: eu-west-1
+  game.server.queue.name:  gameserver-q-GSQueue-15OXUDHW963DK
+  game.server.queue.url: https://eu-west-1.queue.amazonaws.com/356566070122/gameserver-q-GSQueue-15OXUDHW963DK
+  spot.int.queue.url: https://eu-west-1.queue.amazonaws.com/356566070122/spotint-q-SpotQueue-O1ZGQ00EOOPZ
+```
    1. Discover the SQS queue that a game-server publishes its status. 
     
+    ```bash
     aws sqs list-queues| grep gameserver
+    ```
     
    e.g., `gameserver-GSQueue-53KMDTED5ML4`
     
-   Populate the `QUEUENAME` in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+   Populate the `game.server.queue.name` in [region-config.yaml](/workshop/eks/specs/region-config.yaml)
     
    2. Discover the image registry url of the game-server image created by the CI pipline. 
    
+   ```bash
     aws ecr describe-repositories | jq '.repositories[].repositoryUri'| grep multiplayersample
+   ```
    
-   Populate the `image` value in [game-server.yaml](/workshop/eks/specs/game-server.yaml)
+   Populate the `image` value in [region-config.yaml](/workshop/eks/specs/region-config.yaml)
     e.g.,
     ```yaml
     ...
@@ -201,26 +222,28 @@ The autoscale inline policy will look like:
     
    1.3 Deploy the game-server to EKS
    
-    
-    kubectl create -f eks/specs/game-server.yaml
-    
+    ```bash
+    kubectl create -f eks/specs/region-config.yaml
+    kubectl create -f eks/specs/game-server-deploy.yaml
+    ```
     
    After few minutes the game-server image we built will be deployed and running in the EKS cluster. To view the game-server execute:
     
-    
+    ```
     kubectl get po
-    
+    ```
   Next optional step is to connect a game client and play the game. The game play is left to the reader to review [Lumberyard Sample Projects and Levels](https://docs.aws.amazon.com/lumberyard/latest/userguide/sample-projects-levels-intro.html) 
    
   Our next step will deploy the game-server autopilot for prediction-based game-server auto-scale. 
-   
-  1.4 Deploy the autopilot client to EKS
-  Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
-  First build and push the autopilot image to ECR. Using the Cloud9 terminal, execute [build.sh](/workshop/eks/autopilot-image/build.sh). In the [autopilot-client.yaml](/workshop/eks/specs/autopilot-client.yaml), configure the queue name configured above for the game-server spec.
+ ## Deploy game-server autopilot  
+Now that we have the game server running, we can schedule the autopilot client to autoscale based on predictions. It uses a trained model that predict the number of game-servers needed. In this workshop, we are going to focus only on the client side only. The client is backed by a model that learns usage patterns and adopt the predictions based on emerging game-server allocation in a specific cluster. Autopilot client set the needed size of the game-servers. If there is a need for more EC2 instances, there will be game-server jobs that are pending. That will indicate the clsuter_autoscaler that we deployed in previous step to add more EC2 instances. 
    To deploy autopilot execute:
-   
+   1. Build and deploy the image to ECR.
    ```
-   kubectl apply -f autopilot-client.yaml
+   cd ~/workshop/eks/autopilot-image
+   ./build.sh
+   
+   kubectl apply -f autopilot-client-deploy.yaml
    ```
    
    After the pod is scheduled check its stdour/err by executing:
@@ -229,4 +252,16 @@ The autoscale inline policy will look like:
    kubectl logs `kubectl get po | grep autopilot| awk '{print $1}'`
    ```
    
-   After few minutes, we can start seeing metrics populated in cloudwatch.
+   After few minutes, we can start seeing metrics populated in cloudwatch. 
+   Using CloudWatch console, discover the `multiplayersample` CloudWatch namespace under Custom Namespaces. There are five metrics that help us to assess the system health. 
+   * `num_of_gs` - Describes the predicated number of game-server that was set on the cluster.  
+   * `current_gs_demand` - Describes the current demand for game-servers by players. 
+   * `num_of_nodes` - Describes the number of EC2 instances allocated. 
+   * `false-positive` - Counter of cases where the predictions `num_of_gs` was smaller than `current_gs_demand` and could cause live session interruption.
+   1. Create a line graph that includes `num_of_gs` and `current_gs_demand` to assess the prediction quality. Set the metric data aggregation to 5min **(Statistics=Average)**  
+   2. Create a line graph that includes `num_of_gs` and `num_of_nodes` to assess the correlation between game-server allocation and EC2 instances allocation. Set the metric data aggregation to 5min **(Statistics=Average)** 
+   3. Create a line graph that aggregates the number of **false positives** by the autopilot model. Set the metric aggregation to 5min **(Statistics=Sum)**
+   Resulted ![CloudWatch Dashboard](/images/ap-cloudwatch.png)
+   
+## Configre CD pipeline
+[how to configure CD pipeline](config-cd-pipeline.md)

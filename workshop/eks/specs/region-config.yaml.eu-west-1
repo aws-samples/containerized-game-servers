@@ -4,7 +4,7 @@ metadata:
   name: region-config
   namespace: default
 data:
-  aws.default.region: eu-central-1
+  aws.default.region: eu-west-1
   game.server.queue.name:  gameserver-q-GSQueue-15OXUDHW963DK
   game.server.queue.url: https://eu-west-1.queue.amazonaws.com/356566070122/gameserver-q-GSQueue-15OXUDHW963DK
   spot.int.queue.url: https://eu-west-1.queue.amazonaws.com/356566070122/spotint-q-SpotQueue-O1ZGQ00EOOPZ

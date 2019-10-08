@@ -98,5 +98,7 @@ containers:
 
 When using imagePullPolicy: Always, one can't circumvent ECR security and make ECR as the single source of truth w.r.t. to binaries to be scheduled. However, pulling a whole image from the image source (ECR) requires pulling a few giga-bytes from ECR to the worker nodes via kubelet, the node agent. [Data transfer out might be expensive](https://aws.amazon.com/ecr/pricing/) when new images are pulled continuously. However, Docker layers will update only the layers that were modified preventing a whole image update and secure image distribution. Specifically for our example, only the layer `MultiplayerSample_pc_Paks_Dedicated` will be updated.
 
-## CI process proposed
+## CI/CD process proposed
 We propose an end-to-end architecture of a full-scale game-server deployment using EKS as the orchestration system, ECR as the container registry and CodeBuild as the build engine. Game developers merge changes to the Git repository that includes both the pre-configured game-engine binaries and the game artifacts. Upon merge events, CodeBuild builds a multi-stage game-server image that is pushed to a centralized container registry hosted by ECR. At this point DevOps teams in different regions continuously scheduling the image as a game server, pulling only the updated layer in the game server image. This keeps the entire game-server fleets to run the same game binaries set allowing the game DevOps team a secure deployment. 
+
+

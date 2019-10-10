@@ -73,7 +73,7 @@ spec:
         alpha.eksctl.io/nodegroup-name: mixed-instances-1
       containers:
       - name: multiplayersample
-        image: 356566070122.dkr.ecr.eu-west-1.amazonaws.com/multiplayersample-build
+        image: 356566070122.dkr.ecr.us-east-1.amazonaws.com/multiplayersample-build
         imagePullPolicy: Always
         command: ["/start.py"]
         env:

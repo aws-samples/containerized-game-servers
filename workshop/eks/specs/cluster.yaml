@@ -2,8 +2,8 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: gs-us-east-1
-  region: us-east-1
+  name: gs-us-west-2
+  region: us-west-2
 
 nodeGroups:
   - name: mixed-instances-1

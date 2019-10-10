@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: region-config
+  namespace: default
+data:
+  aws.default.region: us-west-2
+  game.server.queue.name:  gameserver-GSQueue-ZQR24E3NU18E
+  game.server.queue.url: https://us-west-2.queue.amazonaws.com/356566070122/gameserver-GSQueue-ZQR24E3NU18E
+  spot.int.queue.url: https://us-west-2.queue.amazonaws.com/356566070122/spotint-SpotQueue-1W0Z6VKBYFZXK

@@ -18,6 +18,11 @@ if [ "${POD_NAME}" == "" ]; then
   exit 1
 fi
 
+if [ "${DEPLOY_NAME}" == "" ]; then
+  echo '[ERROR] Environment variable `DEPLOY_NAME` has no value set.' 1>&2
+  exit 1
+fi
+
 echo "Getting the node name"
 NODE_NAME=$(kubectl --namespace ${NAMESPACE} get pod ${POD_NAME} --output jsonpath="{.spec.nodeName}")
 echo NODE_NAME=${NODE_NAME}
@@ -55,6 +60,8 @@ NOTICE_URL=${NOTICE_URL:-http://169.254.169.254/latest/meta-data/spot/terminatio
 #MESSAGE="[{'status': 'test spot termination', 'public_hostname': ${NODE_NAME}, 'public_port': NA, 'region': 'us-east'}]"
 #MESSAGE_GRP_ID="gsGrp_us-east-1"
 #aws sqs send-message --queue-url ${QUEUE_URL} --message-body "${MESSAGE}" --message-group-id ${MESSAGE_GRP_ID}
+echo "TESTING INFO"
+echo  MESSAGE="pod:TBD,instance_az:${INSTANCE_AZ},instance_group:${INSTANCE_GROUP},time:${TIME_ST},instance_type:${INSTANCE_TYPE},public_hostname:${NODE_NAME},region:${AWS_DEFAULT_REGION}"
 
 echo "Polling ${NOTICE_URL} every ${POLL_INTERVAL} second(s)"
 while http_status=$(curl -o /dev/null -w '%{http_code}' -sL ${NOTICE_URL}); [ ${http_status} -ne 200 ]; do
@@ -62,11 +69,17 @@ while http_status=$(curl -o /dev/null -w '%{http_code}' -sL ${NOTICE_URL}); [ ${
   sleep ${POLL_INTERVAL}
 done
 
+echo "SPOT TERMINATION"
 echo $(date): ${http_status}
 
-MESSAGE="instance_az:${INSTANCE_AZ},instance_group:${INSTANCE_GROUP},time:${TIME_ST},instance_type:${INSTANCE_TYPE},public_hostname:${NODE_NAME},region:${AWS_DEFAULT_REGION}"
-echo MESSAGE=$MESSAGE
-aws sqs send-message --queue-url ${QUEUE_URL} --message-body "${MESSAGE}" 
+pods2bterm=`kubectl get po -o wide | grep ${NODE_NAME} | grep {DEPLOY_NAME} | awk '{print $1}'`
+
+for pod in $pods2bterm
+do
+  MESSAGE="pod:${pod},instance_az:${INSTANCE_AZ},instance_group:${INSTANCE_GROUP},time:${TIME_ST},instance_type:${INSTANCE_TYPE},public_hostname:${NODE_NAME},region:${AWS_DEFAULT_REGION}"
+  echo MESSAGE=$MESSAGE
+  aws sqs send-message --queue-url ${QUEUE_URL} --message-body "${MESSAGE}" 
+done
 
 echo "Drain the node."
 kubectl drain ${NODE_NAME} --force --ignore-daemonsets

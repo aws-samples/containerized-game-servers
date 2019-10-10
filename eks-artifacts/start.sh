@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh 
 echo in start.sh
 echo SERVER_PORT=${SERVER_PORT}
 cd /BinLinux64.Dedicated 

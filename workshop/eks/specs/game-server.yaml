@@ -59,6 +59,11 @@ metadata:
   name: multiplayersample
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 10
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: multiplayersample
@@ -93,8 +98,8 @@ spec:
                 key: game.server.queue.name
         resources:
           requests:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 720m
+            memory: 768Mi
       - name: terminator
         image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/gs-term
         imagePullPolicy: Always

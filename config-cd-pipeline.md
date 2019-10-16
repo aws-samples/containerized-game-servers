@@ -10,7 +10,7 @@ To continue from the point we left in the workshop, we have a set of k8s specs a
 2. Create a CodeBuild project that apply changes made in the kube specs or config maps. Before creating the project. Make sure you have the region and account number in [cd-buildspec.yml](cd-buildspec.yml) correct. Should be `eu-central-1` and your AWS account number.
 For creating the CodeBuild project follow the steps in the CodeBuild console.
 	1. Create build project Under project config choose your favorite name. 
-	2. For the source config use CodeCommit and point to your CodeCommit repo you created in the first step. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
+	2. For the source config use GitHub and point to your GitHub repo you created in the first step. For the Environment section use Managed image with Amazon Linux 2, Standard runtime and the image it offers. ***Make sure you enable the Privileged flag otherwise the `docker` command can’t be executed*** 
 	3. Under `Service Role` choose `New service role` use the name offered and capture it for the next step.
     4. Finally configure the cd-buildspec.yml file.
 

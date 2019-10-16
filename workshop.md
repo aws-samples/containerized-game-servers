@@ -5,14 +5,26 @@ This page describes the steps to be executed in the workshop. We assume you have
 In reality we are going to use two different git repos. The first is the repo that holds game-server binaries. This repo is decoupled from repositories that handles deployment and operations as it hooked to a CI system so we dont want every change in the game binaries to impact deployments of other artifacts e.g. SQS queues, DynamoDB tables. Therefore, the second repo include the “control plane” components that allocate and schedule the gameservers. e.g. Kubernetes specs, SQS queus, and DynamoDB tables. In this workshop, we are going to use one repo only.
 
 ### Workspace preparation
-1. Fork the github repo from [aws-samples](https://github.com/aws-samples/containerized-game-servers). 
-You will connect your git repo to your CodeBuild, the CI system we use. Therefore, you can't use git branches. 
-2. Create an admin role to assign the cloud9 workspace so we can provision the required resources (EKS cluster, SQS queues, DynamoDB tables, ECR registries and more). Click [here](https://console.aws.amazon.com/iam/home?region=eu-central-1#/roles$new?step=type). Under ***Choose the service that will use this role*** choose EC2. Click next and add the first role **AdministratorAccess**. 
+1. Fork the github repo from [aws-samples](https://github.com/aws-samples/containerized-game-servers).
+You will connect your git repo to your CodeBuild, the CI system we use. Therefore, you can't use git branches.
+2. Create an admin role to assign the cloud9 workspace so we can provision the required resources (EKS cluster, SQS queues, DynamoDB tables, ECR registries and more). Click [here](https://console.aws.amazon.com/iam/home?region=eu-central-1#/roles$new?step=type). Under ***Choose the service that will use this role*** choose EC2. Click next and add the first role **AdministratorAccess**.
 3. Create a Cloud9 Environment in `eu-central-1` (Frankfurt region). Using the [link](https://us-west-2.console.aws.amazon.com/cloud9/home?region=eu-central-1). Name it `games-loft-workshop`. Choose the `t2.micro` instance. Cloud9 will spin up an EC2 instance in your account in `eu-central-1`. Choose the IAM Role that you created in Step 2.
-* Cloud9 normally manages IAM credentials dynamically. This isn’t currently compatible with the EKS IAM authentication, so we will disable it and rely on the IAM role instead. Therefore, we are going to disable the assigned Cloud9 credentials as indicated in the ![image](/images/cloud9-iam-disable.png) below. 
-4. Execute the script [workspace_prep.sh](/workshop/env_prep/workspace_prep.sh) via the Cloud9 workspace. *Please note that there few messages prompts during the ssh key generator install*
-5. Execute the script [create_aws_objects.sh](/workshop/env_prep/create_aws_objects.sh) via the Cloud9 workspace.
-This script will provision AWS objects like Docker image registry thru ECR to store the game-server images as well as other workloads we deploy on EKS. It will also create SQS queues for the game-server to report status e.g., `init` or `terminating`. Finally, we will create few DynamoDB tables to persist system events. 
+* Cloud9 normally manages IAM credentials dynamically. This isn’t currently compatible with the EKS IAM authentication, so we will disable it and rely on the IAM role instead. Therefore, we are going to disable the assigned Cloud9 credentials as indicated in the ![image](/images/cloud9-iam-disable.png) below.
+4. Inside the Cloud9 instance, clone the GitHub repository into your workspace. Your github repository should be public, so you can clone it using the HTTPS Url.
+    ```bash
+    git clone https://github.com/<username>/containerized-game-servers.git
+    ```
+5. Execute the script [workspace_prep.sh](/workshop/env_prep/workspace_prep.sh) via the Cloud9 workspace. *Please note that there are a few message prompts during the ssh key generator install*
+   ```bash
+   cd containerized-game-servers/workshop/env_prep
+   ./workspace_prep.sh
+   ```
+6. Execute the script [create_aws_objects.sh](/workshop/env_prep/create_aws_objects.sh) via the Cloud9 workspace.
+This script will provision AWS objects like Docker image registry through ECR to store the game-server images as well as other workloads we deploy on EKS. It will also create SQS queues for the game-server to report status e.g., `init` or `terminating`. Finally, we will create few DynamoDB tables to persist system events.
+   ```
+   # In the same env_prep folder
+   ./create_aws_objects.sh
+   ```
 
 ***Safety Tip -***
 *Please pay attention to the AWS region you are using in your scripts. The workshop is designed to be executed in the Frankfurt region but can be modifed to other supported AWS regions*

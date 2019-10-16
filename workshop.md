@@ -217,8 +217,18 @@ data:
    e.g., `gameserver-q-GSQueue-53KMDTED5ML4`
     
    Populate the `game.server.queue.name` in [region-config.yaml](/workshop/eks/specs/region-config.yaml)
+   
+2. Discover the SQS queue that a game-server publishes its status.
+   ```bash
+   aws sqs list-queues | grep spot
+   ```
     
-2. Discover the image registry url of the game-server image created by the CI pipeline.
+   e.g., `spot-q-GSQueue-53KMDTED5ML4`
+    
+   Populate the `spot.server.queue.name` in [region-config.yaml](/workshop/eks/specs/region-config.yaml)
+   
+    
+3. Discover the image registry url of the game-server image created by the CI pipeline.
 
    ```bash
     aws ecr describe-repositories | jq '.repositories[].repositoryUri' | grep multiplayersample

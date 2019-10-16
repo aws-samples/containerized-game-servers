@@ -5,7 +5,7 @@ We assume that by now, you have the k8s workload deployed and running. Any chang
 
 To continue from the point we left in the workshop, we have a set of k8s specs and cluster specs in [eks](/workshop/eks/). To implement a system that continuously applies changes made to the workload specification we will use CodeCommit to store the regional cluster state, [specs](/workshop/eks/specs) folder. Then we configure a CodePipeline project that is triggered by pull request on the CodeCommit. The pipeline execute a script that iterates through the spec folder and enforce the workload specifications.
 
-1. Modify `post_eks_deploy.sh` to include the region and the preferred name for the role to be assigned e.g., "codebuild-cd-"${AWS_REGION} and execute [create_cd_role.sh](/bin/create_cd_role.sh). 
+1. Modify `bin/create_cd_role.sh` to include the region and the preferred name for the role to be assigned e.g., "codebuild-cd-"${AWS_REGION} and execute [create_cd_role.sh](/bin/create_cd_role.sh).
 
 2. Create a CodeBuild project that apply changes made in the kube specs or config maps. Before creating the project. Make sure you have the region and account number in [cd-buildspec.yml](cd-buildspec.yml) correct. Should be `eu-central-1` and your AWS account number.
 For creating the CodeBuild project follow the steps in the CodeBuild console.

@@ -98,8 +98,8 @@ spec:
                 key: game.server.queue.name
         resources:
           requests:
-            cpu: 720m
-            memory: 768Mi
+            cpu: 1024m
+            memory: 1024Mi
       - name: terminator
         image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/gs-term
         imagePullPolicy: Always

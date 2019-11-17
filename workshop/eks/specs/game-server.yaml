@@ -69,8 +69,24 @@ spec:
         app: multiplayersample
     spec:
       serviceAccountName: gs-terminator
-      nodeSelector:
-        alpha.eksctl.io/nodegroup-name: mixed-instances-1
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: lifecycle
+                operator: In
+                values:
+                - Ec2Spot
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: alpha.eksctl.io/nodegroup-name
+                operator: In
+                values:
+                - mixed-instances-1
+                - mixed-instances-2
       containers:
       - name: multiplayersample
         image: 356566070122.dkr.ecr.eu-west-1.amazonaws.com/multiplayersample-build

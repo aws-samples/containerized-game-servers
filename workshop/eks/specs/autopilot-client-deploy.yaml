@@ -78,7 +78,7 @@ spec:
         - name: DEMAND_URL
           value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine1h"
         - name: MODEL_URL
-          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-central-1"
+          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-north-1"
         - name: AWS_DEFAULT_REGION
           valueFrom:
             configMapKeyRef:
@@ -95,7 +95,7 @@ spec:
         - name: MIN_GS_NUM
           value: "10"
         - name: NODE_GROUP
-          value: "mixed-instances-1"
+          value: "mixed-instances-"
         - name: QUEUE_URL
           valueFrom:
             configMapKeyRef:

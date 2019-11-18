@@ -6,7 +6,7 @@ metadata:
   region: eu-north-1
 
 nodeGroups:
-  - name: mixed-instances-1
+  - name: mixed-instances-2
     minSize: 2
     maxSize: 50
     ssh:
@@ -14,7 +14,7 @@ nodeGroups:
       publicKeyPath: ~/.ssh/id_rsa.pub
     instancesDistribution:
       instanceTypes: ["c5.large","c5.xlarge","c5.2xlarge","c5.4xlarge","c5d.large","c5d.xlarge","c5d.2xlarge","c5d.4xlarge"]
-      onDemandPercentageAboveBaseCapacity: 0
+      onDemandPercentageAboveBaseCapacity: 100
       onDemandBaseCapacity: 0
     overrideBootstrapCommand: |
         #!/bin/bash

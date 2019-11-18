@@ -11,7 +11,7 @@ for command in kubectl jq envsubst
     which $command &>/dev/null && echo "$command in path" || echo "$command NOT FOUND"
   done
 
-ssh-keygen
+ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
 
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 

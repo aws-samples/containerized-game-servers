@@ -92,7 +92,7 @@ do
   echo CURRENT_RS_SIZE=${CURRENT_RS_SIZE}
 
   kubectl scale deploy/${DEPLOY_NAME} --replicas=${NEW_RS_SIZE} -n ${NAMESPACE}
-  echo "sleeping for ${SLEEP_TIME_B4_NEXT_READ} to allow the scale operations"
+  echo "sleeping for ${FREQUENCY} to allow the scale operations"
 
   NUM_NODES=`kubectl get nodes -o json | jq '.items[].metadata.labels'| grep ${NODE_GROUP} | wc -l`
   echo NUM_NODES=${NUM_NODES}

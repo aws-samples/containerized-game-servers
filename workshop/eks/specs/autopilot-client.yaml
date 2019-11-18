@@ -95,7 +95,7 @@ spec:
         - name: MIN_GS_NUM
           value: "10"
         - name: NODE_GROUP
-          value: "mixed-instances-1"
+          value: "mixed-instances-"
         - name: QUEUE_URL
           valueFrom:
             configMapKeyRef:

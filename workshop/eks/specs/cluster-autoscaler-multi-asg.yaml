@@ -148,8 +148,8 @@ spec:
             - --cloud-provider=aws
             - --skip-nodes-with-local-storage=false
             - --expander=random
-            - --nodes=1:50:eksctl-gs-eu-north-1-nodegroup-mixed-instances-1-NodeGroup-V84RK9BOSL9X
-            - --nodes=1:50:eksctl-gs-eu-north-1-nodegroup-mixed-instances-2-NodeGroup-139ZH6W4CC03Y
+            - --nodes=1:50:eksctl-gs-ap-southeast-2-nodegroup-mixed-instances-1-NodeGroup-1E7THUP76LJVX
+            - --nodes=1:50:eksctl-gs-ap-southeast-2-nodegroup-mixed-instances-2-NodeGroup-RRRIXPZYRMCX
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt

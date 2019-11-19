@@ -78,7 +78,7 @@ spec:
         - name: DEMAND_URL
           value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine1h"
         - name: MODEL_URL
-          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-north-1"
+          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/ap-southeast-2"
         - name: AWS_DEFAULT_REGION
           valueFrom:
             configMapKeyRef:

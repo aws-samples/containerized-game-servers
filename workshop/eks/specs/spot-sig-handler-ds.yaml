@@ -90,5 +90,4 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
       nodeSelector:
-        alpha.eksctl.io/nodegroup-name: mixed-instances-1
-
+        lifecycle: Ec2Spot

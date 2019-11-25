@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-autoscaler-priority-expander
+data:
+  priorities: |-
+    10: 
+      - .*-non-existing-entry.*
+    20: 
+      - eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-1-NodeGroup.*
+    30: 
+      - eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-2-NodeGroup.*

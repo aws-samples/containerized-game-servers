@@ -76,9 +76,9 @@ spec:
         command: ["/start.sh"]
         env:
         - name: DEMAND_URL
-          value: "https://3vwufqstq5.execute-api.us-west-2.amazonaws.com/api/currsine24h"
+          value: "https://o2p5pgyyk0.execute-api.us-west-2.amazonaws.com/api/currsine24h"
         - name: MODEL_URL
-          value: "https://cq20vmabsf.execute-api.us-west-2.amazonaws.com/api/predict/eu-west-1"
+          value: "https://o2p5pgyyk0.execute-api.us-west-2.amazonaws.com/api/predict/eu-west-1"
         - name: AWS_DEFAULT_REGION
           valueFrom:
             configMapKeyRef:

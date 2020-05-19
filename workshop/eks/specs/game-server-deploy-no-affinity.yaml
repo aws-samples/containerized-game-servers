@@ -74,11 +74,10 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: alpha.eksctl.io/nodegroup-name
+              - key: lifecycle
                 operator: In
                 values:
-                - gdc2020-1
-                - gdc2020-2
+                - Ec2Spot
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             preference:
@@ -86,7 +85,8 @@ spec:
               - key: alpha.eksctl.io/nodegroup-name
                 operator: In
                 values:
-                - Ec2Spot
+                - mixed-instances-1
+                - mixed-instances-2
       containers:
       - name: multiplayersample
         image: 356566070122.dkr.ecr.eu-west-1.amazonaws.com/multiplayersample-build

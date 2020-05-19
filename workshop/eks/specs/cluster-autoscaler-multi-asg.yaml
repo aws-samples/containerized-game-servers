@@ -110,6 +110,23 @@ subjects:
     namespace: kube-system
 
 ---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-autoscaler-priority-expander
+  namespace: kube-system
+data:
+  priorities: |-
+    10:
+      - .*-non-existing-entry.*
+    20:
+      - eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-1-NodeGroup.*
+    30:
+      - eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-2-NodeGroup.*
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -132,7 +149,7 @@ spec:
     spec:
       serviceAccountName: cluster-autoscaler
       containers:
-        - image: k8s.gcr.io/cluster-autoscaler:v1.12.3
+        - image: ruecarlo/cluster-autoscaler:1.14.5.priority
           name: cluster-autoscaler
           resources:
             limits:
@@ -147,9 +164,9 @@ spec:
             - --stderrthreshold=info
             - --cloud-provider=aws
             - --skip-nodes-with-local-storage=false
-            - --expander=random
-            - --nodes=1:50:eksctl-gs-eu-north-1-nodegroup-mixed-instances-1-NodeGroup-V84RK9BOSL9X
-            - --nodes=1:50:eksctl-gs-eu-north-1-nodegroup-mixed-instances-2-NodeGroup-139ZH6W4CC03Y
+            - --expander=priority
+            - --nodes=1:50:eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-1-NodeGroup-178UV9H0QXZ4V
+            - --nodes=1:50:eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-2-NodeGroup-ZV59D0M1UKE8
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt

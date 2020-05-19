@@ -2,18 +2,19 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: gs-eu-north-1
-  region: eu-north-1
+  name: yb-us-west-2
+  region: us-west-2
 
 nodeGroups:
-  - name: mixed-instances-1
+  - name: gdc2020-1
+    labels: { Project: gdc2020 }
     minSize: 2
     maxSize: 50
     ssh:
       allow: true
       publicKeyPath: ~/.ssh/id_rsa.pub
     instancesDistribution:
-      instanceTypes: ["c5.large","c5.xlarge","c5.2xlarge","c5.4xlarge","c5d.large","c5d.xlarge","c5d.2xlarge","c5d.4xlarge"]
+      instanceTypes: ["c4.large","c4.xlarge","c3.large","c3.xlarge","c5.large","c5.xlarge","c5.2xlarge","c5.4xlarge","c5d.large","c5d.xlarge","c5d.2xlarge","c5d.4xlarge"]
       onDemandPercentageAboveBaseCapacity: 0
       onDemandBaseCapacity: 0
     overrideBootstrapCommand: |

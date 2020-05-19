@@ -85,8 +85,7 @@ spec:
               - key: alpha.eksctl.io/nodegroup-name
                 operator: In
                 values:
-                - mixed-instances-1
-                - mixed-instances-2
+                - gdc2020-1
       containers:
       - name: multiplayersample
         image: 356566070122.dkr.ecr.eu-west-1.amazonaws.com/multiplayersample-build

@@ -121,9 +121,9 @@ data:
     10:
       - .*-non-existing-entry.*
     20:
-      - eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-1-NodeGroup.*
+      - eksctl-yb-us-west-2-nodegroup-c5spot-NodeGroup-1O2428X0FGTS9
     30:
-      - eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-2-NodeGroup.*
+      - eksctl-yb-us-west-2-nodegroup-gdc2020-4-NodeGroup-MEEEAXNUZ7NJ
 
 ---
 
@@ -165,8 +165,8 @@ spec:
             - --cloud-provider=aws
             - --skip-nodes-with-local-storage=false
             - --expander=priority
-            - --nodes=1:50:eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-1-NodeGroup-178UV9H0QXZ4V
-            - --nodes=1:50:eksctl-gs-ap-northeast-2-nodegroup-mixed-instances-2-NodeGroup-ZV59D0M1UKE8
+            - --nodes=1:50:eksctl-yb-us-west-2-nodegroup-c5spot-NodeGroup-1O2428X0FGTS9
+            - --nodes=1:50:eksctl-yb-us-west-2-nodegroup-gdc2020-4-NodeGroup-MEEEAXNUZ7NJ
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt

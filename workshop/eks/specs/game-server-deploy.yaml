@@ -77,8 +77,8 @@ spec:
               - key: alpha.eksctl.io/nodegroup-name
                 operator: In
                 values:
-                - gdc2020-1
-                - gdc2020-2
+                - p3spot
+                - c5spot
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             preference:
@@ -109,8 +109,8 @@ spec:
                 key: game.server.queue.name
         resources:
           requests:
-            cpu: 1024m
-            memory: 1024Mi
+            cpu: 256m
+            memory: 256Mi
       - name: terminator
         image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/gs-term
         imagePullPolicy: Always

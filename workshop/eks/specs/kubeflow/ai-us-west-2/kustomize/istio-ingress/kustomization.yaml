@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+bases:
+- base
+configMapGenerator:
+- behavior: unspecified
+  env: overlays/cognito/params.env
+  name: istio-ingress-cognito-parameters
+configurations:
+- overlays/cognito/params.yaml
+kind: Kustomization
+namespace: istio-system
+patchesStrategicMerge:
+- overlays/cognito/ingress.yaml
+vars:
+- fieldref:
+    fieldPath: data.CognitoUserPoolArn
+  name: CognitoUserPoolArn
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: istio-ingress-cognito-parameters
+- fieldref:
+    fieldPath: data.CognitoAppClientId
+  name: CognitoAppClientId
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: istio-ingress-cognito-parameters
+- fieldref:
+    fieldPath: data.CognitoUserPoolDomain
+  name: CognitoUserPoolDomain
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: istio-ingress-cognito-parameters
+- fieldref:
+    fieldPath: data.certArn
+  name: certArn
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: istio-ingress-cognito-parameters

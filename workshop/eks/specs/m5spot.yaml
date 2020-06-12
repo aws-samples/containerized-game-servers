@@ -1,0 +1,38 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: ai-us-west-2
+  region: us-west-2
+
+nodeGroups:
+  - name: m5spot
+    labels:  
+      project: zip
+      lifecycle: Ec2Spot
+      aws.amazon.com/spot: "true"
+    maxSize: 50
+    minSize: 1
+    ssh:
+      allow: true
+      publicKeyPath: ~/.ssh/id_rsa.pub
+    instancesDistribution:
+      instanceTypes: ["m5.2xlarge","m5.4xlarge","m5a.2xlarge","m5a.4xlarge","m5n.2xlarge","m5n.4xlarge"]
+      onDemandPercentageAboveBaseCapacity: 0
+      onDemandBaseCapacity: 0
+      spotAllocationStrategy: "capacity-optimized"
+    taints:
+      spotInstance: "true:PreferNoSchedule"
+    tags:
+      k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
+      k8s.io/cluster-autoscaler/node-template/label/project: zip
+      k8s.io/cluster-autoscaler/node-template/taint/spotInstance: "true:PreferNoSchedule"
+      k8s.io/cluster-autoscaler/node-template/label/aws.amazon.com/spot: "true"
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        cloudWatch: true
+        albIngress: true
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]

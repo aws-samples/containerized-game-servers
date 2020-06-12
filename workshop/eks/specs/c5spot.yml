@@ -2,7 +2,7 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: yb-us-west-2
+  name: ml-us-west-2
   region: us-west-2
 
 nodeGroups:

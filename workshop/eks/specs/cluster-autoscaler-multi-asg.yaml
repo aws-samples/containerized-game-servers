@@ -121,9 +121,9 @@ data:
     10:
       - .*-non-existing-entry.*
     20:
-      - eksctl-ai-us-west-2-nodegroup-m5spot-NodeGroup-E16WIJDMWB83
-    30:
-      - .*-non-existing-entry.*
+      - eksctl-ai-us-west-2-nodegroup-p3od-NodeGroup-NKHMN74TFOPF
+    60:
+      - eksctl-ai-us-west-2-nodegroup-p3spot-NodeGroup-1EC86FRMZ7V6N
 
 ---
 
@@ -148,8 +148,10 @@ spec:
         prometheus.io/port: '8085'
     spec:
       serviceAccountName: cluster-autoscaler
+      nodeSelector:
+        alpha.eksctl.io/nodegroup-name: m5spot
       containers:
-        - image: ruecarlo/cluster-autoscaler:1.14.5.priority
+        - image: k8s.gcr.io/cluster-autoscaler:v1.16.1
           name: cluster-autoscaler
           resources:
             limits:
@@ -165,7 +167,8 @@ spec:
             - --cloud-provider=aws
             - --skip-nodes-with-local-storage=false
             - --expander=priority
-            - --nodes=8:50:eksctl-ai-us-west-2-nodegroup-m5spot-NodeGroup-E16WIJDMWB83
+            - --nodes=0:5:eksctl-ai-us-west-2-nodegroup-p3spot-NodeGroup-1EC86FRMZ7V6N
+            - --nodes=0:5:eksctl-ai-us-west-2-nodegroup-p3od-NodeGroup-NKHMN74TFOPF
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt

@@ -6,11 +6,9 @@ metadata:
   region: us-west-2
 
 nodeGroups:
-  - name: p3spot
+  - name: p3od
     labels:  
       project: zip
-      lifecycle: Ec2Spot
-      aws.amazon.com/spot: "true"
     maxSize: 10
     minSize: 0
     ssh:
@@ -18,16 +16,8 @@ nodeGroups:
       publicKeyPath: ~/.ssh/id_rsa.pub
     instancesDistribution:
       instanceTypes: ["p3.2xlarge","p3.8xlarge"]
-      onDemandPercentageAboveBaseCapacity: 0
-      onDemandBaseCapacity: 0
-      spotAllocationStrategy: "capacity-optimized"
-    taints:
-      spotInstance: "true:PreferNoSchedule"
     tags:
-      k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
       k8s.io/cluster-autoscaler/node-template/label/project: zip
-      k8s.io/cluster-autoscaler/node-template/taint/spotInstance: "true:PreferNoSchedule"
-      k8s.io/cluster-autoscaler/node-template/label/aws.amazon.com/spot: "true"
     iam:
       withAddonPolicies:
         autoScaler: true

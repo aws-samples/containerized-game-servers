@@ -167,8 +167,8 @@ spec:
             - --cloud-provider=aws
             - --skip-nodes-with-local-storage=false
             - --expander=priority
-            - --nodes=0:5:eksctl-ai-us-west-2-nodegroup-p3spot-NodeGroup-1EC86FRMZ7V6N
-            - --nodes=0:5:eksctl-ai-us-west-2-nodegroup-p3od-NodeGroup-NKHMN74TFOPF
+            - --nodes=0:7:eksctl-ai-us-west-2-nodegroup-p3spot-NodeGroup-1EC86FRMZ7V6N
+            - --nodes=0:3:eksctl-ai-us-west-2-nodegroup-p3od-NodeGroup-NKHMN74TFOPF
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt

@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: supertuxkart
+    release: r1
+  name: supertuxkart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supertuxkart
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: supertuxkart
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        alpha.eksctl.io/nodegroup-name: m5spot
+      containers:
+      - name: supertuxkart
+        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/supertuxkart:0.2
+        imagePullPolicy: Always
+        command: ["./start.sh"]
+        resources:
+          requests:
+            cpu: 512m
+            memory: 512Mi

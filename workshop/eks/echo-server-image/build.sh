@@ -1,8 +1,8 @@
 #!/bin/bash
-
+  
 source ../account.conf
 region="us-west-2"
-repo="jupyter"
+repo="tcp-server"
 repo_name='.dkr.ecr.'$region'.amazonaws.com/'$repo':latest'
 repo_url=$account$repo_name
 

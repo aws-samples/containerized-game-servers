@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: supertuxkart
-  type: LoadBalancer
+  type: NodePort
   ports:
     - protocol: UDP
       port: 8080
@@ -40,5 +40,5 @@ spec:
         command: ["./start.sh"]
         resources:
           requests:
-            cpu: 512m
-            memory: 512Mi
+            cpu: 256m
+            memory: 256Mi

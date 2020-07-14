@@ -19,6 +19,14 @@ def create_fn(meta, spec, namespace, logger, **kwargs):
 def my_handler(meta, **_):
     pass
 
+@kopf.on.delete('', 'v1', 'pods', when=lambda meta, **_: meta['ownerReferences'][0]['kind']=='StatefulSet')
+def delete_fn(meta, spec, namespace, logger, **kwargs):
+    name=meta['labels']['statefulset.kubernetes.io/pod-name']
+    logging.info(namespace)
+    logging.info(name)
+    api_response = api_instance.delete_namespaced_service(name,namespace)
+    logging.info(api_response)
+    
 def create_node_port_service(namespace, label_selector, service_ports):
     service_spec = client.V1ServiceSpec(selector=label_selector,ports=service_ports,type='NodePort')
     service_meta = client.V1ObjectMeta(name=label_selector['statefulset.kubernetes.io/pod-name'])

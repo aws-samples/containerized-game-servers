@@ -2,7 +2,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: readonly-sa-role
+  name: nodeport-controller-sa
   namespace: default
 rules:
 - apiGroups:
@@ -35,18 +35,18 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: readonly-sa-role
+  name: nodeport-controller-sa
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: readonly-sa-role
+  name: nodeport-controller-sa
   namespace: default
 subjects:
 - kind: ServiceAccount
-  name: readonly-sa-role
+  name: nodeport-controller-sa
   namespace: default
 roleRef:
   kind: ClusterRole
-  name: readonly-sa-role
+  name: nodeport-controller-sa
   apiGroup: rbac.authorization.k8s.io

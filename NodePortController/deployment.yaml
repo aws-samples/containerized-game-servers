@@ -14,10 +14,10 @@ spec:
       labels:
         application: node-port-controller
     spec:
-      serviceAccountName: readonly-sa-role
+      serviceAccountName: nodeport-controller-sa
       containers:
       - name: node-port-controller
-        image: jicowan/node-port-controller:1.0
+        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/nodeportcontroller
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

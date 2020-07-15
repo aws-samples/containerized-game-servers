@@ -16,7 +16,7 @@ def create_fn(meta, spec, namespace, status, logger, **kwargs):
         service_ports = []
         for container in spec['containers']:
             for port in container['ports']:
-                service_ports.append(client.models.V1ServicePort(port=port['containerPort']))
+                service_ports.append(client.models.V1ServicePort(port=port['containerPort'],protocol='UDP'))
         api_response = create_node_port_service(namespace, label_selector, service_ports)
         node_port_spec = api_response.spec
         node_port_ports = node_port_spec.ports
@@ -52,8 +52,16 @@ def get_instance_id(node_name):
 def my_handler(meta, **_):
     pass
 
+@kopf.on.delete('', 'v1', 'pods', when=lambda meta, **_: meta['ownerReferences'][0]['kind']=='StatefulSet')
+def delete_fn(meta, spec, namespace, logger, **kwargs):
+    name=meta['labels']['statefulset.kubernetes.io/pod-name']
+    logging.info(namespace)
+    logging.info(name)
+    api_response = api_instance.delete_namespaced_service(name,namespace)
+    logging.info(api_response)
+    
 def create_node_port_service(namespace, label_selector, service_ports):
-    service_spec = client.V1ServiceSpec(selector=label_selector, ports=service_ports, type='NodePort')
+    service_spec = client.V1ServiceSpec(selector=label_selector,ports=service_ports,type='NodePort')
     service_meta = client.V1ObjectMeta(name=label_selector['statefulset.kubernetes.io/pod-name'])
     body = client.V1Service(metadata=service_meta, spec=service_spec)
     api_response = api_instance.create_namespaced_service(namespace, body)

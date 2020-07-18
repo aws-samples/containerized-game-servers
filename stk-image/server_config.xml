@@ -140,7 +140,7 @@ limitations under the License.
     <state-frequency value="10" />
 
     <!-- Use sql database for handling server stats and maintenance, STK needs to be compiled with sqlite3 supported. -->
-    <sql-management value="false" />
+    <sql-management value="true" />
 
     <!-- Database filename for sqlite to use, it can be shared for all servers created in this machine, and stk will create specific table for each server. You need to create the database yourself first, see NETWORKING.md for details -->
     <database-file value="stkservers.db" />

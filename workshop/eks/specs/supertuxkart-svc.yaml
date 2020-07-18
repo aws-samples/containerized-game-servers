@@ -1,7 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: supertuxkart-svc-0
+  name: stk-0 
+spec:
+  selector:
+    statefulset.kubernetes.io/pod-name: stk-0 
+  type: NodePort
+  ports:
+    - protocol: UDP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: supertuxkart-0
 spec:
   selector:
     statefulset.kubernetes.io/pod-name: supertuxkart-0
@@ -14,10 +27,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: supertuxkart-svc-1
+  name: stk1-0
 spec:
   selector:
-    statefulset.kubernetes.io/pod-name: supertuxkart-1
+    statefulset.kubernetes.io/pod-name: stk1-0
   type: NodePort
   ports:
     - protocol: UDP
@@ -27,23 +40,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: supertuxkart-svc-2
+  name: stk2-0
 spec:
   selector:
-    statefulset.kubernetes.io/pod-name: supertuxkart-2
-  type: NodePort
-  ports:
-    - protocol: UDP
-      port: 8080
-      targetPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: supertuxkart-svc-3
-spec:
-  selector:
-    statefulset.kubernetes.io/pod-name: supertuxkart-3
+    statefulset.kubernetes.io/pod-name: stk2-0
   type: NodePort
   ports:
     - protocol: UDP

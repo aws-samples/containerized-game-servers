@@ -11,11 +11,13 @@ fleetiq = boto3.client('gamelift', region_name='us-west-2')
 
 @kopf.on.create('', 'v1', 'pods', when=lambda meta, **_: meta['ownerReferences'][0]['kind']=='StatefulSet')
 def create_fn(meta, spec, namespace, status, logger, **kwargs):
-    if 'statefulset.kubernetes.io/pod-name' in meta['labels']:
-        label_selector = {'statefulset.kubernetes.io/pod-name': meta['labels']['statefulset.kubernetes.io/pod-name']}
-        service_ports = []
-        for container in spec['containers']:
-            for port in container['ports']:
+  if 'statefulset.kubernetes.io/pod-name' in meta['labels']:
+    label_selector = {'statefulset.kubernetes.io/pod-name': meta['labels']['statefulset.kubernetes.io/pod-name']}
+    service_ports = []
+    logging.debug(spec['containers'])
+    for container in spec['containers']:
+      if 'ports' in container:
+        for port in container['ports']:
                 service_ports.append(client.models.V1ServicePort(port=port['containerPort'],protocol='UDP'))
         api_response = create_node_port_service(namespace, label_selector, service_ports)
         node_port_spec = api_response.spec
@@ -24,7 +26,7 @@ def create_fn(meta, spec, namespace, status, logger, **kwargs):
         node_port = node_port_ports[0].node_port
         #TODO Get nodePort from api_response
         instance_id, public_ip = get_instance_id(spec['nodeName'])
-        add_game_server(instance_id, public_ip, node_port)
+        #add_game_server(instance_id, public_ip, node_port)
 
 def add_game_server(instance_id, public_ip, node_port):
     response = fleetiq.register_game_server(

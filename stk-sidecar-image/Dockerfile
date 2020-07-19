@@ -7,4 +7,6 @@ RUN apk -Uuv add groff less python py-pip
 RUN apk add jq tcpdump vim bash
 RUN pip install awscli
 COPY start.sh /
+COPY monitor_session.sh  /
 RUN chmod +x /start.sh
+RUN chmod +x /monitor_session.sh 

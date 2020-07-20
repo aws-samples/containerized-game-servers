@@ -82,9 +82,9 @@ spec:
         - name: WAIT_TO_PLAYERS
           value: "120"
         - name: FREQ_CHECK_SESSION
-          value: "10"
+          value: "1000000"
         - name: NUM_IDLE_SESSION
-          value: "5"
+          value: "500000"
         - name: POD_NAME
           valueFrom:
             fieldRef:

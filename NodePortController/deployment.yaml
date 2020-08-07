@@ -17,7 +17,7 @@ spec:
       serviceAccountName: nodeport-controller-sa
       containers:
       - name: node-port-controller
-        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/nodeportcontroller
+        image: 163538056407.dkr.ecr.us-west-2.amazonaws.com/nodeportcontroller
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

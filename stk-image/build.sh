@@ -2,7 +2,7 @@
   
 source ../account.conf
 region="us-west-2"
-repo="supertuxkart"
+repo="stk"
 repo_name='.dkr.ecr.'$region'.amazonaws.com/'$repo':0.3'
 repo_url=$account$repo_name
 

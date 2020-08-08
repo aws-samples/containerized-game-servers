@@ -89,7 +89,7 @@ spec:
         - name: FREQ_CHECK_SESSION
           value: "10"
         - name: NUM_IDLE_SESSION
-          value: "500000"
+          value: "5"
         - name: POD_NAME
           valueFrom:
             fieldRef:

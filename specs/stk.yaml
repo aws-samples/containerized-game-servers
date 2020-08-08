@@ -73,6 +73,9 @@ spec:
       nodeSelector:
         nodetype: fleetiq
       serviceAccountName: stk
+      volumes:
+      - name: shared-data
+        emptyDir: {}
       containers:
       - name: stk
         image: 163538056407.dkr.ecr.us-west-2.amazonaws.com/stk:0.3
@@ -82,8 +85,12 @@ spec:
           protocol: UDP
         command: ["./start.sh"]
         env:
+        - name: SHARED_FOLDER
+          value: "/sharedata"
         - name: WAIT_TO_PLAYERS
           value: "120"
+        - name: GAME_SERVER_GROUP_NAME 
+          value: "agonsegs"
         - name: POD_NAME
           valueFrom:
             fieldRef:
@@ -92,6 +99,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        volumeMounts:
+        - name: shared-data
+          mountPath: /sharedata
         resources:
           requests:
             cpu: 256m

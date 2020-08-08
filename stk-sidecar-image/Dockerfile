@@ -10,3 +10,6 @@ COPY start.sh /
 COPY monitor_session.sh  /
 RUN chmod +x /start.sh
 RUN chmod +x /monitor_session.sh 
+RUN mkdir /root/.aws
+COPY config /root/.aws
+RUN mkdir /sharedata

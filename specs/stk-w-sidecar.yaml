@@ -71,18 +71,23 @@ spec:
         app: stk
     spec:
       nodeSelector:
-        alpha.eksctl.io/nodegroup-name: m5spot
+        nodetype: fleetiq
       serviceAccountName: stk
+      volumes:
+      - name: shared-data
+        emptyDir: {}
       containers:
       - name: stk-sidecar
-        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/stk-sidecar:0.1
+        image: 163538056407.dkr.ecr.us-west-2.amazonaws.com/stk-sidecar:0.1
         imagePullPolicy: Always
         command: ["./start.sh"]
         env:
+        - name: SHARED_FOLDER
+          value: "/sharedata"
         - name: WAIT_TO_PLAYERS
           value: "120"
         - name: FREQ_CHECK_SESSION
-          value: "1000000"
+          value: "10"
         - name: NUM_IDLE_SESSION
           value: "500000"
         - name: POD_NAME
@@ -93,18 +98,31 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        volumeMounts:
+        - name: shared-data
+          mountPath: /sharedata
         resources:
           requests:
-            cpu: 256m
-            memory: 256Mi
+            cpu: 128m
+            memory: 128Mi
       - name: stk
-        image: 356566070122.dkr.ecr.us-west-2.amazonaws.com/supertuxkart:0.3
+        image: 163538056407.dkr.ecr.us-west-2.amazonaws.com/stk:0.3
         imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","/pre-stop"]
         ports:
         - containerPort: 8080
           protocol: UDP
         command: ["./start.sh"]
         env:
+        - name: SHARED_FOLDER
+          value: "/sharedata"
+        - name: WAIT_TO_PLAYERS
+          value: "120"
+        - name: GAME_SERVER_GROUP_NAME
+          value: "agonsegs"
         - name: POD_NAME
           valueFrom:
             fieldRef:
@@ -113,6 +131,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        volumeMounts:
+        - name: shared-data
+          mountPath: /sharedata
         resources:
           requests:
             cpu: 256m

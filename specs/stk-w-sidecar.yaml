@@ -111,7 +111,7 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: ["/bin/sh","-c","/pre-stop"]
+              command: ["/bin/sh","-c","/pre-stop.sh"]
         ports:
         - containerPort: 8080
           protocol: UDP

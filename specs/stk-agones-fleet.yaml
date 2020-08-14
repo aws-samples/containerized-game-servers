@@ -55,8 +55,6 @@ spec:
                     command: ["/bin/sh","-c","/pre-stop.sh"]
               command: ["/start.sh"]
               env:
-              - name: WAIT_TO_PLAYERS
-                value: "120"
               - name: FREQ_CHECK_SESSION
                 value: "10"
               - name: NUM_IDLE_SESSION

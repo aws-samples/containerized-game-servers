@@ -32,5 +32,7 @@ do
     echo $current_time $last_session_packet_time
     aws gamelift update-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id --utilization-status "UTILIZED"
   fi
+  curl -d "{}" -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/health
+  aws gamelift update-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id --health-check "HEALTHY"
   sleep ${FREQ_CHECK_SESSION}
 done

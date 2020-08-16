@@ -1,0 +1,17 @@
+apiVersion: skaffold/v1beta15
+kind: Config
+build:
+  local: 
+    push: true
+  tagPolicy:
+    sha256: {}
+  # defines where to find the code at build time and where to push the resulting image
+  artifacts:
+  - context: src
+    image: jicowan/gamelift-daemon
+
+# defines the Kubernetes manifests to deploy on each run
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes-manifests/**

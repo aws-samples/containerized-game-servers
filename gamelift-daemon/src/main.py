@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from ec2_metadata import ec2_metadata
-import boto3, signal, sys, logging, random, click
+import boto3, signal, sys, logging, random, click, requests
 from time import sleep
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
@@ -9,6 +9,57 @@ gamelift = boto3.client('gamelift', region_name='us-west-2')
 ec2 = boto3.client('autoscaling', region_name='us-west-2')
 config.load_incluster_config()
 api_instance = client.CoreV1Api()
+SERVICE_URL = "http://169.254.169.254/latest/"
+METADATA_URL = SERVICE_URL + "meta-data/"
+# Max TTL:
+TOKEN_TTL_SECONDS = 21600
+TOKEN_HEADER = "X-aws-ec2-metadata-token"
+TOKEN_HEADER_TTL = "X-aws-ec2-metadata-token-ttl-seconds"
+
+def get_session_token(session):
+    token_response = session.put(
+        SERVICE_URL + "api/token",
+        headers={TOKEN_HEADER_TTL: str(TOKEN_TTL_SECONDS)},
+        timeout=5.0,
+    )
+    if token_response.status_code != 200:
+        token_response.raise_for_status()
+    token = token_response.text
+    session.headers.update({TOKEN_HEADER: token})
+    return session
+
+def get_url(session, url, allow_404=False):
+    session = get_session_token(session)
+    resp = session.get(url, timeout=1.0)
+    if resp.status_code != 404 or not allow_404:
+        resp.raise_for_status()
+    return resp
+
+def spot_termination(session):
+    resp = get_url(session, METADATA_URL + "spot/instance-action", allow_404=True)
+    if resp.status_code == 404:
+        return None
+    return resp.json()
+
+def deregister_game_server(game_server_group_name, game_server_id):
+    body='[{"op": "add", "path": "/spec/unschedulable", "value": True}]'
+    try:
+        api_instance.patch_node(name=ec2_metadata.private_hostname, body=json.loads(body))
+        print('Node %s has been cordoned' % instance_id, flush=True)
+    except ApiException as e:
+        print("Exception when calling CoreV1Api->patch_node: %s\n" % e)
+    gamelift.deregister_game_server(
+        GameServerGroupName=game_server_group_name,
+        GameServerId=game_server_id
+    )
+    print('Instance %s has been deregistered from FleetIQ' % game_server_id, flush=True)
+    session = requests.session()
+    while spot_termination(session) == None:
+        print('Waiting for termination notification', flush=True)
+        session = get_session_token(session)
+        sleep(5)
+    print('Shutting down', flush=True)
+    exit(0)    
 
 def initialize_game_server(game_server_group_name, game_server_id, instance_id):
     try:
@@ -83,12 +134,7 @@ def main(failure_threshold, healthcheck_interval):
             print('Instance is healthy', flush=True)
         sleep(healthcheck_interval)
     print('Instance is no longer viable', flush=True)
-    body='[{"op": "add", "path": "/spec/unschedulable", "value": True}]'
-    try:
-        api_instance.patch_node(name=ec2_metadata.private_hostname, body=json.loads(body))
-        print('Node %s has been cordoned' % instance_id, flush=True)
-    except ApiException as e:
-        print("Exception when calling CoreV1Api->patch_node: %s\n" % e)
+    deregister_game_server(game_server_group_name, game_server_id)
 
 def sigterm_handler(signal, frame):
 # degister game server on exit

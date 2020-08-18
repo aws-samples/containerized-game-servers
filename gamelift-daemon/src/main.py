@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 from ec2_metadata import ec2_metadata
-import boto3, signal, sys, logging, random, click, requests
+import boto3, signal, sys, logging, random, click, requests, os
 from time import sleep
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
 
-gamelift = boto3.client('gamelift', region_name='us-west-2')
-ec2 = boto3.client('autoscaling', region_name='us-west-2')
+gamelift = boto3.client('gamelift', region_name=os.getenv('AWS_REGION'))
+ec2 = boto3.client('autoscaling', region_name=os.getenv('AWS_REGION'))
 config.load_incluster_config()
 api_instance = client.CoreV1Api()
+instance_id = ec2_metadata.instance_id
+game_server_id = instance_id
+game_server_group_name = 'agones-game-servers'
+
 SERVICE_URL = "http://169.254.169.254/latest/"
 METADATA_URL = SERVICE_URL + "meta-data/"
 # Max TTL:
@@ -115,9 +119,6 @@ def is_healthy(instance_id):
 @click.option('--failure-threshold', help='Number of times to try before giving up', type=click.IntRange(1, 5, clamp=True), default=3)
 @click.option('--healthcheck-interval', help='How often in seconds to perform the healthcheck', type=click.IntRange(5, 60, clamp=True), default=60)
 def main(failure_threshold, healthcheck_interval):
-    instance_id = ec2_metadata.instance_id
-    game_server_id = instance_id
-    game_server_group_name = 'agones-game-servers'
     initialize_game_server(game_server_group_name, game_server_id, instance_id)
     
     # Check game server health

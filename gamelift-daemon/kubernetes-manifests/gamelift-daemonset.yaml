@@ -14,13 +14,10 @@ spec:
         name: gamelift-daemonset
     spec:
       tolerations:
-      - key: "agones.dev/game-servers"
-        operator: "Equal"
-        value: "true"
-        effect: NoExecute
+        - operator: Exists
       containers:
       - name: gamelift-daemonset
-        image: jicowan/gamelift-daemon
+        image: jicowan/jicowan_gamelift-daemon
         env:
           - name: "PYTHONUNBUFFERED"
             value: "1"
@@ -30,6 +27,8 @@ spec:
             value: "us-west-2"
           - name: "GAME_SERVER_GROUP_NAME"
             value: "agones-game-servers"
+          - name: "REDIS_URL"
+            value: "gameliftcache.hmhiju.ng.0001.usw2.cache.amazonaws.com:6379"
         args:
           - "--failure-threshold=2"
           - "--healthcheck-interval=30"
@@ -44,7 +43,13 @@ metadata:
 rules:
 - apiGroups: [""]
   resources: ["nodes"]
-  verbs: ["get, patch"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "update", "patch"]
+- apiGroups: ["agones.dev"]
+  resources: ["gameservers"]
+  verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

@@ -20,6 +20,7 @@ instance_id = ec2_metadata.instance_id
 game_server_id = instance_id
 game_server_group_name = os.getenv('GAME_SERVER_GROUP_NAME') # move to cmdline flag?
 grace_period = 30
+loop = asyncio.get_event_loop()
 
 def drain_pods(node_name):
     # Removes all Kubernetes pods from the specified node
@@ -56,7 +57,7 @@ def drain_pods(node_name):
             }
         core_v1_client.create_namespaced_pod_eviction(pod.metadata.name + '-eviction', pod.metadata.namespace, body)
 
-def deregister_game_server(game_server_group_name, game_server_id):
+async def deregister_game_server(game_server_group_name, game_server_id):
     cordon_body = {
         "spec": {
             "unschedulable": True
@@ -142,9 +143,10 @@ def deregister_game_server(game_server_group_name, game_server_id):
     except ApiException as e:
         print(f'Exception when calling CoreV1Api->patch_node: {e}\n')
 
+async def termination_handler(game_server_group_name,game_server_id):
     while ec2_metadata.spot_instance_action == None:
         print('Waiting for termination notification', flush=True)
-        sleep(5)
+        await asyncio.sleep(5)
     print('Shutting down', flush=True)
     
     # Drain pods from the instance
@@ -253,7 +255,8 @@ async def get_health_status(instance_id, game_server_group_name, game_server_id,
         print(message, flush=True)
         if message['InstanceStatus'] == 'DRAINING':
             print('Instance is no longer viable', flush=True)
-            deregister_game_server(game_server_group_name, game_server_id)
+            await asyncio.wait_for(deregister_game_server(game_server_group_name, game_server_id), timeout=300)
+            await termination_handler(game_server_group_name,game_server_id)
         else: 
             print('Waiting for next signal')
             await asyncio.sleep(healthcheck_interval)
@@ -263,7 +266,7 @@ async def get_health_status(instance_id, game_server_group_name, game_server_id,
 @click.option('--healthcheck-interval', help='How often in seconds to perform the healthcheck', type=click.IntRange(5, 60, clamp=True), default=60)
 def main(failure_threshold, healthcheck_interval):
     initialize_game_server(game_server_group_name, game_server_id, instance_id)
-    loop = asyncio.get_event_loop()
+
     try: 
         asyncio.ensure_future(update_health_status(game_server_group_name, game_server_id))
         asyncio.ensure_future(get_health_status(instance_id, game_server_group_name, game_server_id, healthcheck_interval))

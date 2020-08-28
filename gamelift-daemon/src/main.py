@@ -25,16 +25,11 @@ loop = asyncio.get_event_loop()
 def drain_pods(node_name):
     # Removes all Kubernetes pods from the specified node
     # Not currently implemented. Need to assess whether to allow the termination handler to drain pods.
-    field_selector = {
-        "spec": {
-            "nodeName": node_name
-        }
-    }
+    field_selector = 'spec.nodeName=' + ec2_metadata.private_hostname
     pods = core_v1_client.list_pod_for_all_namespaces(watch=False, field_selector=field_selector)
+    filtered_pods = filter(lambda x: x.metadata.namespace != 'kube-system', pods.items)
 
-    print('Number of pods to delete: ' + str(len(pods.items)), flush=True)
-
-    for pod in pods.items:
+    for pod in filtered_pods:
         print(f'Deleting pod {pod.metadata.name} in namespace {pod.metadata.namespace}', flush=True)
         if 'grace_period' in globals():
             body = {
@@ -55,7 +50,7 @@ def drain_pods(node_name):
                     'namespace': pod.metadata.namespace
                 }
             }
-        core_v1_client.create_namespaced_pod_eviction(pod.metadata.name + '-eviction', pod.metadata.namespace, body)
+        core_v1_client.create_namespaced_pod_eviction(pod.metadata.name, pod.metadata.namespace, body)
 
 async def deregister_game_server(game_server_group_name, game_server_id):
     cordon_body = {
@@ -111,9 +106,7 @@ async def deregister_game_server(game_server_group_name, game_server_id):
         api_response = custom_obj_client.list_cluster_custom_object(group='agones.dev', version='v1', plural='gameservers')
     except ApiException as e:
         print("Exception when calling CustomObjectsApi->list_cluster_custom_object: %s\n" % e)
-    
     game_servers = api_response['items']
-    print(game_servers)
     filtered_list = list(filter(lambda x: x['status']['state']=='Allocated' and x['status']['nodeName']==ec2_metadata.private_hostname, game_servers))
     for item in filtered_list:
         print(f"Updating {item['metadata']['name']} with toleration", flush=True)
@@ -143,21 +136,22 @@ async def deregister_game_server(game_server_group_name, game_server_id):
     except ApiException as e:
         print(f'Exception when calling CoreV1Api->patch_node: {e}\n')
 
-async def termination_handler(game_server_group_name,game_server_id):
-    while ec2_metadata.spot_instance_action == None:
-        print('Waiting for termination notification', flush=True)
-        await asyncio.sleep(5)
-    print('Shutting down', flush=True)
-    
-    # Drain pods from the instance
-    drain_pods(ec2_metadata.private_hostname)
-    
+def termination_handler(game_server_group_name,game_server_id):
     # Deregister the instance from FleetIQ
     gamelift.deregister_game_server(
         GameServerGroupName=game_server_group_name,
         GameServerId=game_server_id
     )
     print(f'Instance {game_server_id} has been deregistered from FleetIQ', flush=True)
+    
+    print('Shutting down', flush=True)
+    # Drain pods from the instance
+    drain_pods(ec2_metadata.private_hostname)
+
+    while ec2_metadata.spot_instance_action == None:
+        print('Waiting for termination notification', flush=True)
+        sleep(10)
+    
     exit(0)
 
 def initialize_game_server(game_server_group_name, game_server_id, instance_id):
@@ -242,6 +236,21 @@ async def update_health_status(game_server_group_name, game_server_id):
         print('Updated Gamelift game server health')
         await asyncio.sleep(60)
 
+async def get_game_servers(game_server_group_name,game_server_id):
+    while True:
+        print('Scanning instance for game servers')
+        try:
+            api_response = custom_obj_client.list_cluster_custom_object(group='agones.dev', version='v1', plural='gameservers')
+        except ApiException as e:
+            print("Exception when calling CustomObjectsApi->list_cluster_custom_object: %s\n" % e)
+        game_servers = api_response['items']
+        filtered_list = list(filter(lambda x: x['status']['state']=='Allocated' and x['status']['nodeName']==ec2_metadata.private_hostname, game_servers))
+        print(f'There are {len(filtered_list)} Allocated game servers running on this instance')
+        if filtered_list == []:
+            return True
+        else:          
+            await asyncio.sleep(60)
+
 async def get_health_status(instance_id, game_server_group_name, game_server_id, healthcheck_interval):
     # Check instance health
     pubsub = r.pubsub()
@@ -252,11 +261,13 @@ async def get_health_status(instance_id, game_server_group_name, game_server_id,
             continue
         message = json.loads(raw_message['data'])
         print(f"Instance {message['InstanceId']} status is: {message['InstanceStatus']}", flush=True)
-        print(message, flush=True)
         if message['InstanceStatus'] == 'DRAINING':
             print('Instance is no longer viable', flush=True)
-            await asyncio.wait_for(deregister_game_server(game_server_group_name, game_server_id), timeout=300)
-            await termination_handler(game_server_group_name,game_server_id)
+            await asyncio.wait_for(deregister_game_server(game_server_group_name, game_server_id), timeout=60)
+            is_ready_shutdown = await get_game_servers(game_server_group_name,game_server_id)
+            if is_ready_shutdown == True:
+                loop.stop()
+                termination_handler(game_server_group_name,game_server_id)
         else: 
             print('Waiting for next signal')
             await asyncio.sleep(healthcheck_interval)
@@ -266,7 +277,6 @@ async def get_health_status(instance_id, game_server_group_name, game_server_id,
 @click.option('--healthcheck-interval', help='How often in seconds to perform the healthcheck', type=click.IntRange(5, 60, clamp=True), default=60)
 def main(failure_threshold, healthcheck_interval):
     initialize_game_server(game_server_group_name, game_server_id, instance_id)
-
     try: 
         asyncio.ensure_future(update_health_status(game_server_group_name, game_server_id))
         asyncio.ensure_future(get_health_status(instance_id, game_server_group_name, game_server_id, healthcheck_interval))

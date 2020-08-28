@@ -156,7 +156,7 @@ class EC2Metadata(BaseLazyObject):
             return None
         return resp.text
 
-    @cached_property
+    @property
     def spot_instance_action(self):
         resp = self._get_url(METADATA_URL + "spot/instance-action", allow_404=True)
         if resp.status_code == 404:

@@ -161,7 +161,10 @@ class EC2Metadata(BaseLazyObject):
         resp = self._get_url(METADATA_URL + "spot/instance-action", allow_404=True)
         if resp.status_code == 404:
             return None
-        return resp.text
+        elif resp != None and (resp.status_code < 200 or resp >= 300):
+            print(f'Metadata request received http status code {resp.StatusCode}')
+            return resp.status_code
+            
 
     @cached_property
     def region(self):

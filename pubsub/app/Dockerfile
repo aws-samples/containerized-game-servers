@@ -5,11 +5,7 @@ FROM python:3.8
 WORKDIR /app
 
 # copy the requirements file used for dependencies
-COPY ["requirements.txt", "boto3-1.14.11.tar.gz", "botocore-1.17.11.tar.gz", "./"]
-
-# Install updated boto libraries
-RUN pip install ./boto3-1.14.11.tar.gz
-RUN pip install ./botocore-1.17.11.tar.gz
+COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt

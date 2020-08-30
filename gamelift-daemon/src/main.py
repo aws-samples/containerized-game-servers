@@ -126,19 +126,15 @@ async def cordon_and_protect():
         core_v1_client.patch_node(ec2_metadata.private_hostname, taint_body)
         print(f'Node {ec2_metadata.instance_id} has been tainted', flush=True)
     except ApiException as e:
-        print(f'Exception when calling CoreV1Api->patch_node: {e}\n', flush=True)
+        print(f'The node has already been tainted with the draining taint', flush=True)
+    return True 
 
 def termination_handler(GameServerGroupName: str, GameServerId: str):
-    """This method deregisters the instance from FleetIQ, calls the drain pods method to evict non-essential pods from the node
+    """This method calls the drain pods method to evict non-essential pods from the node
     and waits to receive the termination signal from EC2 metadata."""
-    # Deregister the instance from FleetIQ
-    gamelift.deregister_game_server(
-        GameServerGroupName=GameServerGroupName,
-        GameServerId=GameServerId
-    )
-    print(f'Instance {game_server_id} has been deregistered from FleetIQ', flush=True)
-    print('Shutting down', flush=True)
+    # This method is never called because the instance never receives a termination signal
     
+    print('Shutting down', flush=True)
     # Drain pods from the instance
     drain_pods()
 
@@ -167,7 +163,7 @@ def initialize_game_server(GameServerGroupName: str, GameServerId: str, Instance
     # Update the game server status to healthy
     # TODO(jicowan@amazon.com) Change this to use the new FleetIQ API DescribeGameServerInstances
     # TODO(jicowan@amazon.com) Consider using a decorator and backoff library to implement the backoff
-    backoff = random.randint(1,10)
+    backoff = random.randint(1,5)
     while is_healthy(InstanceId) != 'HEALTHY':
         print(f'Instance is not healthy, re-trying in {backoff}', flush=True)
         sleep(backoff)
@@ -218,7 +214,7 @@ def initialize_game_server(GameServerGroupName: str, GameServerId: str, Instance
         core_v1_client.patch_node(ec2_metadata.private_hostname, taint_body)
         print(f'Node {InstanceId} has been tainted', flush=True)
     except ApiException as e:
-        print(f'Exception when calling CoreV1Api->patch_node: {e}\n', flush=True)
+        print(f'The node {InstanceId} has already been tainted', flush=True)
 
 def is_healthy(InstanceId: str):
     """This method calls the DescribeAutoscalingInstance API to get the health status of the instance."""
@@ -233,13 +229,16 @@ def is_healthy(InstanceId: str):
 
 async def update_health_status(GameServerGroupName: str, GameServerId: str):
     while True:
-        gamelift.update_game_server(
-            GameServerGroupName=GameServerGroupName,
-            GameServerId=GameServerId,
-            HealthCheck='HEALTHY'
-        )
-        print('Updated Gamelift game server health', flush=True)
-        await asyncio.sleep(60)
+        try: 
+            gamelift.update_game_server(
+                GameServerGroupName=GameServerGroupName,
+                GameServerId=GameServerId,
+                HealthCheck='HEALTHY'
+            )
+            print('Updated Gamelift game server health', flush=True)
+        except gamelift.exceptions.NotFoundException as e:
+            print(f'Skipping healthcheck, the node {GameServerId} is not registered', flush=True)
+        await asyncio.sleep(30)
 
 async def get_game_servers():
     """This is an asynchronous method call that checks to see whether there are any Agones game servers in the Allocated state.
@@ -250,10 +249,10 @@ async def get_game_servers():
         try:
             custom_objs = custom_obj_client.list_cluster_custom_object(group='agones.dev', version='v1', plural='gameservers')
         except ApiException as e:
-            print("Exception when calling CustomObjectsApi->list_cluster_custom_object: %s\n" % e)
+            print(f'Exception when calling CustomObjectsApi->list_cluster_custom_object: {e}')
         game_servers = custom_objs['items']
         filtered_list = list(filter(lambda x: x['status']['state']=='Allocated' and x['status']['nodeName']==ec2_metadata.private_hostname, game_servers))
-        print(f'There are {len(filtered_list)} Allocated game servers running on this instance')
+        print(f'There are {len(filtered_list)} Allocated game servers running on this instance', flush=True)
         if filtered_list == []:
             return True
         else:          
@@ -270,21 +269,51 @@ async def get_health_status(InstanceId: str, GameServerGroupName: str, GameServe
     pubsub = r.pubsub()
     pubsub.subscribe(InstanceId)
     print('Starting message loop', flush=True)
+    is_cordoned = False
+    is_ready_shutdown = False
+    is_waiting_for_termination = False
     for raw_message in pubsub.listen():
+        print(f'is_cordoned: {is_cordoned}, is_ready_shutdown: {is_ready_shutdown}, is_waiting_for_termination: {is_waiting_for_termination}', flush=True)
         if raw_message['type'] != "message":
             continue
         message = json.loads(raw_message['data'])
+        status = message['InstanceStatus']
         print(f"Instance {message['InstanceId']} status is: {message['InstanceStatus']}", flush=True)
-        if message['InstanceStatus'] == 'DRAINING':
+        
+        if is_waiting_for_termination == True and status == 'DRAINING':
+            print(f'Waiting for termination signal', flush=True)
+            
+        elif is_waiting_for_termination == True and status == 'SPOT_TERMINATING':
+        # This is never invoked because the status never equals SPOT_TERMINATING    
+            print(f'Received termination signal', flush=True)
+            loop.stop()
+            termination_handler(GameServerGroupName, GameServerId)
+        
+        elif is_ready_shutdown == True:
+            try:
+                gamelift.deregister_game_server(
+                    GameServerGroupName=GameServerGroupName,
+                    GameServerId=GameServerId
+                )
+                print(f'Instance {message["InstanceId"]} has been deregistered from GameLift', flush=True)
+                is_waiting_for_termination = True
+            except gamelift.exceptions.NotFoundException as e:
+                pass
+        
+        elif status == 'DRAINING' and is_cordoned == True:
+            # This seems to be a block call.  Delays the main loop, get_health_status, until resolved.
+            # I think I neeed to spawn a new thread here. 
+            is_ready_shutdown = await asyncio.ensure_future(get_game_servers())
+        
+        elif status == 'DRAINING' and is_cordoned == False:
             print('Instance is no longer viable', flush=True)
-            await asyncio.wait_for(cordon_and_protect(), timeout=60)
-            is_ready_shutdown = await get_game_servers()
-            if is_ready_shutdown == True:
-                loop.stop()
-                termination_handler(GameServerGroupName, GameServerId)
-        else: 
-            print('Waiting for next signal')
-            await asyncio.sleep(HealthcheckInterval)
+            is_cordoned = await asyncio.wait_for(cordon_and_protect(), timeout=30)
+        
+        else:
+            pass
+        
+        print('Finished get health status loop', flush=True)
+        await asyncio.sleep(HealthcheckInterval)
 
 @click.command()
 @click.option('--failure-threshold', help='Number of times to try before giving up', type=click.IntRange(1, 5, clamp=True), default=3)
@@ -307,6 +336,7 @@ def sigterm_handler(signal, frame):
         GameServerGroupName=game_server_group_name,
         GameServerId=game_server_id
     )
+    drain_pods()
     sys.exit(0)
 
 #logging.basicConfig(format='%(asctime)s [%(levelname)s] - %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)

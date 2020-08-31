@@ -303,7 +303,7 @@ async def get_health_status(InstanceId: str, GameServerGroupName: str, GameServe
         elif status == 'DRAINING' and is_cordoned == True:
             # This seems to be a block call.  Delays the main loop, get_health_status, until resolved.
             # I think I neeed to spawn a new thread here. 
-            is_ready_shutdown = await asyncio.ensure_future(get_game_servers())
+            is_ready_shutdown = await get_game_servers()
         
         elif status == 'DRAINING' and is_cordoned == False:
             print('Instance is no longer viable', flush=True)
@@ -332,11 +332,13 @@ def main(failure_threshold, healthcheck_interval):
 def sigterm_handler(signal, frame):
     """A handler for when the daemon receives a SIGTERM signal.  Before shutting down, the daemon will deregister the instance from FleetIQ."""
     # degister game server on exit
-    gamelift.deregister_game_server(
+    try: 
+        gamelift.deregister_game_server(
         GameServerGroupName=game_server_group_name,
         GameServerId=game_server_id
     )
-    drain_pods()
+    except gamelift.exceptions.NotFoundException as e:
+        print(f'Instance has already been deregistered', flush=True)
     sys.exit(0)
 
 #logging.basicConfig(format='%(asctime)s [%(levelname)s] - %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)

@@ -16,4 +16,8 @@ gameliftDaemon:
   healthcheckInterval: 60
   nodeSelector: game-servers
   serviceAccount: gamelift-daemon
-  redisUrl: redis-master
+
+redis: 
+  tls:
+    authClients: false
+  usePassword: false

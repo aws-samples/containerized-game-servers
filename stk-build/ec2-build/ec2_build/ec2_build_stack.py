@@ -32,7 +32,7 @@ class Ec2BuildStack(core.Stack):
     userdata.add_commands(
          "echo '======================================================='",
          "yum -y update",
-         "yum install -y git docker",
+         "yum install -y git docker svn",
          "cd /home/ec2-user",
          "git clone https://github.com/yahavb/agones.git",
          "chown ec2-user -R /home/ec2-user/agones/",
@@ -65,3 +65,6 @@ class Ec2BuildStack(core.Stack):
       property_path="BlockDeviceMappings",
       value=[{'DeviceName': '/dev/xvda', 'Ebs': {'VolumeSize': 100,'DeleteOnTermination': False, 'VolumeType': 'gp2'}}]
     )
+
+
+    #TODO add ECR registry creation and enable actions 

@@ -71,7 +71,7 @@ spec:
         app: stk
     spec:
       nodeSelector:
-        nodetype: fleetiq
+        project: agones
       serviceAccountName: stk
       volumes:
       - name: shared-data

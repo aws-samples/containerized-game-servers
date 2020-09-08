@@ -27,7 +27,7 @@ spec:
           - name: "GAME_SERVER_GROUP_NAME"
             value: {{ .Values.gameliftDaemon.gameServerGroupName }}
           - name: "REDIS_URL"
-            value: {{ .Values.gameliftDaemon.redisUrl }}
+            value: {{ .Release.Name }}-redis-master
         args:
         {{- with .Values.gameliftDaemon }}
           - --failure-threshold={{ .failureThreshold }}

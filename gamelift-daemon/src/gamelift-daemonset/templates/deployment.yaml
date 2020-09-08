@@ -19,7 +19,7 @@ spec:
         image: jicowan/pubsub
         env:
           - name: "REDIS_URL"
-            value: {{ .Values.gameliftDaemon.redisUrl }}
+            value: {{ .Release.Name }}-redis-master
           - name: "GAME_SERVER_GROUP_NAME"
             value: {{ .Values.gameliftDaemon.gameServerGroupName }}
           - name: "AWS_REGION"

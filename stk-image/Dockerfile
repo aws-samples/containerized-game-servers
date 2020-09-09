@@ -1,6 +1,6 @@
 FROM 356566070122.dkr.ecr.us-west-2.amazonaws.com/supertuxkart:0.2
-
-RUN apt-get install -y vim sqlite3 lsof tcpdump curl jq uuid
+RUN apt-get update -y
+RUN apt-get install -y vim sqlite3 lsof tcpdump curl jq uuid default-jdk default-jre
 RUN curl -f -s -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/local/bin/kubectl && \
     kubectl version --client

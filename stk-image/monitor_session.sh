@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Starting monitor sessions"
+#echo "Starting monitor sessions"
 
 capture_file="/capture_file"
 num_of_no_session_events=0
@@ -9,10 +9,10 @@ game_server_id=`cat $SHARED_FOLDER/GAME_SERVER_ID`
 instance_id=`cat $SHARED_FOLDER/INSTANCE_ID`
 game_server_name=`cat $SHARED_FOLDER/GAME_SERVER_GROUP_NAME`
 
-echo "reading  game server attr from shared folder"
-echo game_server_name=$game_server_name
-echo instance_id=$instance_id
-echo game_server_id=$game_server_id
+#echo "reading  game server attr from shared folder"
+#echo game_server_name=$game_server_name
+#echo instance_id=$instance_id
+#echo game_server_id=$game_server_id
 
 while true
 do
@@ -25,14 +25,14 @@ do
       echo num_of_no_session_events=$num_of_no_session_events
       if [ "$num_of_no_session_events" -ge "$NUM_IDLE_SESSION" ]; then 
         echo "no acvite sessions in the last $FREQ_CHECK_SESSION*$num_of_no_session_events seconds, going to terminate the game server"
-        echo aws gamelift deregister-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id
-        echo kubectl delete pod $POD_NAME -n $NAMESPACE
+        #echo aws gamelift deregister-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id
+        #echo kubectl delete pod $POD_NAME -n $NAMESPACE
       fi
     fi
-    echo $current_time $last_session_packet_time
-    echo aws gamelift update-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id --utilization-status "UTILIZED"
+    #echo $current_time $last_session_packet_time
+    #echo aws gamelift update-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id --utilization-status "UTILIZED"
   fi
-  curl -d "{}" -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/health
-  echo aws gamelift update-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id --health-check "HEALTHY"
+  curl -s -d "{}" -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/health
+  #echo aws gamelift update-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id --health-check "HEALTHY"
   sleep ${FREQ_CHECK_SESSION}
 done

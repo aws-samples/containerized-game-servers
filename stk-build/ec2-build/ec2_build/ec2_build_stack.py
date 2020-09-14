@@ -1,7 +1,5 @@
 from aws_cdk import (
     aws_iam as iam,
-    aws_lambda as _lambda,
-    aws_apigateway as apigw,
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     core

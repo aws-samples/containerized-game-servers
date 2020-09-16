@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: fluentd
+  name: fluentbit
   namespace: default
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: fluentd-role
+  name: fluentbit-role
 rules:
   - apiGroups: [""]
     resources:
@@ -19,14 +19,14 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: fluentd-role-binding
+  name: fluentbit-role-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: fluentd-role
+  name: fluentbit-role
 subjects:
   - kind: ServiceAccount
-    name: fluentd
+    name: fluentbit
     namespace: default
 ---
 apiVersion: v1
@@ -38,14 +38,12 @@ metadata:
 data:
   fluent-bit.conf: |
     [SERVICE]
-        Parsers_File  parsers.conf
     @INCLUDE kube.conf
   kube.conf: |
     [INPUT]
         Name              tail
         Tag               kube.*
         Path              /var/log/containers/*.log
-        Parser            docker
         DB                /var/log/flb_kube.db
         Mem_Buf_Limit     50MB
         Skip_Long_Lines   On
@@ -59,7 +57,7 @@ data:
         K8S-Logging.Exclude On
     [OUTPUT]
         Name firehose
-        Match stk-*
+        Match *
         delivery_stream stk
         region us-west-2
 ---
@@ -78,7 +76,7 @@ spec:
       labels:
         name: fluentbit
     spec:
-      serviceAccountName: fluentd
+      serviceAccountName: fluentbit
       containers:
       - name: aws-for-fluent-bit
         image: 906394416424.dkr.ecr.us-west-2.amazonaws.com/aws-for-fluent-bit:latest
@@ -90,11 +88,6 @@ spec:
           readOnly: true
         - name: fluent-bit-config
           mountPath: /fluent-bit/etc/
-        - name: mnt
-          mountPath: /mnt
-          readOnly: true
-        - name: magento-debug-log
-          mountPath: /tmp/debug_log
         resources:
           limits:
             memory: 500Mi
@@ -111,10 +104,3 @@ spec:
       - name: fluent-bit-config
         configMap:
           name: fluent-bit-config
-      - name: mnt
-        hostPath:
-          path: /mnt
-      - name: magento-debug-log
-        hostPath:
-            path: /tmp/debug_log
-

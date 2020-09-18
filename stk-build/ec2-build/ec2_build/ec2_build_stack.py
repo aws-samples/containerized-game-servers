@@ -33,6 +33,7 @@ class Ec2BuildStack(core.Stack):
          "yum install -y git docker svn",
          "cd /home/ec2-user",
          "git clone https://github.com/yahavb/agones.git",
+         "git clone https://github.com/yahavb/amazon-aurora-call-to-amazon-sagemaker-sample.git",
          "chown ec2-user -R /home/ec2-user/agones/",
          "service docker start"
     )

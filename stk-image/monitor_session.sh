@@ -22,7 +22,7 @@ do
     last_session_packet_time=`tail -1 $capture_file| awk -F\: '{print $1":"$2}'`
     if [ "$current_time" != "$last_session_packet_time" ]; then
       (( num_of_no_session_events += 1 ))
-      echo num_of_no_session_events=$num_of_no_session_events
+      #echo num_of_no_session_events=$num_of_no_session_events
       if [ "$num_of_no_session_events" -ge "$NUM_IDLE_SESSION" ]; then 
         echo "no acvite sessions in the last $FREQ_CHECK_SESSION*$num_of_no_session_events seconds, going to terminate the game server"
         #echo aws gamelift deregister-game-server --game-server-group-name $game_server_name --game-server-id $game_server_id

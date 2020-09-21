@@ -8,7 +8,12 @@ sighandler () {
   echo aws gamelift deregister-game-server --game-server-group-name $GAME_SERVER_GROUP_NAME --game-server-id $game_server_id 
   exit $?
 }
+<<<<<<< HEAD
+sleep 1
+curl -s -d "{}" -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/ready
+=======
 sleep 10
 
 curl -d "{}" -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/ready
+>>>>>>> c208024f0a27ddd544e859a268de9283a02fb55d
 ./cmake_build/bin/supertuxkart --server-config=/home/supertuxkart/stk-code/server_config.xml --log=0 --connection-debug --mode=${GAME_MODE}

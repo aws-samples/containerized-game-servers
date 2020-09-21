@@ -33,8 +33,8 @@ spec:
         app: stk
     # GameServer specification
     spec:
-      health:
-        disabled: true
+    #  health:
+    #    disabled: true
       ports:
       - name: default
         portPolicy: Dynamic
@@ -56,7 +56,7 @@ spec:
               command: ["/start.sh"]
               env:
               - name: FREQ_CHECK_SESSION
-                value: "10"
+                value: "9"
               - name: GAME_MODE
                 value: "1"
               - name: NUM_IDLE_SESSION

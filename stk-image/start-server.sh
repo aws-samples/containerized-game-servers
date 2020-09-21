@@ -10,4 +10,4 @@ sighandler () {
 }
 sleep 10
 curl -d "{}" -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/ready
-./cmake_build/bin/supertuxkart --server-config=/home/supertuxkart/stk-code/server_config.xml --log=0 --connection-debug
+./cmake_build/bin/supertuxkart --server-config=/home/supertuxkart/stk-code/server_config.xml --log=0 --connection-debug --mode=${GAME_MODE}

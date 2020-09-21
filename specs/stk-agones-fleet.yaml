@@ -57,6 +57,8 @@ spec:
               env:
               - name: FREQ_CHECK_SESSION
                 value: "10"
+              - name: GAME_MODE
+                value: "1"
               - name: NUM_IDLE_SESSION
                 value: "5"
               - name: SHARED_FOLDER
@@ -78,7 +80,7 @@ spec:
               mountPath: /sharedata
             resources:
               requests:
-                cpu: 256m
-                memory: 256Mi
+                cpu: 1024m
+                memory: 1024Mi
             nodeSelector: 
               project: agones

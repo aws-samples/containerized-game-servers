@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pubsub
+  labels:
+    app: pubsub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pubsub
+  template:
+    metadata:
+      labels:
+        app: pubsub
+    spec:
+      containers:
+      - name: pubsub
+        image: jicowan/pubsub
+        env:
+          - name: "REDIS_URL"
+            value: "gameliftcache.hmhiju.ng.0001.usw2.cache.amazonaws.com:6379"
+          - name: "GAME_SERVER_GROUP_NAME"
+            value: "agones-game-servers"
+          - name: "AWS_REGION"
+            value: "us-west-2"

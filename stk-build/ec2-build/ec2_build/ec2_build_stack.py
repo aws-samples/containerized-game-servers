@@ -1,7 +1,5 @@
 from aws_cdk import (
     aws_iam as iam,
-    aws_lambda as _lambda,
-    aws_apigateway as apigw,
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     core
@@ -32,9 +30,10 @@ class Ec2BuildStack(core.Stack):
     userdata.add_commands(
          "echo '======================================================='",
          "yum -y update",
-         "yum install -y git docker",
+         "yum install -y git docker svn",
          "cd /home/ec2-user",
          "git clone https://github.com/yahavb/agones.git",
+         "git clone https://github.com/yahavb/amazon-aurora-call-to-amazon-sagemaker-sample.git",
          "chown ec2-user -R /home/ec2-user/agones/",
          "service docker start"
     )
@@ -65,3 +64,6 @@ class Ec2BuildStack(core.Stack):
       property_path="BlockDeviceMappings",
       value=[{'DeviceName': '/dev/xvda', 'Ebs': {'VolumeSize': 100,'DeleteOnTermination': False, 'VolumeType': 'gp2'}}]
     )
+
+
+    #TODO add ECR registry creation and enable actions 

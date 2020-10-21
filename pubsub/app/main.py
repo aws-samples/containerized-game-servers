@@ -14,7 +14,7 @@ gamelift = boto3.client('gamelift', region_name=os.getenv('AWS_REGION'))
 
 while True:
     paginator = gamelift.get_paginator('describe_game_server_instances')
-    pages = paginator.paginate(GameServerGroupName='agones-game-servers')
+    pages = paginator.paginate(GameServerGroupName=os.getenv('GAME_SERVER_GROUP_NAME'))
     for page in pages:
         for game_server in page['GameServerInstances']:
             print(f'Publishing status on channel {game_server["InstanceId"]}', flush=True)

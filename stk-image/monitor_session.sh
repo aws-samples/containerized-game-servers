@@ -13,6 +13,8 @@ game_server_name=`cat $SHARED_FOLDER/GAME_SERVER_GROUP_NAME`
 #echo game_server_name=$game_server_name
 #echo instance_id=$instance_id
 #echo game_server_id=$game_server_id
+sleep 5
+curl -s -d "{}" -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/ready
 
 while true
 do

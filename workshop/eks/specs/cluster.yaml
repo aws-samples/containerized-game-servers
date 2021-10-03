@@ -2,16 +2,16 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: ml-us-west-2
+  name: ack-us-west-2
   region: us-west-2
 
 nodeGroups:
   - name: c5spot
     labels:
-      project: zip
+      project: procore
       lifecycle: Ec2Spot
       aws.amazon.com/spot: "true"
-    maxSize: 50
+    maxSize: 10
     minSize: 1
     ssh:
       allow: true
@@ -25,7 +25,7 @@ nodeGroups:
       spotInstance: "true:PreferNoSchedule"
     tags:
       k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
-      k8s.io/cluster-autoscaler/node-template/label/project: zip
+      k8s.io/cluster-autoscaler/node-template/label/project: procore
       k8s.io/cluster-autoscaler/node-template/taint/spotInstance: "true:PreferNoSchedule"
       k8s.io/cluster-autoscaler/node-template/label/aws.amazon.com/spot: "true"
     iam:

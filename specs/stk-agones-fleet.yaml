@@ -58,7 +58,7 @@ spec:
               - name: FREQ_CHECK_SESSION
                 value: "9"
               - name: GAME_MODE
-                value: "1"
+                value: "0"
               - name: NUM_IDLE_SESSION
                 value: "5"
               - name: SHARED_FOLDER

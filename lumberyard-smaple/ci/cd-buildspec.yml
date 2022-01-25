@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install: 
+   runtime-versions: 
+      docker: 18
+  pre_build:
+    commands:
+      - AWS_DEFAULT_REGION=eu-central-1
+      - AWS_ACCOUNT_ID=356566070122
+      - CLUSTER_NAME=gs-eu-central-1
+      - ROLE_ARN=arn:aws:iam::356566070122:role/codebuild-cd-eu-central-1
+  build:
+    commands:
+      - echo Build started on `date`
+      - curl --silent --location -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.13.7/bin/linux/amd64/kubectl
+      - chmod +x /usr/local/bin/kubectl
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - aws configure set default.region ${AWS_DEFAULT_REGION}
+      - aws configure get default.region
+      - aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${CLUSTER_NAME} --role-arn ${ROLE_ARN}
+      - ./bin/cd-operations.sh

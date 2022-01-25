@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fluentbit
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fluentbit-role
+rules:
+  - apiGroups: [""]
+    resources:
+      - namespaces
+      - pods
+      - pods/logs
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fluentbit-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: fluentbit-role
+subjects:
+  - kind: ServiceAccount
+    name: fluentbit
+    namespace: default
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  labels:
+    app.kubernetes.io/name: fluentbit
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+    Parsers_File /fluent-bit/parsers/parsers.conf
+    @INCLUDE kube.conf
+  kube.conf: |
+    [INPUT]
+        Name              tail
+        Tag               kube.*
+        Path              /var/log/containers/stk-fleet*.log
+        DB                /var/log/flb_kube.db
+        Mem_Buf_Limit     50MB
+        Skip_Long_Lines   On
+        Refresh_Interval  10
+        Parser            docker
+    [FILTER]
+        Name              grep
+        Regex		  log  GameProtocol: Controller action: (\d+) (\d+) (\d+) (\d+) (\d+) (\D*\d+)
+        Match		  *
+    [OUTPUT]
+        Name firehose
+        Match *
+        delivery_stream stk
+        region us-west-2
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentbit
+  labels:
+    app.kubernetes.io/name: fluentbit
+spec:
+  selector:
+    matchLabels:
+      name: fluentbit
+  template:
+    metadata:
+      labels:
+        name: fluentbit
+    spec:
+      serviceAccountName: fluentbit
+      containers:
+      - name: aws-for-fluent-bit
+        image: 906394416424.dkr.ecr.us-west-2.amazonaws.com/aws-for-fluent-bit:latest
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc/
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 50m
+            memory: 60Mi
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config

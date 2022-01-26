@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stk-nlb-svc-inject
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "80"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: TCP    
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+spec:
+  selector:
+    app: stknlb-inject
+  ports:
+    - protocol: UDP
+      port: 8081
+      targetPort: 8081
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stknlb-inject
+  labels:
+    app: stknlb-inject
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stknlb-inject
+  template:
+    metadata:
+      annotations:
+        sidecar-injector-webhook.morven.me/inject: "yes"
+      labels:
+        app: stknlb-inject
+    spec:
+      nodeSelector:
+        karpenter.sh/provisioner-name: default
+      containers:
+        #- name: nginx
+        #image: 584416962002.dkr.ecr.us-west-2.amazonaws.com/nginx:arm0.1
+        #imagePullPolicy: Always
+        #command: ["nginx","-g","daemon off;"]
+        #ports:
+        #  - name: tcp
+        #    containerPort: 80
+        #    protocol: TCP
+      - name: stk
+        env:
+        - name: UDP_SOCKET_PORT
+          value: "8081"
+        - name: UDP_SOCKET_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        image: 584416962002.dkr.ecr.us-west-2.amazonaws.com/stk:arm0.11.0
+        imagePullPolicy: Always
+        command: ["/stk-code/start-server.sh"]
+        ports:
+          - name: udp
+            containerPort: 8081
+            protocol: UDP
+        livenessProbe:
+          exec:
+            command:
+            - /udp-health-probe.py
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi

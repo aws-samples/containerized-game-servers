@@ -33,4 +33,30 @@ that will cause the `readinessProbe` and the target group check to failover to a
 
 * The project offers two deployment methods of the side-car TCP server. The first uses [static sidecar container](./nginx-static-sidecar), the second, [nginx-inject-sidecar](./nginx-inject-sidecar), deploys TCP endpoint as a sidecar prior to the game-server pod object by using [MutatingAdminssionWebhook](https://kubernetes.io/docs/admin/admission-controllers/#mutatingadmissionwebhook-beta-in-19)
 
+* The NLB is deployed using the aws-loadbalancer webhook mutation per the k8s game server [annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/). 
 
+The annotation `service.beta.kubernetes.io/aws-load-balancer-type: "external"` indicates the load-balancer is NLB, 
+The annotation `service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"` indicates the nlb target type to use is the pod ip, hence the Amazon VPC CNI. 
+The annotations `service.beta.kubernetes.io/aws-load-balancer-healthcheck-port` and `service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol` specifies the TCP health check, the nginx sidecar discussed below. 
+The annotation `service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing` indicates the NLB endpoint to be public for players to play
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: stk-arm-svc1
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "80"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: TCP
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+spec:
+  selector:
+    app: stkarm
+  ports:
+    - protocol: UDP
+      port: 8081
+      targetPort: 8081
+  type: LoadBalancer
+```

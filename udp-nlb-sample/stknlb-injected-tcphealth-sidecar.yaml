@@ -39,14 +39,6 @@ spec:
       nodeSelector:
         karpenter.sh/provisioner-name: default
       containers:
-        #- name: nginx
-        #image: 584416962002.dkr.ecr.us-west-2.amazonaws.com/nginx:arm0.1
-        #imagePullPolicy: Always
-        #command: ["nginx","-g","daemon off;"]
-        #ports:
-        #  - name: tcp
-        #    containerPort: 80
-        #    protocol: TCP
       - name: stk
         env:
         - name: UDP_SOCKET_PORT

@@ -1,0 +1,24 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: arm-us-west-2
+  region: us-west-2
+  #version: "1.20"
+
+managedNodeGroups:
+  - instanceType: "c6g.xlarge"
+    amiFamily: AmazonLinux2
+    name: us-west-2-ng-1
+    desiredCapacity: 1
+    maxSize: 10
+    minSize: 1
+    ssh:
+      allow: true
+      publicKeyPath: ~/.ssh/id_rsa.pub
+    tags:
+      project: zynga
+    labels:  
+      project: zynga
+iam:
+  withOIDC: true

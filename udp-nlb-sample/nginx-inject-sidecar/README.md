@@ -37,7 +37,7 @@ Update the ECR image URL in the injector webhook [deployment](./deployment.yaml)
 # kubectl create -f deploy/mutatingwebhook-ca-bundle.yaml
 ```
 
-Deploy the [game-server with the side-car annotation](../stknlb-injected-tcphealth-sidecar.yaml)
+Deploy the [game-server with the side-car annotation](./stknlb-injected-tcphealth-sidecar.yaml)
 
 Note the annotation in the Pod spec section
 

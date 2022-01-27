@@ -2,7 +2,7 @@
 
 ### Deploy a MutatingAdmissionWebhook that injects a nginx sidecar container for TCP health-check into game server pod upon creation.
 
-This sample uses https://github.com/morvencao/kube-mutating-webhook-tutorial. This fork extends it to arm64 CPU arch. 
+This sample uses https://github.com/yahavb/kube-mutating-webhook-tutorial. This fork extends it to arm64 CPU arch. 
 
 Follow [README](https://github.com/yahavb/kube-mutating-webhook-tutorial/blob/master/README.md) for build the go binaries. 
 Modify [Makefile](https://github.com/yahavb/kube-mutating-webhook-tutorial/blob/master/Makefile) with your `IMAGE_REPO`

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: sidecar-injector
-          image: 584416962002.dkr.ecr.us-west-2.amazonaws.com/sidecar-injector:v20220126-b326755-dirty
+          image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/sidecar-injector:v20220126-b326755-dirty
           imagePullPolicy: IfNotPresent
           args:
           - -sidecarCfgFile=/etc/webhook/config/sidecarconfig.yaml

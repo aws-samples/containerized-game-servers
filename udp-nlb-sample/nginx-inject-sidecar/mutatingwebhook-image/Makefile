@@ -1,7 +1,7 @@
 # Image URL to use all building/pushing image targets;
 # Use your own docker registry and image name for dev/test by overridding the
 # IMAGE_REPO, IMAGE_NAME and IMAGE_TAG environment variable.
-IMAGE_REPO ?= 584416962002.dkr.ecr.us-west-2.amazonaws.com/nginx
+IMAGE_REPO ?= ${AWS_ACCOUT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/nginx
 IMAGE_NAME ?= sidecar-injector
 
 

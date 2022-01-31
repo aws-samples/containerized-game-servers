@@ -4,11 +4,11 @@
 
 This sample uses https://github.com/yahavb/kube-mutating-webhook-tutorial. This fork extends it to arm64 CPU arch. 
 
-Follow [README](https://github.com/yahavb/kube-mutating-webhook-tutorial/blob/master/README.md) for build the go binaries. 
+Follow [README](./mutatingwebhook-image) for build the go binaries. 
 Modify [Makefile](https://github.com/yahavb/kube-mutating-webhook-tutorial/blob/master/Makefile) with your `IMAGE_REPO`
 Modify [Dockerfile](https://github.com/yahavb/kube-mutating-webhook-tutorial/blob/master/build/Dockerfile) with the base alpine image. In our case we used `arm64v8/alpine:latest`
 
-Execute the following from the root of the [repo](https://github.com/yahavb/kube-mutating-webhook-tutorial)
+Execute the following [steps](./mutatingwebhook-image)
 
 ```
 # make build

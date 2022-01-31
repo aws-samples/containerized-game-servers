@@ -13743,7 +13743,7 @@ spec:
       serviceAccountName: agones-controller
       containers:
       - name: agones-controller
-        image: "gcr.io/agones-images/agones-controller:1.20.0"
+        image: "584416962002.dkr.ecr.us-west-2.amazonaws.com/agones-allocator:1.21.0-1a026e9"
         imagePullPolicy: IfNotPresent
         env:
         # minimum port that can be exposed to GameServer traffic

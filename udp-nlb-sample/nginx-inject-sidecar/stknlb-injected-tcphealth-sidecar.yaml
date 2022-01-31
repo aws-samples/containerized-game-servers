@@ -47,7 +47,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: 584416962002.dkr.ecr.us-west-2.amazonaws.com/stk:arm0.11.0
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:arm0.11.0
         imagePullPolicy: Always
         command: ["/stk-code/start-server.sh"]
         ports:

@@ -1,7 +1,7 @@
 #!/bin/bash
   
 account=$(aws sts get-caller-identity --output text --query Account)
-region="us-west-2"
+region=${AWS_REGION}
 repo="stk"
 ver="arm0.11.0"
 

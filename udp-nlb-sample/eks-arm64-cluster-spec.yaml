@@ -2,14 +2,34 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: arm-us-west-2
-  region: us-west-2
-  #version: "1.20"
+  name: my-ipv4-cluster
+  version: "1.21"
+  region: us-east-2
+
+kubernetesNetworkConfig:
+  ipFamily: IPv4
+
+vpc:
+  clusterEndpoints:
+    publicAccess: true
+    privateAccess: true
+
+iam:
+  withOIDC: true
+
+addons:
+  - name: vpc-cni
+    version: v1.10.1-eksbuild.1 # optional
+  - name: coredns
+    version: v1.8.4-eksbuild.1 # optional
+  - name: kube-proxy
+    version: v1.21.2-eksbuild.2 # optional
+
 
 managedNodeGroups:
   - instanceType: "c6g.xlarge"
     amiFamily: AmazonLinux2
-    name: us-west-2-ng-1
+    name: arm-ng-1
     desiredCapacity: 1
     maxSize: 10
     minSize: 1
@@ -18,7 +38,5 @@ managedNodeGroups:
       publicKeyPath: ~/.ssh/id_rsa.pub
     tags:
       project: zynga
-    labels:  
+    labels:
       project: zynga
-iam:
-  withOIDC: true

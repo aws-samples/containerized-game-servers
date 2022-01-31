@@ -1,4 +1,6 @@
-FROM python:3.9
+FROM arm64v8/nginx
 
 RUN apt-get update -y
-RUN apt install -y nginx telnet
+RUN apt install -y telnet
+
+CMD [nginx, '-g', 'daemon off;']

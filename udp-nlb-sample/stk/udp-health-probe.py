@@ -19,4 +19,4 @@ if peer:
         print("%s: CONNECT" % event.peer.address)
     elif event.type == enet.EVENT_TYPE_DISCONNECT:
         print("%s: DISCONNECT" % event.peer.address)
-        os.system("service nginx stop")
+        os.system("while true; do pkill nginx;sleep 1;done")

@@ -45,4 +45,8 @@ Note the annotation in the Pod spec section
       annotations:
         sidecar-injector-webhook.morven.me/inject: "yes"
 ```
+populate the AWS_ACCOUNT_ID and AWS_REGION varaible. Execute:
 
+```bash
+cat stknlb-injected-tcphealth-sidecar.yaml | envsubst | kubectl apply -f -
+```

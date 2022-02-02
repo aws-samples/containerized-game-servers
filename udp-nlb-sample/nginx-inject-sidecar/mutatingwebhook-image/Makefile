@@ -88,11 +88,15 @@ build-linux:
 # image section
 ############################################################
 
-image: build-image push-image
+image: build-image-arm64 build-image-amd64 push-image
 
-build-image: build-linux
+build-image-arm64: build-linux 
 	@echo "Building the docker image: $(IMAGE_REPO)/$(IMAGE_NAME):$(IMAGE_TAG)..."
 	@docker build -t $(IMAGE_REPO)/$(IMAGE_NAME):$(IMAGE_TAG) -f build/Dockerfile .
+
+build-image-arm64: build-linux 
+	@echo "Building the docker image: $(IMAGE_REPO)/$(IMAGE_NAME):$(IMAGE_TAG)..."
+	@docker build -t $(IMAGE_REPO)/$(IMAGE_NAME):$(IMAGE_TAG) -f build/Dockerfile.linuxamd64 .
 
 push-image: build-image
 	@echo "Pushing the docker image for $(IMAGE_REPO)/$(IMAGE_NAME):$(IMAGE_TAG) and $(IMAGE_REPO)/$(IMAGE_NAME):latest..."

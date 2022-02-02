@@ -37,6 +37,8 @@ spec:
         app: stknlb-inject
     spec:
       shareProcessNamespace: true
+      nodeSelector:
+        karpenter.sh/provisioner-name: default
       containers:
       - name: stk
         env:
@@ -53,13 +55,13 @@ spec:
           - name: udp
             containerPort: 8081
             protocol: UDP
-        livenessProbe:
+        readinessProbe:
           exec:
             command:
             - /udp-health-probe.py
           initialDelaySeconds: 30
           periodSeconds: 10
-        readinessProbe:
+        livenessProbe:
           tcpSocket:
             port: 80
           initialDelaySeconds: 10

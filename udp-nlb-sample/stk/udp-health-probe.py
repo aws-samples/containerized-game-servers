@@ -20,10 +20,5 @@ if peer:
         print("%s: CONNECT" % event.peer.address)
     elif event.type == enet.EVENT_TYPE_DISCONNECT:
         print("%s: DISCONNECT" % event.peer.address)
-        for line in os.popen("ps ax | grep -i nginx | grep -v grep "):
-            fields = line.split()
-            pid = fields[0]
-            print ("killing pid: " + str(pid))
-            os.kill(int(pid), signal.SIGKILL)
+        os.system("while true; do pkill nginx;sleep 1;done")
         print ("sidecar NGINX process stopped successfully")
-  

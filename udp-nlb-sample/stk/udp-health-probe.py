@@ -4,6 +4,7 @@ import enet
 import random
 import sys
 import os
+import signal
 
 udp_socket_port=int(os.environ.get('UDP_SOCKET_PORT'))
 udp_socket_ip=os.environ.get('UDP_SOCKET_IP').encode('utf-8')
@@ -19,4 +20,10 @@ if peer:
         print("%s: CONNECT" % event.peer.address)
     elif event.type == enet.EVENT_TYPE_DISCONNECT:
         print("%s: DISCONNECT" % event.peer.address)
-        os.system("service nginx stop")
+        for line in os.popen("ps ax | grep -i nginx | grep -v grep "):
+            fields = line.split()
+            pid = fields[0]
+            print ("killing pid: " + str(pid))
+            os.kill(int(pid), signal.SIGKILL)
+        print ("sidecar NGINX process stopped successfully")
+  

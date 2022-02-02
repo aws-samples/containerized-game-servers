@@ -34,6 +34,7 @@ spec:
       labels:
         app: stknlb
     spec:
+      shareProcessNamespace: true
       containers:
       - name: nginx
         image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/nginx:arm0.1
@@ -70,6 +71,10 @@ spec:
             - /udp-health-probe.py
           initialDelaySeconds: 30
           periodSeconds: 10
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
         resources:
           requests:
             cpu: 500m

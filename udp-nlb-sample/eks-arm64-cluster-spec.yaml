@@ -2,9 +2,9 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: my-ipv4-cluster
+  name: arm-us-west-2
   version: "1.21"
-  region: us-east-2
+  region: us-west-2
 
 kubernetesNetworkConfig:
   ipFamily: IPv4
@@ -33,10 +33,7 @@ managedNodeGroups:
     desiredCapacity: 1
     maxSize: 10
     minSize: 1
-    ssh:
-      allow: true
-      publicKeyPath: ~/.ssh/id_rsa.pub
     tags:
-      project: zynga
+      project: supertuxkart
     labels:
-      project: zynga
+      project: supertuxkart

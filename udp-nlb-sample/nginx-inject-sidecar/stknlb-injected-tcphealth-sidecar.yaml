@@ -66,6 +66,10 @@ spec:
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 10
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
         resources:
           requests:
             cpu: 500m

@@ -74,3 +74,95 @@ spec:
       targetPort: 8081
   type: LoadBalancer
 ```
+
+### Try it yourself
+
+#### Prerequisites
+
+* An AWS account with admin privileges: For this blog, we will assume you already have an AWS account with admin privileges.
+
+* Command line tools: Mac/Linux users need to install the latest version of AWS CLI (https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html), aws-iam-authenticator, kubectl (https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html), eksctl (https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html), and git (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) on their workstation. Whereas Windows users might want to Cloud9 environment (https://docs.aws.amazon.com/cloud9/latest/user-guide/create-environment-main.html) in AWS and then install these CLIs inside their Cloud9 environment.
+
+* To get started with the game server install, clone thecontainerized-game-servers (https://github.com/aws-samples/containerized-game-servers/) github repository on your local workstation.
+
+#### Publish Application Images
+
+As part of this step, you will build and publish the game server and sidecar nginx container images to Amazon Elastic Container Registry (Amazon ECR). Locate udp-nlb-sample directory in the local folder where you recently cloned containerized-game-servers (https://github.com/aws-samples/containerized-game-servers/) repo into.  
+
+```bash
+cd containerized-game-servers/udp-nlb-sample
+```
+
+Enter the following command to set environment variables AWS Region and AWS Account ID.
+
+```bash
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
+export AWS_REGION=us-west-2
+```
+
+#### Build and Publish Game Server Image
+The next step is to build a docker image of a game server and publish it to the ECR repository. This step creates ARM-based images. 
+
+The buildx (https://docs.docker.com/engine/reference/commandline/buildx/) CLI plug-in for Docker simplifies the process of creating multi-arch images. If you're running Docker Desktop (https://www.docker.com/products/docker-desktop) >= 2.1.0, for example on Mac OSX or Windows, it comes configured with buildx and all the necessary functionality for cross platform image building. However, if you're running on a system that lacks Docker Desktop support, such as a Cloud9 instance, you'll need to install it manually. You may install buildx on Amazon Linux2 EC2 instances by following the steps detailed here (https://aws.amazon.com/blogs/compute/how-to-quickly-setup-an-experimental-environment-to-run-containers-on-x86-and-aws-graviton2-based-amazon-ec2-instances-effort-to-port-a-container-based-application-from-x86-to-graviton2/).
+
+```bash
+cd containerized-game-servers/udp-nlb-sample/stk
+sh ecr-repos.sh
+sh build.sh
+```
+
+#### Build and Publish Sidecar Image
+We are running nginx as a sidecar container alongside the game server to support TCP target health checks used by the Network Load Balancer Controller. We will publish an ARM-based nginx image to the ECR repository. 
+
+```bash
+cd containerized-game-servers/udp-nlb-sample/nginx-static-sidecar/
+sh ecr-repos.sh
+sh build.sh
+```
+
+#### Create EKS Cluster
+Use eksctl to create a cluster. Make sure you are using the latest version (https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html) of eksctl for this example. Cluster add-ons such as VPC CNI, Core DNS, and kube-proxy are deployed using the cluster specification file. Additionally, the following command creates managed node group of instances powered by Arm-based AWS Graviton3 processors.
+
+```bash
+eksctl create cluster -f eks-arm64-cluster-spec.yaml
+```
+
+#### Deploy AWS Load Balancer Controller
+AWS Load Balancer Controller is responsible for the management of AWS Elastic Load Balancers in a Kubernetes cluster. To deploy an AWS Load Balancer Controller, follow the steps outlined in the EKS user guide (https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html).
+
+#### Deploy Game Server
+The sample game server is configured as a service type of LoadBalancer. When deployed, the AWS Load Balancer Controller (https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/guide/service/nlb/) will provision an external-facing Network Load Balancer (https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-type) with a target type "IP" and a listener protocol "UDP". In this demonstration, we are using AWS VPC CNI (https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html) for pod networking. The VPC CNI supports direct access to pod IP via secondary IP addresses on an ENI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html) of the instance pod is scheduled on. If you are using an alternative CNI, ensure that it supports directly accessible pod IP.
+
+For the purpose of this demonstration, we will use nginx as a sidecar. Sidecars are the containers that should run alongside the pod’s main container. This sidecar pattern extends and enhances the functionality of existing containers without requiring them to be modified. The nginx port is used to work around the Network Load Balancer’s requirement for target TCP only health checks (https://docs.aws.amazon.com/elasticloadbalancing/latest/network/target-group-health-checks.html). The game server and sidecar share the same process namespace (https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/#configure-a-pod). A udp_health_check.py (https://github.com/aws-samples/containerized-game-servers/blob/master/udp-nlb-sample/stk/udp-health-probe.py) script included in this demo checks the game server’s health and sends a SIGKILL signal to the nginx container. Incoming UDP traffic is forwarded to a healthy game server pod when the Network Load Balancer's target health check fails.
+ 
+Make sure the AWS_REGION and AWS_ACCOUNT_ID variables are set correctly.
+
+```bash
+cd containerized-game-servers/nginx-static-sidecar/
+cat stknlb-static-tcphealth-sidecar.yaml | envsubst | kubectl apply -f -
+```
+
+Wait for all the pods to be in running state. 
+
+```bash
+kubectl get pods --selector=app=stknlb --watch
+```
+
+Take note of the URL (EXTERNAL-IP) for our newly launched gaming server application. You may need to wait a few minutes for the load balancer to be provisioned successfully.
+
+```bash
+kubectl get svc stk-nlb-svc
+```
+
+#### Test Game Server
+You can test the game server on your local workstation by downloading the supertuxkart (https://supertuxkart.net/Download)). Use online mode in supertuxkart and connect to the Network Load Balancer URL recorded in the previous step.
+
+You next navigate to the game lobby by entering the EXTERNAL-IP URL with port 8081. Wait for other players to join, then click Start race to begin the game.
+
+#### Cleanup
+
+To avoid incurring future charges, you can delete all resources created during this exercise. This action, in addition to deleting the cluster, will also delete the node group.
+
+```bash
+eksctl delete cluster --name arm-us-west-2
+```

@@ -21,15 +21,11 @@ from botocore.exceptions import ClientError
 
 
 
-region='us-west-2'
-#region=os.environ['REGION']
+region=os.environ['REGION']
 rds_client = boto3.client('rds-data', region_name=region)
-#cluster_arn = os.environ['CLUSTER_ARN']
-cluster_arn = 'arn:aws:rds:us-west-2:584416962002:cluster:craft-usw'
-#secret_arn = os.environ['SECRET_ARN']
-secret_arn = 'arn:aws:secretsmanager:us-west-2:584416962002:secret:craft-usw-pprVj5'
-#database_name = os.environ['DB_NAME']
-database_name = 'craft-usw'
+cluster_arn = os.environ['CLUSTER_ARN']
+secret_arn = os.environ['SECRET_ARN']
+database_name = os.environ['DB_NAME']
 #agones_port = os.environ['AGONES_SDK_HTTP_PORT']
 
 DEFAULT_HOST = '0.0.0.0'
@@ -144,12 +140,13 @@ class Handler(socketserver.BaseRequestHandler):
         try:
             buf = []
             while True:
-                data = self.request.recv(BUFFER_SIZE).strip()
+                data = self.request.recv(BUFFER_SIZE).decode("utf-8")
                 if not data:
                     break
                 print("{} wrote:".format(self.client_address[0]))
-                print(data)
-                #buf.extend(data.replace('\r\n', '\n'))
+                print(data,flush=True)
+                print(data.replace('\r\n', '\n'),flush=True)
+                buf.extend(data.replace('\r\n', '\n'))
                 while '\n' in buf:
                     index = buf.index('\n')
                     line = ''.join(buf[:index])
@@ -412,7 +409,7 @@ class Model(object):
             y=_row[2]['longValue']
             z=_row[3]['longValue']
             w=_row[4]['longValue']
-            log('on_chunk-result[records]',rowid,x,y,z,w)
+            #log('on_chunk-result[records]',rowid,x,y,z,w)
             blocks += 1
             packets.append(packet(BLOCK, p, q, x, y, z, w))
             max_rowid = max(max_rowid, rowid)
@@ -481,7 +478,7 @@ class Model(object):
             'insert or replace into block (p, q, x, y, z, w) '
             'values (:p, :q, :x, :y, :z, :w);'
         )
-        #log('about to insert ',str(p)+' '+str(q)+' '+str(x)+' '+str(y)+' '+str(z)+' '+str(w))
+        log('about to insert ',str(p)+' '+str(q)+' '+str(x)+' '+str(y)+' '+str(z)+' '+str(w))
         self.execute(query, dict(p=p, q=q, x=x, y=y, z=z, w=w))
         self.send_block(client, p, q, x, y, z, w)
 
@@ -495,7 +492,7 @@ class Model(object):
         ]
         sql = 'insert into block (p, q, x, y, z, w) values (:p, :q, :x, :y, :z, :w) on conflict on constraint unique_block_pqxyz do UPDATE SET w = :w'
         response = execute_rds_statement(sql, sql_parameters)
-        #log('rds_response_on_block',response)
+        log('rds_response_on_block',response)
         for dx in range(-1, 2):
             for dz in range(-1, 2):
                 if dx == 0 and dz == 0:
@@ -546,7 +543,7 @@ class Model(object):
         )
         sql = 'insert or replace into light (p, q, x, y, z, w) values (:p, :q, :x, :y, :z, :w)'
         response = execute_rds_statement(sql, sql_parameters)
-        #log('rds_response_on_insert_to_light',response)
+        log('rds_response_on_insert_to_light',response)
         self.execute(query, dict(p=p, q=q, x=x, y=y, z=z, w=w))
         self.send_light(client, p, q, x, y, z, w)
     def on_sign(self, client, x, y, z, face, *args):
@@ -569,7 +566,7 @@ class Model(object):
             )
             sql = 'insert or replace into sign (p, q, x, y, z, face, text) values (:p, :q, :x, :y, :z, :face, :text)'
             response = execute_rds_statement(sql, sql_parameters)
-            #log('rds_response_on_insert_to_sign',response)
+            log('rds_response_on_insert_to_sign',response)
             self.execute(query,
                 dict(p=p, q=q, x=x, y=y, z=z, face=face, text=text))
         else:
@@ -579,7 +576,7 @@ class Model(object):
             )
             sql = 'delete from sign where x = :x and y = :y and z = :z and face = :face'
             response = execute_rds_statement(sql, sql_parameters)
-            #log('rds_response_on_delete_sign',response)
+            log('rds_response_on_delete_sign',response)
             self.execute(query, dict(x=x, y=y, z=z, face=face))
         self.send_sign(client, p, q, x, y, z, face, text)
     def on_position(self, client, x, y, z, rx, ry):

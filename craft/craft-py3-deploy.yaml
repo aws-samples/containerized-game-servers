@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: craft-py3-svc
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+spec:
+  selector:
+    app: craft-py3
+  ports:
+    - protocol: TCP
+      port: 4080
+      targetPort: 4080
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: craft-py3
+  name: craft-py3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: craft-py3
+  template:
+    metadata:
+      name: craft-py3
+      labels:
+        app: craft-py3
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-192-168-78-4.us-west-2.compute.internal
+#        karpenter.sh/provisioner-name: default
+      containers:
+      - env:
+        - name: REGION
+          value: "us-west-2"
+        - name: CLUSTER_ARN
+          value: "arn:aws:rds:us-west-2:584416962002:cluster:craft-usw"
+        - name: SECRET_ARN
+          value: "arn:aws:secretsmanager:us-west-2:584416962002:secret:craft-usw-pprVj5"
+        - name: DB_NAME
+          value: "postgres"
+        - name: GAMESTATE
+          value: "/game/state"
+        - name: SERVERPORT
+          value: "4080"
+        - name: SPAWN_POINT
+          value: "(0, 0, 0, 0, 0)"
+        image: 584416962002.dkr.ecr.us-west-2.amazonaws.com/craft:arm0.8
+        imagePullPolicy: Always
+        name: craft
+        command: ["python3","/server-py3.py"]
+        readinessProbe:
+          tcpSocket:
+            port: 4080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 4080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /game
+          name: datadir
+      volumes:
+      - emptyDir: {}
+        name: datadir
+      hostNetwork: true

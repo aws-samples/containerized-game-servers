@@ -1,5 +1,5 @@
 .DS_Store
-package-lock.json
-cdk.out/*
+supertuxkart/ci/package-lock.json
+supertuxkart/ci/cdk.out/*
 node_modules
 package.json

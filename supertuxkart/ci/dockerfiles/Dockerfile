@@ -9,7 +9,8 @@ libssl-dev libvorbis-dev libmbedtls-dev pkg-config zlib1g-dev git sqlite3 subver
 FROM debian_base AS build_art
 RUN svn co https://svn.code.sf.net/p/supertuxkart/code/stk-assets stk-assets
 
-FROM build_art AS build_code
+FROM debian_base AS build_code
+COPY --from=1 /stk-assets /stk-assets
 RUN apt-get install git -y
 RUN git clone https://github.com/supertuxkart/stk-code stk-code
 RUN cd stk-code

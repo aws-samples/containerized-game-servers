@@ -91,7 +91,7 @@
                       "branchName": "main",
                       "s3": {
                         "bucket": "cdk-hnb659fds-assets-259994957756-us-west-2",
-                        "key": "6927ef9e4d11f09d66318dad5ce9d9f13034394507fbb21ca8a8d29d81b649d4.zip"
+                        "key": "7865c9fcfed6c175ac6be89efa881fb6ffa6c315893252ef40c3fb2f887b6b6e.zip"
                       }
                     },
                     "repositoryDescription": "New repository for demo project."

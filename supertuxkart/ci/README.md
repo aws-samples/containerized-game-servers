@@ -45,4 +45,6 @@ libjpeg-dev libogg-dev libopenal-dev libpng-dev \
 libssl-dev libvorbis-dev libmbedtls-dev pkg-config zlib1g-dev git sqlite3 subversion -y
 ```
 
-Then it uses the 
+We use Docker multi-stage builds to package our SuperTuxKart binaries and assets.
+The first stage denoted by debian_base in the Dockerfile includes the required packages for compiling the code. The second stage, build_arts uses the base image and download the arts objects. The last stage, build_code uses the build_art stage to compile it code. The three stages allow the developer to recompile the image without re-installing the build packages, reducing build time and compute costs.
+

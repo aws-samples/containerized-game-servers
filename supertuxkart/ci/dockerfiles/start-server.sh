@@ -14,5 +14,4 @@ then
   GAME_MODE=0
 fi
 cd /stk-code
-#./cmake_build/bin/supertuxkart --server-config=/stk-code/server_config.xml --log=0 --connection-debug --mode=${GAME_MODE} 
-./cmake_build/bin/supertuxkart --server-config=/stk-code/server_config.xml --log=0 --connection-debug 
+/cmake_build/bin/supertuxkart --server-config=/stk-code/server_config.xml --log=0 --connection-debug 

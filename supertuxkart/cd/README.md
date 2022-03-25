@@ -60,3 +60,20 @@ spec:
   ttlSecondsAfterEmpty: 30
 EOF
 ```
+
+Enter the following command to set environment variables AWS Region and AWS Account ID.
+```bash
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
+export AWS_REGION=us-west-2
+```
+
+
+Deploy the server
+```bash
+cat stk-server.yaml | envsubst | kubectl apply -f -
+```
+
+Deploy the client
+```bash
+cat stk-client.yaml | envsubst | kubectl apply -f -
+```

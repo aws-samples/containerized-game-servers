@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stkcli
+  name: stkcli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stkcli
+  template:
+    metadata:
+      labels:
+        app: stkcli
+    spec:
+      containers:
+      - name: stk
+        env:
+        - name: GAMESERVER_ENDPOINT
+          value: "44.229.199.24:8081"
+        - name: NETWORK_AI
+          value: "7"
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/supertuxkart:latest
+        imagePullPolicy: Always
+        command: ["/stk-code/start-client.sh"]
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi

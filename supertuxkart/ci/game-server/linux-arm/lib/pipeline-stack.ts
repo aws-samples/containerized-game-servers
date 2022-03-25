@@ -45,7 +45,7 @@ export class StkPipelineStack extends Stack {
   const repo = new codecommit.Repository(this, `gitRepo`, {
       repositoryName: gitRepoName.valueAsString,
       description: "New repository for demo project.",
-      code: codecommit.Code.fromDirectory('./dockerfiles','main'),
+      code: codecommit.Code.fromDirectory('./serverfiles','main'),
      
   });
     

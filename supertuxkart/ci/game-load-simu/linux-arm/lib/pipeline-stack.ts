@@ -9,7 +9,7 @@ import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as notifications from 'aws-cdk-lib/aws-codestarnotifications';
 
-export class StkPipelineStack extends Stack {
+export class gameLoadSimuPipeline extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -24,7 +24,7 @@ export class StkPipelineStack extends Stack {
   const gitRepoName = new CfnParameter(this, "gitRepoName", {
   type: "String",
   description: "The git repository hosting application code",
-  default: "stk-docker-build"
+  default: "game-load-simu"
   });
   
   
@@ -37,7 +37,7 @@ export class StkPipelineStack extends Stack {
   const ecrRepoName = new CfnParameter(this, "ecrRepoName", {
   type: "String",
   description: "The name of the ecr registry",
-  default: "supertuxkart"
+  default: "game-load-simu"
   });
 
   
@@ -64,7 +64,7 @@ export class StkPipelineStack extends Stack {
   //codebuild project to build docker containers
   // we are reading the build spec from the code, but you could also read it from a file
   // that way the build commands are abstracted from the pipeline
-  const buildproject = new codebuild.Project(this, `STKgameServerDockerBuild`, {
+  const buildproject = new codebuild.Project(this, `gameLoadSimuDockerBuild`, {
        environment: {
             privileged: true,
             buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2

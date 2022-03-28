@@ -1,5 +1,6 @@
 #!/bin/bash 
 #restore simulator state from SQS in the case of previous run
+DEPLOY_PREFIX="stk"
 sqs_file="/tmp/"$RANDOM".json"
 aws sqs receive-message --queue-url ${QUEUE_URL} > $sqs_file
 echo "sqs exit code="$?
@@ -37,25 +38,25 @@ for i in $_seq; do
   fi
   rm -f $sqs_file
   x=`echo $i|awk '{print $1}'`
-  sinx=`echo $i|awk '{print int(sin($1)*1200)}'`
+  sinx=`echo $i|awk '{print int(sin($1)*100)}'`
   echo "sinx=" $sinx
   echo "i=" $i
   aws sqs send-message --queue-url ${QUEUE_URL} --message-body "$i"
 
-  clients=`echo $(( sinx * 3 ))`
-  servers=`echo $(( sinx * 3/2 ))`
-  deploys=`kubectl get deploy | grep app| awk '{print $1}'`
+  clients=`echo $(( sinx * 4 ))`
+  servers=`echo $(( sinx * 1/2 ))`
+  deploys=`kubectl get deploy | grep $DEPLOY_PREFIX | awk '{print $1}'`
   for deploy in $deploys
   do
    if [[ "$deploy" == "stknlb"* ]]; then
         kubectl scale deploy/$deploy --replicas=$servers
-        aws cloudwatch put-metric-data --metric-name current_inserts --namespace ${DEPLOY_NAME} --value ${servers}
-        echo "inserts="$servers" sinx="$sinx
+        aws cloudwatch put-metric-data --metric-name current_gameservers --namespace ${DEPLOY_NAME} --value ${servers}
+        echo "gameservers="$servers" sinx="$sinx
    fi
    if [[ "$deploy" == "stkcli"* ]]; then
         kubectl scale deploy/$deploy --replicas=$clients
-        aws cloudwatch put-metric-data --metric-name current_updates --namespace ${DEPLOY_NAME} --value ${clients}
-        echo "updates="$clients" sinx="$sinx
+        aws cloudwatch put-metric-data --metric-name current_gameclient --namespace ${DEPLOY_NAME} --value ${clients}
+        echo "gameclients="$clients" sinx="$sinx
    fi
   done
 

@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM public.ecr.aws/debian/debian:stable-slim 
 
 RUN apt -y --fix-missing update
 RUN apt install -y curl vim unzip jq

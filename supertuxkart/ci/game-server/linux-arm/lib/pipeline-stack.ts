@@ -37,7 +37,7 @@ export class StkPipelineStack extends Stack {
   const ecrRepoName = new CfnParameter(this, "ecrRepoName", {
   type: "String",
   description: "The name of the ecr registry",
-  default: "supertuxkart"
+  default: "stk"
   });
 
   

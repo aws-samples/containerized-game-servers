@@ -14,6 +14,7 @@ FROM debian_base AS build_code
 COPY --from=1 /stk-assets /stk-assets
 RUN apt-get install git -y
 RUN git clone https://github.com/yahavb/stk-code stk-code
+#RUN git clone https://github.com/supertuxkart/stk-code stk-code
 RUN cd stk-code
 RUN mkdir cmake_build
 RUN cmake ../stk-code -B ./cmake_build -DSERVER_ONLY=ON

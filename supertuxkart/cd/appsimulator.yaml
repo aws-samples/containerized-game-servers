@@ -67,8 +67,8 @@ spec:
       labels:
         app: appsimulator
     spec:
-#      nodeSelector:
-#        kubernetes.io/arch: arm64
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: vivox-arm-us-west-2-ng
       serviceAccountName: appsimulator
       containers:
       - env:

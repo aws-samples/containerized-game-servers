@@ -6,4 +6,4 @@ npm install aws-cdk-lib
 . ~/.bash_profile
 cdk bootstrap aws://$account/$region
 npm install
-cdk deploy --parameters notificationEmail=birayaha@amazon.com --parameters gitRepoName=stk-server-docker-build
+cdk deploy --parameters notificationEmail=birayaha@amazon.com --parameters gitRepoName=stk-server-docker-build1

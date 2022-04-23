@@ -13,5 +13,8 @@ if [ -z ${GAME_MODE+x} ];
 then
   GAME_MODE=0
 fi
-cd /stk-code
-/cmake_build/bin/supertuxkart --connect-now=$GAMESERVER_ENDPOINT --network-ai=$NETWORK_AI --auto-connect --owner-less --no-graphics
+while true
+do
+  /cmake_build/bin/supertuxkart --connect-now=$GAMESERVER_ENDPOINT --network-ai=$NETWORK_AI --auto-connect --owner-less&
+  sleep 60
+done

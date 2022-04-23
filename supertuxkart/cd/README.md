@@ -52,7 +52,7 @@ spec:
       - arm64
   limits:
     resources:
-      cpu: 1000
+      cpu: 20000
   provider:
     subnetSelector:
       karpenter.sh/discovery: ${CLUSTER_NAME}

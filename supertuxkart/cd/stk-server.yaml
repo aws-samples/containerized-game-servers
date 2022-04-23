@@ -35,6 +35,8 @@ spec:
         app: stknlb
     spec:
       shareProcessNamespace: true
+      nodeSelector:
+        karpenter.sh/provisioner-name: default
       containers:
       - name: nginx
         image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/nginx:arm0.1
@@ -58,7 +60,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/supertuxkart:latest
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:latest
         imagePullPolicy: Always
         command: ["/stk-code/start-server.sh"]
         ports:
@@ -69,13 +71,13 @@ spec:
           exec:
             command:
             - /udp-health-probe.py
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          initialDelaySeconds: 60
+          periodSeconds: 10000
         securityContext:
           capabilities:
             add:
             - SYS_PTRACE
         resources:
           requests:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 1024m
+            memory: 1024Mi

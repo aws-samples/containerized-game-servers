@@ -1,8 +1,6 @@
 .DS_Store
 supertuxkart/ci/package-lock.json
-supertuxkart/ci/game-load-simu/linux-arm/cdk.out/*
-supertuxkart/ci/game-load-simu/linux-arm/package-lock.json
-supertuxkart/ci/game-server/linux-arm/cdk.out/*
-supertuxkart/ci/game-server/linux-arm/package-lock.json
+*/cdk.out/*
+*/package-lock.json
 node_modules
-package.json
+*/package.json

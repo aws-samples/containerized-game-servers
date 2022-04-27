@@ -28,9 +28,9 @@ The build process provision `codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2` ima
         version: "0.2",
         phases: {
           build: {
-            commands: [`docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:${baseImageVersion.valueAsString} .`,
+             commands: [`TAG=$(date +'%Y%m%d%H%M%S')`,`docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG .`,
             `aws ecr get-login-password --region ${this.region} | docker login --username AWS --password-stdin ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}`,
-            `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:${baseImageVersion.valueAsString}`],
+            `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG`],
 ```
 
 The docker build will first build the base image needed to compile and link the code.

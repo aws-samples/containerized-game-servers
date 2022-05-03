@@ -51,7 +51,7 @@ export class StkPipelineStack extends Stack {
     
   //sns topic for pipeline notifications
   const pipelineNotifications = new sns.Topic(this, 'BuildNotifications');
-  pipelineNotifications.addSubscription(new subscriptions.EmailSubscription(`${notificationEmail.valueAsString}`));
+  //pipelineNotifications.addSubscription(new subscriptions.EmailSubscription(`${notificationEmail.valueAsString}`));
     
     
   //docker repository to store container images
@@ -122,14 +122,14 @@ export class StkPipelineStack extends Stack {
     
 
     
-    const buildNotificationRule = new notifications.NotificationRule(this, 'buildNotificationRule', {
-    source: buildproject,
-    events: [
-      'codebuild-project-build-state-succeeded',
-      'codebuild-project-build-state-failed',
-    ],
-    targets: [pipelineNotifications],
-  });
+    //const buildNotificationRule = new notifications.NotificationRule(this, 'buildNotificationRule', {
+    //source: buildproject,
+    //events: [
+    //  'codebuild-project-build-state-succeeded',
+    //  'codebuild-project-build-state-failed',
+    //],
+    //targets: [pipelineNotifications],
+  //});
 
   }
 }

@@ -1,4 +1,3 @@
-#FROM arm64v8/nginx
 FROM nginx
 
 RUN apt-get update -y

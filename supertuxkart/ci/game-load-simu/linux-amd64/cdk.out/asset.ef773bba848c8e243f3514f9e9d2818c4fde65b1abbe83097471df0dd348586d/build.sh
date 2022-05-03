@@ -1,9 +1,9 @@
 #!/bin/bash
   
 account=$(aws sts get-caller-identity --output text --query Account)
-region=${AWS_REGION}
-repo="nginx"
-ver="amd640.1"
+region=us-west-2
+repo="game-load-simu"
+ver="latest"
 
 repo_name='.dkr.ecr.'$region'.amazonaws.com/'$repo':'$ver
 repo_url=$account$repo_name

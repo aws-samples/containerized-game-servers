@@ -39,7 +39,7 @@ spec:
         karpenter.sh/provisioner-name: default
       containers:
       - name: nginx
-        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/nginx:arm0.1
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/nginx:latest
         imagePullPolicy: Always
         #command: ["service","nginx","start"]
         command: ["nginx","-g","daemon off;"]
@@ -61,6 +61,7 @@ spec:
             fieldRef:
               fieldPath: status.podIP
         image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:latest
+        #image: public.ecr.aws/p9d8y1e7/supertuxkart
         imagePullPolicy: Always
         command: ["/stk-code/start-server.sh"]
         ports:
@@ -71,8 +72,8 @@ spec:
           exec:
             command:
             - /udp-health-probe.py
-          initialDelaySeconds: 60
-          periodSeconds: 10000
+          initialDelaySeconds: 30
+          periodSeconds: 100
         securityContext:
           capabilities:
             add:

@@ -28,6 +28,12 @@ export class StkPipelineStack extends Stack {
   });
   
   
+  const baseImageVersion = new CfnParameter(this, "baseImageVersion", {
+  type: "String",
+  description: "The supertuxkart docker image version",
+  default: "latest"
+  });
+  
   const ecrRepoName = new CfnParameter(this, "ecrRepoName", {
   type: "String",
   description: "The name of the ecr registry",
@@ -45,7 +51,7 @@ export class StkPipelineStack extends Stack {
     
   //sns topic for pipeline notifications
   const pipelineNotifications = new sns.Topic(this, 'BuildNotifications');
-  pipelineNotifications.addSubscription(new subscriptions.EmailSubscription(`${notificationEmail.valueAsString}`));
+  //pipelineNotifications.addSubscription(new subscriptions.EmailSubscription(`${notificationEmail.valueAsString}`));
     
     
   //docker repository to store container images
@@ -68,9 +74,9 @@ export class StkPipelineStack extends Stack {
         version: "0.2",
         phases: {
           build: {
-            commands: [`TAG=$(date +'%Y%m%d%H%M%S')`,`docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG .`,
+            commands: [`docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:${baseImageVersion.valueAsString} .`,
             `aws ecr get-login-password --region ${this.region} | docker login --username AWS --password-stdin ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}`,
-            `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG`],
+            `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:${baseImageVersion.valueAsString}`],
           }
            
         },
@@ -116,14 +122,14 @@ export class StkPipelineStack extends Stack {
     
 
     
-    const buildNotificationRule = new notifications.NotificationRule(this, 'buildNotificationRule', {
-    source: buildproject,
-    events: [
-      'codebuild-project-build-state-succeeded',
-      'codebuild-project-build-state-failed',
-    ],
-    targets: [pipelineNotifications],
-  });
+    //const buildNotificationRule = new notifications.NotificationRule(this, 'buildNotificationRule', {
+    //source: buildproject,
+    //events: [
+    //  'codebuild-project-build-state-succeeded',
+    //  'codebuild-project-build-state-failed',
+    //],
+    //targets: [pipelineNotifications],
+  //});
 
   }
 }

@@ -28,12 +28,6 @@ export class StkPipelineStack extends Stack {
   });
   
   
-  const baseImageVersion = new CfnParameter(this, "baseImageVersion", {
-  type: "String",
-  description: "The supertuxkart docker image version",
-  default: "latest"
-  });
-  
   const ecrRepoName = new CfnParameter(this, "ecrRepoName", {
   type: "String",
   description: "The name of the ecr registry",
@@ -74,9 +68,9 @@ export class StkPipelineStack extends Stack {
         version: "0.2",
         phases: {
           build: {
-            commands: [`docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:${baseImageVersion.valueAsString} .`,
+            commands: [`TAG=$(date +'%Y%m%d%H%M%S')`,`docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG .`,
             `aws ecr get-login-password --region ${this.region} | docker login --username AWS --password-stdin ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}`,
-            `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:${baseImageVersion.valueAsString}`],
+            `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG`],
           }
            
         },

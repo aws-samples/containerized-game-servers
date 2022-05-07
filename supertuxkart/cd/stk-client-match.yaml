@@ -24,6 +24,8 @@ spec:
           - secretRef:
               name: db-creds
         env:
+        - name: SIZE_OF_GAME_SAMPLE
+          value: "1000"
         - name: CW_NS
           value: "supertuxkart"
         - name: CLIENT_STDOUT
@@ -34,6 +36,10 @@ spec:
           value: "6"
         - name: SLEEP_B4_PUT_CW
           value: "60"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:latest
         lifecycle:
           preStop:

@@ -10,7 +10,7 @@ then
   echo "No game servers available, waiting for one to be ready"
 else
   echo export ENDPOINT=$endpoint >> /root/.bashrc
-  psql -A -e -t  -w -c "update servers set num_active_session=num_active_session+"$NETWORK_AI" where endpoint='$endpoint';"
+  psql -A -e -t  -w -c "update servers set num_active_session=num_active_session+"$NETWORK_AI",updated_at=NOW() where endpoint='$endpoint';"
   echo "psql exit code="$?
   if (( $?>0 ))
   then

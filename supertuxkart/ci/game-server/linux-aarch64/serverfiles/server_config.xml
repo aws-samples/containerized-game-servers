@@ -20,7 +20,7 @@ limitations under the License.
     <ai-anywhere value="true" />
 
     <!-- Name of server, encode in XML if you want to use unicode characters. -->
-    <server-name value="stk.arm.johan.sa.aws.dev" />
+    <server-name value="stk.aarch64.sa.aws.dev" />
 
     <!-- Port used in server, if you specify 0, it will use the server port specified in stk_config.xml or if random-server-port is enabled in user config, than any port. STK will auto change to random port if the port you specify failed to be bound. -->
     <!--server-port value="8081" /-->

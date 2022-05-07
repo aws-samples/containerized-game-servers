@@ -14,13 +14,6 @@ export class StkPipelineStack extends Stack {
     super(scope, id, props);
 
   //parameters that can be passed from the command line
-  
-  const notificationEmail = new CfnParameter(this, "notificationEmail", {
-  type: "String",
-  description: "The recipient email for pipeline notifications",
-  default: "xyz@amazon.com"
-  });
-  
   const gitRepoName = new CfnParameter(this, "gitRepoName", {
   type: "String",
   description: "The git repository hosting application code",
@@ -40,7 +33,6 @@ export class StkPipelineStack extends Stack {
   default: "stk"
   });
 
-  
   //codecommit repository that will contain the containerized app to build
   const repo = new codecommit.Repository(this, `gitRepo`, {
       repositoryName: gitRepoName.valueAsString,
@@ -48,11 +40,6 @@ export class StkPipelineStack extends Stack {
       code: codecommit.Code.fromDirectory('./serverfiles','main'),
      
   });
-    
-  //sns topic for pipeline notifications
-  const pipelineNotifications = new sns.Topic(this, 'BuildNotifications');
-  //pipelineNotifications.addSubscription(new subscriptions.EmailSubscription(`${notificationEmail.valueAsString}`));
-    
     
   //docker repository to store container images
   const registry = new ecr.Repository(this,`game-servers`, {
@@ -119,17 +106,5 @@ export class StkPipelineStack extends Stack {
         }
       ]
     });
-    
-
-    
-    //const buildNotificationRule = new notifications.NotificationRule(this, 'buildNotificationRule', {
-    //source: buildproject,
-    //events: [
-    //  'codebuild-project-build-state-succeeded',
-    //  'codebuild-project-build-state-failed',
-    //],
-    //targets: [pipelineNotifications],
-  //});
-
   }
 }

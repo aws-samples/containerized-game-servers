@@ -1,5 +1,4 @@
-#FROM arm64v8/nginx
-FROM nginx
+FROM arm64v8/nginx
 
 RUN apt-get update -y
 RUN apt install -y telnet

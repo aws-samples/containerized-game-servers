@@ -75,7 +75,7 @@ data:
     [OUTPUT]
         Name            es
         Match           *
-        Host            search-vivox-arm-us-west-2-e4zt6xoju6hcui6zrwbb3h3hcu.us-west-2.es.amazonaws.com
+        Host            search-vivox-amd64-us-west-2-su4lyrai6e5bdcxllfj2pgxdnu.us-west-2.es.amazonaws.com
         Port            443
         TLS             On
         AWS_Auth        On

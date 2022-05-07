@@ -1,0 +1,12 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "es:ESHttp*"
+            ],
+            "Resource": "arn:aws:es:us-west-2:313112454038:domain/vivox-amd64-us-west-2",
+            "Effect": "Allow"
+        }
+    ]
+}

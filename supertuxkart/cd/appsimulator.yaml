@@ -68,7 +68,7 @@ spec:
         app: appsimulator
     spec:
       nodeSelector:
-        eks.amazonaws.com/nodegroup: vivox-arm-us-west-2-ng
+        eks.amazonaws.com/nodegroup: vivox-amd64-us-west-2-ng
       serviceAccountName: appsimulator
       containers:
       - env:
@@ -77,11 +77,10 @@ spec:
         - name: MAX_SLEEP_BETWEEN_CYCLE
           value: "12"
         - name: QUEUE_URL
-          value: "https://sqs.us-west-2.amazonaws.com/259994957756/vertscaler-state"
+          value: "https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/vertscaler-state"
         - name: DEPLOY_NAME
           value: "appsimulator"
-        #image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/game-load-simu:latest
-        image: 259994957756.dkr.ecr.us-west-2.amazonaws.com/game-load-simu
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/game-load-simu:latest
         imagePullPolicy: Always
         name: appsimulator
         command: ["/appsimulator.sh"]

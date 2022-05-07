@@ -17,16 +17,17 @@ spec:
     spec:
       nodeSelector:
         karpenter.sh/provisioner-name: default
+      serviceAccountName: gs-admin
       containers:
       - name: stk
         env:
         - name: GAMESERVER_ENDPOINT
-          value: "k8s-default-stknlbsv-97d7d8fef5-992c4932da134ea0.elb.us-west-2.amazonaws.com:8081"
+          value: "None"
         - name: NETWORK_AI
-          value: "7"
+          value: "6"
         image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:latest
         imagePullPolicy: Always
-        command: ["/stk-code/start-client.sh"]
+        command: ["/start-client.sh"]
         resources:
           requests:
             cpu: 7500m

@@ -1,0 +1,196 @@
+{
+  "version": "17.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "gameLoadSimuPipeline.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "gameLoadSimuPipeline.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "gameLoadSimuPipeline": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://313112454038/us-west-2",
+      "properties": {
+        "templateFile": "gameLoadSimuPipeline.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::313112454038:role/cdk-hnb659fds-deploy-role-313112454038-us-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::313112454038:role/cdk-hnb659fds-cfn-exec-role-313112454038-us-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-313112454038-us-west-2/809c7d965da5315d13ef83af97ecc6900803da08b01708e23b9f05d4f8d9f262.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "gameLoadSimuPipeline.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::313112454038:role/cdk-hnb659fds-lookup-role-313112454038-us-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "gameLoadSimuPipeline.assets"
+      ],
+      "metadata": {
+        "/gameLoadSimuPipeline/gitRepoName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gitRepoName"
+          }
+        ],
+        "/gameLoadSimuPipeline/baseImageVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "baseImageVersion"
+          }
+        ],
+        "/gameLoadSimuPipeline/ecrRepoName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ecrRepoName"
+          }
+        ],
+        "/gameLoadSimuPipeline/gitRepo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gitRepoE79A5E14"
+          }
+        ],
+        "/gameLoadSimuPipeline/gitRepo/gameLoadSimuPipelinecontainerPipelineB2F80895-main-EventRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gitRepogameLoadSimuPipelinecontainerPipelineB2F80895mainEventRule3B978B6D"
+          }
+        ],
+        "/gameLoadSimuPipeline/game-servers/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gameservers96C3BF90"
+          }
+        ],
+        "/gameLoadSimuPipeline/gameLoadSimuDockerBuild/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gameLoadSimuDockerBuildRole8E20DB67"
+          }
+        ],
+        "/gameLoadSimuPipeline/gameLoadSimuDockerBuild/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gameLoadSimuDockerBuildRoleDefaultPolicy911E3D92"
+          }
+        ],
+        "/gameLoadSimuPipeline/gameLoadSimuDockerBuild/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gameLoadSimuDockerBuildFF9F80E7"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/ArtifactsBucketEncryptionKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineArtifactsBucketEncryptionKeyAlias4460BD45"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineArtifactsBucket24B5D85B"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineArtifactsBucketPolicyBA24F528"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineRole7FEA970C"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineRoleDefaultPolicy24580DF1"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineE427408B"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineSourceCodeCommitSourceCodePipelineActionRole9BBD9446"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineSourceCodeCommitSourceCodePipelineActionRoleDefaultPolicyE9C5617F"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/EventsRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineEventsRole7F8AAEEF"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/EventsRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineEventsRoleDefaultPolicyEC210F09"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineDockerBuildBuildCodeCodePipelineActionRole1809C40C"
+          }
+        ],
+        "/gameLoadSimuPipeline/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineDockerBuildBuildCodeCodePipelineActionRoleDefaultPolicyB6026FFD"
+          }
+        ],
+        "/gameLoadSimuPipeline/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/gameLoadSimuPipeline/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/gameLoadSimuPipeline/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "gameLoadSimuPipeline"
+    }
+  }
+}

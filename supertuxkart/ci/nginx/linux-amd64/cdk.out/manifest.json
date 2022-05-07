@@ -1,0 +1,202 @@
+{
+  "version": "17.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "NginxPipelineAMD64Stack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "NginxPipelineAMD64Stack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "NginxPipelineAMD64Stack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://212076617619/us-west-2",
+      "properties": {
+        "templateFile": "NginxPipelineAMD64Stack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::212076617619:role/cdk-hnb659fds-deploy-role-212076617619-us-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::212076617619:role/cdk-hnb659fds-cfn-exec-role-212076617619-us-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212076617619-us-west-2/057b7ec298a41cd461c2716c4cb0a5cb4b3e082fa5bea1db79565b15dcb24252.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "NginxPipelineAMD64Stack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::212076617619:role/cdk-hnb659fds-lookup-role-212076617619-us-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "NginxPipelineAMD64Stack.assets"
+      ],
+      "metadata": {
+        "/NginxPipelineAMD64Stack/notificationEmail": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "notificationEmail"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/gitRepoName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gitRepoName"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/baseImageVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "baseImageVersion"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/ecrRepoName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ecrRepoName"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/gitRepo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gitRepoE79A5E14"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/gitRepo/NginxPipelineAMD64StackcontainerPipeline9006E588-main-EventRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "gitRepoNginxPipelineAMD64StackcontainerPipeline9006E588mainEventRuleEE095BC7"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/nginx-servers/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "nginxserversFD95B8E9"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/NginxServerDockerBuild/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NginxServerDockerBuildRole4D63F9B2"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/NginxServerDockerBuild/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NginxServerDockerBuildRoleDefaultPolicy1D7EB52F"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/NginxServerDockerBuild/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NginxServerDockerBuildDEB339D4"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineArtifactsBucketEncryptionKeyAlias4460BD45"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineArtifactsBucket24B5D85B"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineArtifactsBucketPolicyBA24F528"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineRole7FEA970C"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineRoleDefaultPolicy24580DF1"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineE427408B"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineSourceCodeCommitSourceCodePipelineActionRole9BBD9446"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineSourceCodeCommitSourceCodePipelineActionRoleDefaultPolicyE9C5617F"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/EventsRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineEventsRole7F8AAEEF"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/EventsRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineEventsRoleDefaultPolicyEC210F09"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineDockerBuildBuildCodeCodePipelineActionRole1809C40C"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "containerPipelineDockerBuildBuildCodeCodePipelineActionRoleDefaultPolicyB6026FFD"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/NginxPipelineAMD64Stack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "NginxPipelineAMD64Stack"
+    }
+  }
+}

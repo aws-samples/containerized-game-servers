@@ -71,6 +71,14 @@ do
       aws cloudwatch put-metric-data --metric-name PA_LOOK_BACK --namespace ${CW_NS} --value $pa_look_back --dimensions client_id=$client_id
       aws cloudwatch put-metric-data --metric-name PA_LOOK_BACK --namespace ${CW_NS} --value $pa_look_back --dimensions PLAYER_ACTIONS="PA_LOOK_BACK"
     done < $TEMPOUT_8
+
+    psql -A -e -t -w -c "update sessions set updated_at=NOW() where client_id='$POD_NAME';"
+    echo "psql exit code="$?
+    if (( $?>0 ))
+    then
+      echo "ERR-DB update sessions set updated_at=NOW()"
+      exit 0
+    fi
   else
     echo "no game actions yet"
   fi

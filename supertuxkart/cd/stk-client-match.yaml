@@ -24,6 +24,8 @@ spec:
           - secretRef:
               name: db-creds
         env:
+        - name: MISC_ARGS
+          value: "--connection-debug --auto-connect --owner-less"
         - name: SIZE_OF_GAME_SAMPLE
           value: "1000"
         - name: CW_NS

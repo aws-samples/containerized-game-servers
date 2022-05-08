@@ -9,6 +9,13 @@ psql -A -e -t -U postgres -w -c "update servers set num_active_session=num_activ
 echo "psql exit code="$?
 if (( $?>0 ))
 then
-  echo "ERR-DB"
+  echo "ERR-DB update servers set num_active_session"
+  exit 0
+fi
+psql -A -e -t -U postgres -w -c "update sessions set session_length=updated_at-created_at,is_active=0 where client_id='$POD_NAME';"
+echo "psql exit code="$?
+if (( $?>0 ))
+then
+  echo "ERR-DB update servers set num_active_session"
   exit 0
 fi

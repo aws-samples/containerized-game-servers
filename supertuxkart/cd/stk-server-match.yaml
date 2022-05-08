@@ -77,27 +77,16 @@ spec:
           - secretRef:
               name: db-creds
         env:
-        #Difficulty in server, 0 is beginner, 1 is intermediate, 2 is expert and 3 is supertux (the most difficult)
-        - name: DIFFICULTY
+        - name: MODE
           value: "0"
         - name: MISC_ARGS
           value: "--owner-less --auto-connect --log=0"
         - name: MAX_PLAYERS
           value: "24"
-        - name: MODE
-          value: "0"
-        #Penguin Playground-sandtrack,scotland,abyss,volcano_island,hacienda
-        #Off the Beaten Track-cornfield_crossing,snowtuxpeak,ravenbridge_mansion,zengarden,cocoa_temple
-        #To the Moon and Back-olivermath,gran_paradiso_island,lighthouse,candela_city,snowmountain
-        #At World's End-minigolf,black_forest,mines,stk_enterprise,xr591
-        - name: TRACK
-          value: "stk_enterprise"
         - name: REGISTER_Q
           value: "https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/register"
         - name: DEREGISTER_Q
           value: "https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/deregister"
-        - name: GAME_MODE 
-          value: "0"
         - name: UDP_SOCKET_IP
           valueFrom:
             fieldRef:

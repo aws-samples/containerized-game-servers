@@ -91,7 +91,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:20220509012328
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:20220509054555
         imagePullPolicy: Always
         command: ["/start-server.sh"]
         lifecycle:
@@ -110,5 +110,5 @@ spec:
             - SYS_PTRACE
         resources:
           requests:
-            cpu: 1024m
-            memory: 1024Mi
+            cpu: 512m
+            memory: 512Mi

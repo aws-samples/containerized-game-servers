@@ -90,8 +90,8 @@
                     "code": {
                       "branchName": "main",
                       "s3": {
-                        "bucket": "cdk-hnb659fds-assets-212076617619-us-west-2",
-                        "key": "3a595d4ac74e2fc3f6b6d4d1c8b6188c276ba834ef57ca8bfb787173779bb9d5.zip"
+                        "bucket": "cdk-hnb659fds-assets-742301976366-us-east-2",
+                        "key": "a549c87403d0052d036db7a619ca1da1b8517460c7db9b61a598cd325246d8ee.zip"
                       }
                     },
                     "repositoryDescription": "New repository for demo project."
@@ -149,7 +149,7 @@
                                   {
                                     "Ref": "AWS::Partition"
                                   },
-                                  ":codepipeline:us-west-2:212076617619:",
+                                  ":codepipeline:us-east-2:742301976366:",
                                   {
                                     "Ref": "containerPipelineE427408B"
                                   }
@@ -295,7 +295,7 @@
                                           {
                                             "Ref": "AWS::Partition"
                                           },
-                                          ":logs:us-west-2:212076617619:log-group:/aws/codebuild/",
+                                          ":logs:us-east-2:742301976366:log-group:/aws/codebuild/",
                                           {
                                             "Ref": "STKgameServerDockerBuild16674040"
                                           }
@@ -310,7 +310,7 @@
                                           {
                                             "Ref": "AWS::Partition"
                                           },
-                                          ":logs:us-west-2:212076617619:log-group:/aws/codebuild/",
+                                          ":logs:us-east-2:742301976366:log-group:/aws/codebuild/",
                                           {
                                             "Ref": "STKgameServerDockerBuild16674040"
                                           },
@@ -337,7 +337,7 @@
                                         {
                                           "Ref": "AWS::Partition"
                                         },
-                                        ":codebuild:us-west-2:212076617619:report-group/",
+                                        ":codebuild:us-east-2:742301976366:report-group/",
                                         {
                                           "Ref": "STKgameServerDockerBuild16674040"
                                         },
@@ -494,7 +494,7 @@
                         "Fn::Join": [
                           "",
                           [
-                            "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"docker build -t 212076617619.dkr.ecr.us-west-2.amazonaws.com/",
+                            "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"docker build -t 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
@@ -502,11 +502,11 @@
                             {
                               "Ref": "baseImageVersion"
                             },
-                            " .\",\n        \"aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 212076617619.dkr.ecr.us-west-2.amazonaws.com/",
+                            " .\",\n        \"aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
-                            "\",\n        \"docker push 212076617619.dkr.ecr.us-west-2.amazonaws.com/",
+                            "\",\n        \"docker push 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
@@ -569,7 +569,7 @@
                                       {
                                         "Ref": "AWS::Partition"
                                       },
-                                      ":iam::212076617619:root"
+                                      ":iam::742301976366:root"
                                     ]
                                   ]
                                 }
@@ -1008,7 +1008,7 @@
                                               {
                                                 "Ref": "AWS::Partition"
                                               },
-                                              ":iam::212076617619:root"
+                                              ":iam::742301976366:root"
                                             ]
                                           ]
                                         }
@@ -1197,7 +1197,7 @@
                                         {
                                           "Ref": "AWS::Partition"
                                         },
-                                        ":codepipeline:us-west-2:212076617619:",
+                                        ":codepipeline:us-east-2:742301976366:",
                                         {
                                           "Ref": "containerPipelineE427408B"
                                         }
@@ -1265,7 +1265,7 @@
                                               {
                                                 "Ref": "AWS::Partition"
                                               },
-                                              ":iam::212076617619:root"
+                                              ":iam::742301976366:root"
                                             ]
                                           ]
                                         }

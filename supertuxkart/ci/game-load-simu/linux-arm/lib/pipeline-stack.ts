@@ -1,13 +1,15 @@
-import { Stack, StackProps, CfnParameter  } from 'aws-cdk-lib';
-import { Construct } from 'constructs'
-import * as codecommit from 'aws-cdk-lib/aws-codecommit';
-import * as sns from 'aws-cdk-lib/aws-sns';
-import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
-import * as ecr from 'aws-cdk-lib/aws-ecr';
-import * as codebuild from 'aws-cdk-lib/aws-codebuild';
-import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
-import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
-import * as notifications from 'aws-cdk-lib/aws-codestarnotifications';
+import { Stack, StackProps, CfnParameter, RemovalPolicy, CfnOutput } from "aws-cdk-lib";
+import { Construct } from "constructs";
+import * as codecommit from "aws-cdk-lib/aws-codecommit";
+import * as sns from "aws-cdk-lib/aws-sns";
+import * as subscriptions from "aws-cdk-lib/aws-sns-subscriptions";
+import * as ecr from "aws-cdk-lib/aws-ecr";
+import * as codebuild from "aws-cdk-lib/aws-codebuild";
+import * as codepipeline from "aws-cdk-lib/aws-codepipeline";
+import * as codepipeline_actions from "aws-cdk-lib/aws-codepipeline-actions";
+import * as notifications from "aws-cdk-lib/aws-codestarnotifications";
+import * as iam from "aws-cdk-lib/aws-iam";
+import * as eks from "aws-cdk-lib/aws-eks";
 
 export class gameLoadSimuPipeline extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -58,8 +60,27 @@ export class gameLoadSimuPipeline extends Stack {
   const registry = new ecr.Repository(this,`game-servers`, {
       repositoryName: ecrRepoName.valueAsString,
       imageScanOnPush: true,
+      removalPolicy: RemovalPolicy.DESTROY
+    });
+    
+     //name of target EKS cluster
+    const clusterName = new CfnParameter(this, "clusterName", {
+      type: "String",
+      description: "The name of the EKS cluster",
+      default: "stk-gameservers",
     });
 
+
+   //create a roleARN for codebuild 
+    const deployRole = new iam.Role(this, 'codeBuildDeployRole', { roleName: "codeBuildDeployRole",
+      assumedBy: new iam.ServicePrincipal('codebuild.amazonaws.com'),
+    });
+    
+    
+     deployRole.addToPolicy(new iam.PolicyStatement({
+      resources: ['*'],
+      actions: ['ssm:*'],
+    }));
     
   //codebuild project to build docker containers
   // we are reading the build spec from the code, but you could also read it from a file
@@ -74,9 +95,13 @@ export class gameLoadSimuPipeline extends Stack {
         version: "0.2",
         phases: {
           build: {
-            commands: [`docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:${baseImageVersion.valueAsString} .`,
-            `aws ecr get-login-password --region ${this.region} | docker login --username AWS --password-stdin ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}`,
-            `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:${baseImageVersion.valueAsString}`],
+            commands: [
+              `TAG=$(date +'%Y%m%d%H%M%S')`,
+              `docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG .`,
+              `aws ecr get-login-password --region ${this.region} | docker login --username AWS --password-stdin ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}`,
+              `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG`,
+              `aws ssm put-parameter --type String --name ${ gitRepoName.valueAsString }-image-latest-tag --value $TAG --overwrite`
+              ],
           }
            
         },
@@ -84,6 +109,44 @@ export class gameLoadSimuPipeline extends Stack {
              files: ['imageDetail.json']
            },
         
+      }),
+    });
+    
+    //giving permissions to codebuild for eks
+    deployRole.addToPolicy(new iam.PolicyStatement({
+      resources: ['*'],
+      actions: ['eks:*'],
+    }));
+    
+     new CfnOutput(this, 'iamidentitymapping command', { value: `eksctl create iamidentitymapping --cluster ${  clusterName.valueAsString } --region ${ this.region  } --arn ${ deployRole.roleArn } --group system:masters` });
+
+    //deploy docker image using codebuild
+    
+    const deployproject = new codebuild.Project(this, `dockerDeploy`, {
+      environment: {
+        privileged: true,
+        //buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2,
+      },
+      role: deployRole,
+      
+      buildSpec: codebuild.BuildSpec.fromObject({
+        version: "0.2",
+        phases: {
+          build: {
+            commands: [
+              `export AWS_REGION=${ this.region  }`,
+              `export AWS_ACCOUNT_ID=${ this.account }`,
+              `curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp`,
+              `mv /tmp/eksctl /usr/local/bin`,
+              `aws eks update-kubeconfig --region ${ this.region } --name ${ clusterName.valueAsString }`,
+              "IMAGE_TAG=$(aws ssm get-parameter --name sample-cluster-app-image-latest-tag | jq '.Parameter.Value')",
+              "envsubst < sample-cluster-app-deployment.yml | kubectl apply -f -"
+            ],
+          },
+        },
+        artifacts: {
+          files: ["imageDetail.json"],
+        },
       }),
     });
     
@@ -116,7 +179,17 @@ export class gameLoadSimuPipeline extends Stack {
              
             }),
           ]
-        }
+        },
+        {
+          stageName: "EKSDeployment",
+          actions: [
+            new codepipeline_actions.CodeBuildAction({
+              actionName: "Deploy_Code",
+              input: sourceOuput,
+              project: deployproject,
+            }),
+          ],
+        },
       ]
     });
     
@@ -124,6 +197,15 @@ export class gameLoadSimuPipeline extends Stack {
     
     const buildNotificationRule = new notifications.NotificationRule(this, 'buildNotificationRule', {
     source: buildproject,
+    events: [
+      'codebuild-project-build-state-succeeded',
+      'codebuild-project-build-state-failed',
+    ],
+    targets: [pipelineNotifications],
+  });
+  
+   const deployNotificationRule = new notifications.NotificationRule(this, 'deployNotificationRule', {
+    source: deployproject,
     events: [
       'codebuild-project-build-state-succeeded',
       'codebuild-project-build-state-failed',

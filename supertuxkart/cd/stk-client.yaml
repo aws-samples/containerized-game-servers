@@ -25,7 +25,7 @@ spec:
           value: "None"
         - name: NETWORK_AI
           value: "6"
-        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:latest
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:${IMAGE_TAG}
         imagePullPolicy: Always
         command: ["/start-client.sh"]
         resources:

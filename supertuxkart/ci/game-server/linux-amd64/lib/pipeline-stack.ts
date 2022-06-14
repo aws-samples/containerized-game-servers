@@ -8,6 +8,7 @@ import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as notifications from 'aws-cdk-lib/aws-codestarnotifications';
+import * as iam from "aws-cdk-lib/aws-iam";
 
 export class StkPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -54,6 +55,16 @@ export class StkPipelineStack extends Stack {
       imageScanOnPush: true,
     });
 
+  //create a roleARN for codebuild 
+  const buildRole = new iam.Role(this, 'codeBuildDeployRole', { roleName: "codeBuildDeployRole",
+    assumedBy: new iam.ServicePrincipal('codebuild.amazonaws.com'),
+  });
+  
+  
+  buildRole.addToPolicy(new iam.PolicyStatement({
+    resources: ['*'],
+    actions: ['ssm:*'],
+  }));
     
   //codebuild project to build docker containers
   // we are reading the build spec from the code, but you could also read it from a file
@@ -63,14 +74,19 @@ export class StkPipelineStack extends Stack {
             privileged: true,
             buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_2
          },
+          role: buildRole,
       //cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
       buildSpec: codebuild.BuildSpec.fromObject({
         version: "0.2",
         phases: {
           build: {
-            commands: [`TAG=$(date +'%Y%m%d%H%M%S')`,`docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG .`,
-            `aws ecr get-login-password --region ${this.region} | docker login --username AWS --password-stdin ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}`,
-            `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG`],
+            commands: [
+              `TAG=$(date +'%Y%m%d%H%M%S')`,
+              `docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG .`,
+              `aws ecr get-login-password --region ${this.region} | docker login --username AWS --password-stdin ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}`,
+              `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG`,
+              `aws ssm put-parameter --type String --name ${ gitRepoName.valueAsString }-image-latest-tag --value $TAG --overwrite`
+            ],
           }
            
         },

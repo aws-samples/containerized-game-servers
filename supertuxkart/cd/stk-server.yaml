@@ -60,7 +60,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:latest
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:${IMAGE_TAG}
         #image: public.ecr.aws/p9d8y1e7/supertuxkart
         imagePullPolicy: Always
         command: ["/stk-code/start-server.sh"]

@@ -12,6 +12,8 @@ Configure the notification email you wish to get notifications about build statu
 
 Execute ./init.sh
 
+Execute the command returned as output to allow depoyments on EKS: `PipelineStack.iamidentitymappingcommand = eksctl create iamidentitymapping --cluster <cluster> --region <region> --arn arn:aws:iam::<account>:role/codeBuildDeployRole --group system:masters`
+
 # What does it do?
 
 CDK will provision a new ECR image registry and CodeCommit repository, copy the configuration stored in (./dockerfiles)[./dockerfiles] to the CodeCommit repository and kick the build process upon git merges/pushes to the CodeCommit repo. 

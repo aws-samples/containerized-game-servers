@@ -1,5 +1,5 @@
 {
-  "version": "17.0.0",
+  "version": "20.0.0",
   "artifacts": {
     "Tree": {
       "type": "cdk:tree",
@@ -17,20 +17,20 @@
     },
     "StkPipelineAMD64Stack": {
       "type": "aws:cloudformation:stack",
-      "environment": "aws://313112454038/us-west-2",
+      "environment": "aws://742301976366/us-east-2",
       "properties": {
         "templateFile": "StkPipelineAMD64Stack.template.json",
         "validateOnSynth": false,
-        "assumeRoleArn": "arn:${AWS::Partition}:iam::313112454038:role/cdk-hnb659fds-deploy-role-313112454038-us-west-2",
-        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::313112454038:role/cdk-hnb659fds-cfn-exec-role-313112454038-us-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-313112454038-us-west-2/ef187cbacc1a771992163276f383b696991b8ae87af00280ddb1ec77fd61a80d.json",
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::742301976366:role/cdk-hnb659fds-deploy-role-742301976366-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::742301976366:role/cdk-hnb659fds-cfn-exec-role-742301976366-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-742301976366-us-east-2/d9edbffdfcdaa4db34e720d95c44f0f6b0a149c9cb013725676681e79ea8a116.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
           "StkPipelineAMD64Stack.assets"
         ],
         "lookupRole": {
-          "arn": "arn:${AWS::Partition}:iam::313112454038:role/cdk-hnb659fds-lookup-role-313112454038-us-west-2",
+          "arn": "arn:${AWS::Partition}:iam::742301976366:role/cdk-hnb659fds-lookup-role-742301976366-us-east-2",
           "requiresBootstrapStackVersion": 8,
           "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
         }
@@ -49,12 +49,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "gitRepoName"
-          }
-        ],
-        "/StkPipelineAMD64Stack/baseImageVersion": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "baseImageVersion"
           }
         ],
         "/StkPipelineAMD64Stack/ecrRepoName": [
@@ -99,16 +93,16 @@
             "data": "gameservers96C3BF90"
           }
         ],
-        "/StkPipelineAMD64Stack/STKgameServerDockerBuild/Role/Resource": [
+        "/StkPipelineAMD64Stack/codeBuildDeployRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "STKgameServerDockerBuildRoleD46FA7B3"
+            "data": "codeBuildDeployRole08634CC8"
           }
         ],
-        "/StkPipelineAMD64Stack/STKgameServerDockerBuild/Role/DefaultPolicy/Resource": [
+        "/StkPipelineAMD64Stack/codeBuildDeployRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "STKgameServerDockerBuildRoleDefaultPolicy547E2DFE"
+            "data": "codeBuildDeployRoleDefaultPolicy0E0416D5"
           }
         ],
         "/StkPipelineAMD64Stack/STKgameServerDockerBuild/Resource": [

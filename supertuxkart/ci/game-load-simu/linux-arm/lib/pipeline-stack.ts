@@ -86,7 +86,7 @@ export class gameLoadSimuPipeline extends Stack {
               `docker build -t ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG .`,
               `aws ecr get-login-password --region ${this.region} | docker login --username AWS --password-stdin ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}`,
               `docker push ${this.account}.dkr.ecr.${this.region}.amazonaws.com/${registry.repositoryName}:$TAG`,
-              `aws ssm put-parameter --type String --name ${ gitRepoName.valueAsString }-image-latest-tag --value $TAG --overwrite`
+              `aws ssm put-parameter --type String --name stk-image-latest-tag --value $TAG --overwrite`
             ],
           }
            

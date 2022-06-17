@@ -10,11 +10,6 @@
    "Default": "stk-docker-build",
    "Description": "The git repository hosting application code"
   },
-  "baseImageVersion": {
-   "Type": "String",
-   "Default": "latest",
-   "Description": "The supertuxkart docker image version"
-  },
   "ecrRepoName": {
    "Type": "String",
    "Default": "stk",
@@ -36,7 +31,7 @@
     "Code": {
      "BranchName": "main",
      "S3": {
-      "Bucket": "cdk-hnb659fds-assets-313112454038-us-west-2",
+      "Bucket": "cdk-hnb659fds-assets-742301976366-us-east-2",
       "Key": "ee72d563f8621b85020c5b11ebe3b075d60d70abb505485395637d3c19b2b607.zip"
      }
     },
@@ -85,7 +80,7 @@
          {
           "Ref": "AWS::Partition"
          },
-         ":codepipeline:us-west-2:313112454038:",
+         ":codepipeline:us-east-2:742301976366:",
          {
           "Ref": "containerPipelineE427408B"
          }
@@ -172,7 +167,7 @@
     "aws:cdk:path": "StkPipelineAMD64Stack/game-servers/Resource"
    }
   },
-  "STKgameServerDockerBuildRoleD46FA7B3": {
+  "codeBuildDeployRole08634CC8": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -186,17 +181,23 @@
       }
      ],
      "Version": "2012-10-17"
-    }
+    },
+    "RoleName": "codeBuildDeployRole"
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Role/Resource"
+    "aws:cdk:path": "StkPipelineAMD64Stack/codeBuildDeployRole/Resource"
    }
   },
-  "STKgameServerDockerBuildRoleDefaultPolicy547E2DFE": {
+  "codeBuildDeployRoleDefaultPolicy0E0416D5": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": "ssm:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "logs:CreateLogGroup",
@@ -213,7 +214,7 @@
            {
             "Ref": "AWS::Partition"
            },
-           ":logs:us-west-2:313112454038:log-group:/aws/codebuild/",
+           ":logs:us-east-2:742301976366:log-group:/aws/codebuild/",
            {
             "Ref": "STKgameServerDockerBuild16674040"
            }
@@ -228,7 +229,7 @@
            {
             "Ref": "AWS::Partition"
            },
-           ":logs:us-west-2:313112454038:log-group:/aws/codebuild/",
+           ":logs:us-east-2:742301976366:log-group:/aws/codebuild/",
            {
             "Ref": "STKgameServerDockerBuild16674040"
            },
@@ -255,7 +256,7 @@
           {
            "Ref": "AWS::Partition"
           },
-          ":codebuild:us-west-2:313112454038:report-group/",
+          ":codebuild:us-east-2:742301976366:report-group/",
           {
            "Ref": "STKgameServerDockerBuild16674040"
           },
@@ -359,15 +360,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "STKgameServerDockerBuildRoleDefaultPolicy547E2DFE",
+    "PolicyName": "codeBuildDeployRoleDefaultPolicy0E0416D5",
     "Roles": [
      {
-      "Ref": "STKgameServerDockerBuildRoleD46FA7B3"
+      "Ref": "codeBuildDeployRole08634CC8"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Role/DefaultPolicy/Resource"
+    "aws:cdk:path": "StkPipelineAMD64Stack/codeBuildDeployRole/DefaultPolicy/Resource"
    }
   },
   "STKgameServerDockerBuild16674040": {
@@ -385,7 +386,7 @@
     },
     "ServiceRole": {
      "Fn::GetAtt": [
-      "STKgameServerDockerBuildRoleD46FA7B3",
+      "codeBuildDeployRole08634CC8",
       "Arn"
      ]
     },
@@ -394,27 +395,19 @@
       "Fn::Join": [
        "",
        [
-        "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"docker build -t 313112454038.dkr.ecr.us-west-2.amazonaws.com/",
+        "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"TAG=$(date +'%Y%m%d%H%M%S')\",\n        \"docker build -t 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
         {
          "Ref": "gameservers96C3BF90"
         },
-        ":",
-        {
-         "Ref": "baseImageVersion"
-        },
-        " .\",\n        \"aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 313112454038.dkr.ecr.us-west-2.amazonaws.com/",
+        ":$TAG .\",\n        \"aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
         {
          "Ref": "gameservers96C3BF90"
         },
-        "\",\n        \"docker push 313112454038.dkr.ecr.us-west-2.amazonaws.com/",
+        "\",\n        \"docker push 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
         {
          "Ref": "gameservers96C3BF90"
         },
-        ":",
-        {
-         "Ref": "baseImageVersion"
-        },
-        "\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+        ":$TAG\",\n        \"aws ssm put-parameter --type String --name stk-image-latest-tag --value $TAG --overwrite\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
        ]
       ]
      },
@@ -451,7 +444,7 @@
            {
             "Ref": "AWS::Partition"
            },
-           ":iam::313112454038:root"
+           ":iam::742301976366:root"
           ]
          ]
         }
@@ -797,7 +790,7 @@
            {
             "Ref": "AWS::Partition"
            },
-           ":iam::313112454038:root"
+           ":iam::742301976366:root"
           ]
          ]
         }
@@ -935,7 +928,7 @@
           {
            "Ref": "AWS::Partition"
           },
-          ":codepipeline:us-west-2:313112454038:",
+          ":codepipeline:us-east-2:742301976366:",
           {
            "Ref": "containerPipelineE427408B"
           }
@@ -974,7 +967,7 @@
            {
             "Ref": "AWS::Partition"
            },
-           ":iam::313112454038:root"
+           ":iam::742301976366:root"
           ]
          ]
         }
@@ -1052,7 +1045,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31SwW6DMAz9lt1DtrHDdm13nDQhunsVglsZSILi0KlC/PuchIpuh53ee479XkwoZVnKpwf1TYVu+2LARs6HoHQv3k+2Ul4ZCOAFnx9n7VrQzhgMcq5hdITB+Wts3NQi6OWoiCCQ3EVgLef9pHsIe0UgMo1DK8tQuQH1dStnvQi4gGWruZ4GSEmMnGG59OVG1LGWyWFqSHscAzobq790atky7iRHaP/fPnHrZsKhlXPlXQc6XX6li0BleNqtt4u4xdwSosWIIwxogV1WljpWvoje8EofkOYi7AZUFEUi2YOC8tYFPKFWcS2e+LyTt2/0t7YsIj0Fv+sZ7TkvSG7ymnMt+8qOHi/Pr/KN/4SOEAs/2YAGZJ3xByxPFy8lAgAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Ru27DMAz8luyyWqdF0TXpGKAwnO6BLDMB/ZAMUU4RGP73UpIDpx063R1J3YHUVm7fZb5R35Tpus06rOR09Eq34uNsCuVUDx6c4P5p0rYGbfsevZxKGCyht+4WBlc1C3o5KSLwJHcBWMtpP+oW/F4RiETDo4UlKGyH+raWk54FXMGw1VSOHcQkRs4wXPqyA+pQS+Q4VqQdDh6tCdVfOo6sGQ+SI7T7bx9UPbftEh9w9blbhMtUI3a1nApnG9BxwYWm9oADdGiAJxYWRxY+i7bnlQ4QbQPsOlQURCTJg7xyxno8o1ZhLX7x+SDvN/pbm2cRv4L/9YLmkhYkOzrNuYZ9ZUNP1/xN5q/yedMQYuZG47EHWSb8AfAiKEUmAgAA"
    },
    "Metadata": {
     "aws:cdk:path": "StkPipelineAMD64Stack/CDKMetadata/Default"

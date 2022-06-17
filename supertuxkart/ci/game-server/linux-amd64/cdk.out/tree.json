@@ -21,7 +21,7 @@
             "path": "StkPipelineAMD64Stack/notificationEmail",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
-              "version": "2.22.0"
+              "version": "2.28.1"
             }
           },
           "gitRepoName": {
@@ -29,15 +29,7 @@
             "path": "StkPipelineAMD64Stack/gitRepoName",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
-              "version": "2.22.0"
-            }
-          },
-          "baseImageVersion": {
-            "id": "baseImageVersion",
-            "path": "StkPipelineAMD64Stack/baseImageVersion",
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.CfnParameter",
-              "version": "2.22.0"
+              "version": "2.28.1"
             }
           },
           "ecrRepoName": {
@@ -45,7 +37,7 @@
             "path": "StkPipelineAMD64Stack/ecrRepoName",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
-              "version": "2.22.0"
+              "version": "2.28.1"
             }
           },
           "gitRepo": {
@@ -61,7 +53,7 @@
                     "path": "StkPipelineAMD64Stack/gitRepo/PathResolvedCodeAsset/Stage",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.AssetStaging",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   },
                   "AssetBucket": {
@@ -69,13 +61,13 @@
                     "path": "StkPipelineAMD64Stack/gitRepo/PathResolvedCodeAsset/AssetBucket",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "Resource": {
@@ -90,7 +82,7 @@
                     "code": {
                       "branchName": "main",
                       "s3": {
-                        "bucket": "cdk-hnb659fds-assets-313112454038-us-west-2",
+                        "bucket": "cdk-hnb659fds-assets-742301976366-us-east-2",
                         "key": "ee72d563f8621b85020c5b11ebe3b075d60d70abb505485395637d3c19b2b607.zip"
                       }
                     },
@@ -99,7 +91,7 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_codecommit.CfnRepository",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "StkPipelineAMD64StackcontainerPipeline69B0D6EC-main-EventRule": {
@@ -149,7 +141,7 @@
                                   {
                                     "Ref": "AWS::Partition"
                                   },
-                                  ":codepipeline:us-west-2:313112454038:",
+                                  ":codepipeline:us-east-2:742301976366:",
                                   {
                                     "Ref": "containerPipelineE427408B"
                                   }
@@ -168,19 +160,19 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_events.CfnRule",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_events.Rule",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_codecommit.Repository",
-              "version": "2.22.0"
+              "version": "2.28.1"
             }
           },
           "BuildNotifications": {
@@ -196,7 +188,7 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "TokenSubscription:1": {
@@ -220,13 +212,13 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_sns.Subscription",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "Policy": {
@@ -264,19 +256,19 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_sns.CfnTopicPolicy",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_sns.TopicPolicy",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_sns.Topic",
-              "version": "2.22.0"
+              "version": "2.28.1"
             }
           },
           "game-servers": {
@@ -299,247 +291,253 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_ecr.CfnRepository",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_ecr.Repository",
-              "version": "2.22.0"
+              "version": "2.28.1"
+            }
+          },
+          "codeBuildDeployRole": {
+            "id": "codeBuildDeployRole",
+            "path": "StkPipelineAMD64Stack/codeBuildDeployRole",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "StkPipelineAMD64Stack/codeBuildDeployRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "codebuild.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "roleName": "codeBuildDeployRole"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.28.1"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "StkPipelineAMD64Stack/codeBuildDeployRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineAMD64Stack/codeBuildDeployRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "ssm:*",
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:us-east-2:742301976366:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "STKgameServerDockerBuild16674040"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:us-east-2:742301976366:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "STKgameServerDockerBuild16674040"
+                                      },
+                                      ":*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases",
+                                "codebuild:BatchPutCodeCoverages"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":codebuild:us-east-2:742301976366:report-group/",
+                                    {
+                                      "Ref": "STKgameServerDockerBuild16674040"
+                                    },
+                                    "-*"
+                                  ]
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "ecr:BatchCheckLayerAvailability",
+                                "ecr:GetDownloadUrlForLayer",
+                                "ecr:BatchGetImage"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "gameservers96C3BF90",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": "ecr:GetAuthorizationToken",
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "ecr:PutImage",
+                                "ecr:InitiateLayerUpload",
+                                "ecr:UploadLayerPart",
+                                "ecr:CompleteLayerUpload"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "gameservers96C3BF90",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "containerPipelineArtifactsBucket24B5D85B",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "containerPipelineArtifactsBucket24B5D85B",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:DescribeKey"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+                                  "Arn"
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "codeBuildDeployRoleDefaultPolicy0E0416D5",
+                        "roles": [
+                          {
+                            "Ref": "codeBuildDeployRole08634CC8"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.28.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.28.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.28.1"
             }
           },
           "STKgameServerDockerBuild": {
             "id": "STKgameServerDockerBuild",
             "path": "StkPipelineAMD64Stack/STKgameServerDockerBuild",
             "children": {
-              "Role": {
-                "id": "Role",
-                "path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Role",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Role/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                      "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "codebuild.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.22.0"
-                    }
-                  },
-                  "DefaultPolicy": {
-                    "id": "DefaultPolicy",
-                    "path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Role/DefaultPolicy",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Role/DefaultPolicy/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                          "aws:cdk:cloudformation:props": {
-                            "policyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": [
-                                    "logs:CreateLogGroup",
-                                    "logs:CreateLogStream",
-                                    "logs:PutLogEvents"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": [
-                                    {
-                                      "Fn::Join": [
-                                        "",
-                                        [
-                                          "arn:",
-                                          {
-                                            "Ref": "AWS::Partition"
-                                          },
-                                          ":logs:us-west-2:313112454038:log-group:/aws/codebuild/",
-                                          {
-                                            "Ref": "STKgameServerDockerBuild16674040"
-                                          }
-                                        ]
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Join": [
-                                        "",
-                                        [
-                                          "arn:",
-                                          {
-                                            "Ref": "AWS::Partition"
-                                          },
-                                          ":logs:us-west-2:313112454038:log-group:/aws/codebuild/",
-                                          {
-                                            "Ref": "STKgameServerDockerBuild16674040"
-                                          },
-                                          ":*"
-                                        ]
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Action": [
-                                    "codebuild:CreateReportGroup",
-                                    "codebuild:CreateReport",
-                                    "codebuild:UpdateReport",
-                                    "codebuild:BatchPutTestCases",
-                                    "codebuild:BatchPutCodeCoverages"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::Join": [
-                                      "",
-                                      [
-                                        "arn:",
-                                        {
-                                          "Ref": "AWS::Partition"
-                                        },
-                                        ":codebuild:us-west-2:313112454038:report-group/",
-                                        {
-                                          "Ref": "STKgameServerDockerBuild16674040"
-                                        },
-                                        "-*"
-                                      ]
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Action": [
-                                    "ecr:BatchCheckLayerAvailability",
-                                    "ecr:GetDownloadUrlForLayer",
-                                    "ecr:BatchGetImage"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "gameservers96C3BF90",
-                                      "Arn"
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Action": "ecr:GetAuthorizationToken",
-                                  "Effect": "Allow",
-                                  "Resource": "*"
-                                },
-                                {
-                                  "Action": [
-                                    "ecr:PutImage",
-                                    "ecr:InitiateLayerUpload",
-                                    "ecr:UploadLayerPart",
-                                    "ecr:CompleteLayerUpload"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "gameservers96C3BF90",
-                                      "Arn"
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Action": [
-                                    "s3:GetObject*",
-                                    "s3:GetBucket*",
-                                    "s3:List*"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": [
-                                    {
-                                      "Fn::GetAtt": [
-                                        "containerPipelineArtifactsBucket24B5D85B",
-                                        "Arn"
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Join": [
-                                        "",
-                                        [
-                                          {
-                                            "Fn::GetAtt": [
-                                              "containerPipelineArtifactsBucket24B5D85B",
-                                              "Arn"
-                                            ]
-                                          },
-                                          "/*"
-                                        ]
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Action": [
-                                    "kms:Decrypt",
-                                    "kms:DescribeKey"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
-                                      "Arn"
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Action": [
-                                    "kms:Decrypt",
-                                    "kms:Encrypt",
-                                    "kms:ReEncrypt*",
-                                    "kms:GenerateDataKey*"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
-                                      "Arn"
-                                    ]
-                                  }
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "policyName": "STKgameServerDockerBuildRoleDefaultPolicy547E2DFE",
-                            "roles": [
-                              {
-                                "Ref": "STKgameServerDockerBuildRoleD46FA7B3"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                          "version": "2.22.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.Policy",
-                      "version": "2.22.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.22.0"
-                }
-              },
               "Resource": {
                 "id": "Resource",
                 "path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Resource",
@@ -558,7 +556,7 @@
                     },
                     "serviceRole": {
                       "Fn::GetAtt": [
-                        "STKgameServerDockerBuildRoleD46FA7B3",
+                        "codeBuildDeployRole08634CC8",
                         "Arn"
                       ]
                     },
@@ -568,27 +566,19 @@
                         "Fn::Join": [
                           "",
                           [
-                            "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"docker build -t 313112454038.dkr.ecr.us-west-2.amazonaws.com/",
+                            "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"TAG=$(date +'%Y%m%d%H%M%S')\",\n        \"docker build -t 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
-                            ":",
-                            {
-                              "Ref": "baseImageVersion"
-                            },
-                            " .\",\n        \"aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 313112454038.dkr.ecr.us-west-2.amazonaws.com/",
+                            ":$TAG .\",\n        \"aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
-                            "\",\n        \"docker push 313112454038.dkr.ecr.us-west-2.amazonaws.com/",
+                            "\",\n        \"docker push 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
-                            ":",
-                            {
-                              "Ref": "baseImageVersion"
-                            },
-                            "\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+                            ":$TAG\",\n        \"aws ssm put-parameter --type String --name stk-image-latest-tag --value $TAG --overwrite\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
                           ]
                         ]
                       }
@@ -606,13 +596,13 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_codebuild.Project",
-              "version": "2.22.0"
+              "version": "2.28.1"
             }
           },
           "containerPipeline": {
@@ -643,7 +633,7 @@
                                       {
                                         "Ref": "AWS::Partition"
                                       },
-                                      ":iam::313112454038:root"
+                                      ":iam::742301976366:root"
                                     ]
                                   ]
                                 }
@@ -657,13 +647,13 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_kms.CfnKey",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_kms.Key",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "ArtifactsBucketEncryptionKeyAlias": {
@@ -687,13 +677,13 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_kms.CfnAlias",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_kms.Alias",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "ArtifactsBucket": {
@@ -731,7 +721,7 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   },
                   "Policy": {
@@ -790,19 +780,19 @@
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
-                          "version": "2.22.0"
+                          "version": "2.28.1"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_s3.Bucket",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "Role": {
@@ -831,7 +821,7 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   },
                   "DefaultPolicy": {
@@ -932,19 +922,19 @@
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                          "version": "2.22.0"
+                          "version": "2.28.1"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.Policy",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "Resource": {
@@ -1047,7 +1037,7 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_codepipeline.CfnPipeline",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "Source": {
@@ -1082,7 +1072,7 @@
                                               {
                                                 "Ref": "AWS::Partition"
                                               },
-                                              ":iam::313112454038:root"
+                                              ":iam::742301976366:root"
                                             ]
                                           ]
                                         }
@@ -1095,7 +1085,7 @@
                             },
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                              "version": "2.22.0"
+                              "version": "2.28.1"
                             }
                           },
                           "DefaultPolicy": {
@@ -1192,19 +1182,19 @@
                                 },
                                 "constructInfo": {
                                   "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                                  "version": "2.22.0"
+                                  "version": "2.28.1"
                                 }
                               }
                             },
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.aws_iam.Policy",
-                              "version": "2.22.0"
+                              "version": "2.28.1"
                             }
                           }
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_iam.Role",
-                          "version": "2.22.0"
+                          "version": "2.28.1"
                         }
                       }
                     },
@@ -1245,7 +1235,7 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   },
                   "DefaultPolicy": {
@@ -1271,7 +1261,7 @@
                                         {
                                           "Ref": "AWS::Partition"
                                         },
-                                        ":codepipeline:us-west-2:313112454038:",
+                                        ":codepipeline:us-east-2:742301976366:",
                                         {
                                           "Ref": "containerPipelineE427408B"
                                         }
@@ -1292,19 +1282,19 @@
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                          "version": "2.22.0"
+                          "version": "2.28.1"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.Policy",
-                      "version": "2.22.0"
+                      "version": "2.28.1"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               },
               "DockerBuild": {
@@ -1339,7 +1329,7 @@
                                               {
                                                 "Ref": "AWS::Partition"
                                               },
-                                              ":iam::313112454038:root"
+                                              ":iam::742301976366:root"
                                             ]
                                           ]
                                         }
@@ -1352,7 +1342,7 @@
                             },
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                              "version": "2.22.0"
+                              "version": "2.28.1"
                             }
                           },
                           "DefaultPolicy": {
@@ -1394,19 +1384,19 @@
                                 },
                                 "constructInfo": {
                                   "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                                  "version": "2.22.0"
+                                  "version": "2.28.1"
                                 }
                               }
                             },
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.aws_iam.Policy",
-                              "version": "2.22.0"
+                              "version": "2.28.1"
                             }
                           }
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_iam.Role",
-                          "version": "2.22.0"
+                          "version": "2.28.1"
                         }
                       }
                     },
@@ -1424,7 +1414,7 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_codepipeline.Pipeline",
-              "version": "2.22.0"
+              "version": "2.28.1"
             }
           },
           "buildNotificationRule": {
@@ -1461,13 +1451,13 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_codestarnotifications.CfnNotificationRule",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_codestarnotifications.NotificationRule",
-              "version": "2.22.0"
+              "version": "2.28.1"
             }
           },
           "CDKMetadata": {
@@ -1479,7 +1469,7 @@
                 "path": "StkPipelineAMD64Stack/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
-                  "version": "2.22.0"
+                  "version": "2.28.1"
                 }
               }
             },
@@ -1491,13 +1481,13 @@
         },
         "constructInfo": {
           "fqn": "aws-cdk-lib.Stack",
-          "version": "2.22.0"
+          "version": "2.28.1"
         }
       }
     },
     "constructInfo": {
       "fqn": "aws-cdk-lib.App",
-      "version": "2.22.0"
+      "version": "2.28.1"
     }
   }
 }

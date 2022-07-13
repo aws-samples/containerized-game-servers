@@ -17,7 +17,13 @@ import os
 import signal
 import boto3
 import base64
+import psycopg2
 from botocore.exceptions import ClientError
+
+user=os.environ['user']
+password=os.environ['password']
+host=os.environ['host']
+database=os.environ['database']
 
 
 
@@ -74,8 +80,34 @@ except ImportError:
     pass
 
 
-def execute_rds_statement(sql, sql_parameters=[]):
-    log('execute_rds_statement',sql,sql_parameters)
+
+def execute_rds_statement(sql,param):
+  log('execute_rds_statement',sql)
+  try:
+    connection = psycopg2.connect(user=user,
+                                  password=password,
+                                  host=host,
+                                  port="5432",
+                                  database=database)
+    cursor = connection.cursor()
+    cursor.execute(sql,param)
+
+    connection.commit()
+    count = cursor.rowcount
+    print(count, "Record selected/inserted/updated successfully processed")
+
+  except (Exception, psycopg2.Error) as error:
+    print("Failed to select/insert/update", error)
+
+  finally:
+    # closing database connection.
+    if connection:
+        cursor.close()
+        connection.close()
+        print("PostgreSQL connection is closed")
+
+def execute_rds_statement_data_api(sql, sql_parameters=[]):
+    log('execute_rds_statement_data_api',sql,sql_parameters)
     response = rds_client.execute_statement(
         secretArn=secret_arn,
         database=database_name,
@@ -312,8 +344,10 @@ class Model(object):
             {'name':'z', 'value':{'doubleValue': z}},
         ]
         rows = list(self.execute(query, dict(p=p, q=q, x=x, y=y, z=z)))
-        sql = 'select w from block where p = :p and q = :q and x = :x and y = :y and z = :z;'
-        result = execute_rds_statement(sql, sql_parameters)
+        sql = 'select w from block where p = %s and q = %s and x = %s and y = %s and z = %s;'
+        sql = """select w from block where p = %s and q = %s and x = %s and y = %s and z = %s;"""
+        params = [p,q,x,y,z]
+        result = execute_rds_statement(sql,params)
         #log('rds_response get_block',result['records'])
         if rows:
             log('rows from sqlite',rows[0][0])
@@ -380,7 +414,7 @@ class Model(object):
         # TODO: has left message if was already authenticated
         self.send_talk('%s has joined the game.' % client.nick)
         #agones_allocate(self)
-#TBD adopt PG to load the world from pg insed of craft.db
+
     def on_chunk(self, client, p, q, key=0):
         #log('on_chunk-select from block',p,q)
         packets = []
@@ -398,9 +432,15 @@ class Model(object):
             {'name':'q', 'value':{'doubleValue': q}},
             {'name':'key', 'value':{'doubleValue': key}},
         ]
-        result = execute_rds_statement(query, sql_parameters)
-        log('rds_response on_chunk',result['records'])
-        for _row in result['records']:
+        query = (
+            """select rowid, x, y, z, w from block where p = %s and q = %s and rowid > %s;"""
+        )
+        params = [p,q,key]
+        #result = execute_rds_statement(query, sql_parameters)
+        result = execute_rds_statement(query,params)
+        log('rds_response on_chunk',result)
+        if result is not None:
+          for _row in result['records']:
             rowid=_row[0]['longValue']
             x=_row[1]['longValue']
             y=_row[2]['longValue']
@@ -410,36 +450,42 @@ class Model(object):
             blocks += 1
             packets.append(packet(BLOCK, p, q, x, y, z, w))
             max_rowid = max(max_rowid, rowid)
-        #for rowid, x, y, z, w in rows:
+          #for rowid, x, y, z, w in rows:
             #log('on_chunk-rows',x,y,z,w)
             #blocks += 1
             #packets.append(packet(BLOCK, p, q, x, y, z, w))
             #max_rowid = max(max_rowid, rowid)
-        query = (
+          query = (
             'select x, y, z, w from light where '
             'p = :p and q = :q;'
-        )
-        rows = self.execute(query, dict(p=p, q=q))
+          )
+          sql="""select x, y, z, w from light where p=%s and q=%s;'"""
+          params=[p,q]
+          rows = execute_rds_statement(query,params)
+          #rows = self.execute(query, dict(p=p, q=q))
 
-        lights = 0
-        for x, y, z, w in rows:
+          lights = 0
+          for x, y, z, w in rows:
             lights += 1
             packets.append(packet(LIGHT, p, q, x, y, z, w))
-        query = (
+          query = (
             'select x, y, z, face, text from sign where '
             'p = :p and q = :q;'
-        )
-        rows = self.execute(query, dict(p=p, q=q))
-        signs = 0
-        for x, y, z, face, text in rows:
+          )
+          #rows = self.execute(query, dict(p=p, q=q))
+          sql="""select x, y, z, face, text from sign where p = %s and q = %s;"""
+          params=[p,q]
+          rows = execute_rds_statement(query,params)
+          signs = 0
+          for x, y, z, face, text in rows:
             signs += 1
             packets.append(packet(SIGN, p, q, x, y, z, face, text))
-        if blocks:
+          if blocks:
             packets.append(packet(KEY, p, q, max_rowid))
-        if blocks or lights or signs:
+          if blocks or lights or signs:
             packets.append(packet(REDRAW, p, q))
-        packets.append(packet(CHUNK, p, q))
-        client.send_raw(''.join(packets))
+          packets.append(packet(CHUNK, p, q))
+          client.send_raw(''.join(packets))
 
     def on_block(self, client, x, y, z, w):
         #log('on_block','x='+str(x)+' y='+str(y)+' z='+str(z)+' w='+str(w))
@@ -464,6 +510,7 @@ class Model(object):
             client.send(REDRAW, p, q)
             client.send(TALK, message)
             return
+
         query = (
             'insert into block_history (timestamp, user_id, x, y, z, w) '
             'values (:timestamp, :user_id, :x, :y, :z, :w);'
@@ -488,7 +535,12 @@ class Model(object):
             {'name':'w', 'value':{'doubleValue': w}},
         ]
         sql = 'insert into block (p, q, x, y, z, w) values (:p, :q, :x, :y, :z, :w) on conflict on constraint unique_block_pqxyz do UPDATE SET w = :w'
-        response = execute_rds_statement(sql, sql_parameters)
+        sql = """insert into block (p, q, x, y, z, w) values (%s,%s,%s,%s,%s,%s) on conflict on constraint unique_block_pqxyz do UPDATE SET w =%s"""
+        params=[p,q,x,y,z,w,w]
+    #postgres_insert_query = """ INSERT INTO light (p,q,x,y,z,w) VALUES (%s,%s,%s,%s,%s,%s)"""
+    #record_to_insert = (1,2,3,4,5,6)
+        #response = execute_rds_statement(sql, sql_parameters)
+        response = execute_rds_statement(sql,params)
         #log('rds_response_on_block',response)
         for dx in range(-1, 2):
             for dz in range(-1, 2):
@@ -507,7 +559,10 @@ class Model(object):
                 'x = :x and y = :y and z = :z;'
             )
             sql = 'delete from sign where x = :x and y = :y and z = :z'
-            response = execute_rds_statement(sql, sql_parameters)
+            sql = """delete from sign where x = %s and y = %s and z = %s"""
+            params =[x,y,z]
+            #response = execute_rds_statement(sql, sql_parameters)
+            response = execute_rds_statement(sql,params)
             #log('rds_response_on_delete_sign',response)
             self.execute(query, dict(x=x, y=y, z=z))
             query = (
@@ -515,7 +570,10 @@ class Model(object):
                 'x = :x and y = :y and z = :z;'
             )
             sql = 'update light set w = 0 where x = :x and y = :y and z = :z'
-            response = execute_rds_statement(sql, sql_parameters)
+            sql = """update light set w = 0 where x = %s and y = %s and z = %s"""
+            params=[x,y,z]
+            #response = execute_rds_statement(sql, sql_parameters)
+            response = execute_rds_statement(sql,params)
             #log('rds_response_on_update_light',response)
             self.execute(query, dict(x=x, y=y, z=z))
     def on_light(self, client, x, y, z, w):
@@ -539,7 +597,10 @@ class Model(object):
             'values (:p, :q, :x, :y, :z, :w);'
         )
         sql = 'insert or replace into light (p, q, x, y, z, w) values (:p, :q, :x, :y, :z, :w)'
-        response = execute_rds_statement(sql, sql_parameters)
+        sql = """insert or replace into light (p, q, x, y, z, w) values (%s,%s,%s,%s,%s,%s)"""
+        params=[p,q,x,y,z,w]
+        #response = execute_rds_statement(sql, sql_parameters)
+        response = execute_rds_statement(sql,params)
         #log('rds_response_on_insert_to_light',response)
         self.execute(query, dict(p=p, q=q, x=x, y=y, z=z, w=w))
         self.send_light(client, p, q, x, y, z, w)
@@ -562,7 +623,10 @@ class Model(object):
                 'values (:p, :q, :x, :y, :z, :face, :text);'
             )
             sql = 'insert or replace into sign (p, q, x, y, z, face, text) values (:p, :q, :x, :y, :z, :face, :text)'
-            response = execute_rds_statement(sql, sql_parameters)
+            sql = """insert or replace into sign (p, q, x, y, z, face, text) values (%s,%s,%s,%s,%s,%s,%s)"""
+            params[p,q,x,y,z,face,text]
+            #response = execute_rds_statement(sql, sql_parameters)
+            response = execute_rds_statement(sql,params)
             #log('rds_response_on_insert_to_sign',response)
             self.execute(query,
                 dict(p=p, q=q, x=x, y=y, z=z, face=face, text=text))
@@ -572,7 +636,10 @@ class Model(object):
                 'x = :x and y = :y and z = :z and face = :face;'
             )
             sql = 'delete from sign where x = :x and y = :y and z = :z and face = :face'
-            response = execute_rds_statement(sql, sql_parameters)
+            sql = """delete from sign where x = %s and y = %s and z = %s and face = %s"""
+            params=[x,y,z,face]
+            #response = execute_rds_statement(sql, sql_parameters)
+            response = execute_rds_statement(sql,params)
             #log('rds_response_on_delete_sign',response)
             self.execute(query, dict(x=x, y=y, z=z, face=face))
         self.send_sign(client, p, q, x, y, z, face, text)

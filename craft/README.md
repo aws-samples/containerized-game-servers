@@ -1,6 +1,6 @@
 # A sandbox stateful multiplayer video game 
 
-We use [Craft](https://www.michaelfogleman.com/projects/craft/). It is a python-based game server.
+We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. It is a python-based game server.
 
 ## Deploy steps
 ### Create Aurora Serverless PostrgeSQL with Data API enabled

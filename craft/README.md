@@ -33,6 +33,13 @@ database=mypgdb
 ```bash
 ./create_secrets.sh
 ```
+### Deploy EKS components 
+* Deploy [cluster autoscaler](./cluster-autoscaler-autodiscover.yaml). Update the cluster name under `node-group-auto-discovery`
+
+* Deploy [aws-loadbalancer-controllers](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)
+
+* Setup [Container Insights on the cluster](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/deploy-container-insights-EKS.html)
+
 ### Populate the Aurora cluster and secret ARN in the game server pod spec
 * The service and deployment spec is [craft-deploy.yaml](./craft-deploy.yaml)
 * execute:

@@ -7,27 +7,27 @@
         "file": "tree.json"
       }
     },
-    "StkPipelineAMD64Stack.assets": {
+    "StkMatchPipelineStack.assets": {
       "type": "cdk:asset-manifest",
       "properties": {
-        "file": "StkPipelineAMD64Stack.assets.json",
+        "file": "StkMatchPipelineStack.assets.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
       }
     },
-    "StkPipelineAMD64Stack": {
+    "StkMatchPipelineStack": {
       "type": "aws:cloudformation:stack",
       "environment": "aws://742301976366/us-east-2",
       "properties": {
-        "templateFile": "StkPipelineAMD64Stack.template.json",
+        "templateFile": "StkMatchPipelineStack.template.json",
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::742301976366:role/cdk-hnb659fds-deploy-role-742301976366-us-east-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::742301976366:role/cdk-hnb659fds-cfn-exec-role-742301976366-us-east-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-742301976366-us-east-2/d9edbffdfcdaa4db34e720d95c44f0f6b0a149c9cb013725676681e79ea8a116.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-742301976366-us-east-2/8c46605e484dfbf42767f2306e135f952a275e6d6fddf5d20414c6d25b8a4015.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
-          "StkPipelineAMD64Stack.assets"
+          "StkMatchPipelineStack.assets"
         ],
         "lookupRole": {
           "arn": "arn:${AWS::Partition}:iam::742301976366:role/cdk-hnb659fds-lookup-role-742301976366-us-east-2",
@@ -36,185 +36,161 @@
         }
       },
       "dependencies": [
-        "StkPipelineAMD64Stack.assets"
+        "StkMatchPipelineStack.assets"
       ],
       "metadata": {
-        "/StkPipelineAMD64Stack/notificationEmail": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "notificationEmail"
-          }
-        ],
-        "/StkPipelineAMD64Stack/gitRepoName": [
+        "/StkMatchPipelineStack/gitRepoName": [
           {
             "type": "aws:cdk:logicalId",
             "data": "gitRepoName"
           }
         ],
-        "/StkPipelineAMD64Stack/ecrRepoName": [
+        "/StkMatchPipelineStack/baseImageVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "baseImageVersion"
+          }
+        ],
+        "/StkMatchPipelineStack/ecrRepoName": [
           {
             "type": "aws:cdk:logicalId",
             "data": "ecrRepoName"
           }
         ],
-        "/StkPipelineAMD64Stack/gitRepo/Resource": [
+        "/StkMatchPipelineStack/gitRepo/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "gitRepoE79A5E14"
           }
         ],
-        "/StkPipelineAMD64Stack/gitRepo/StkPipelineAMD64StackcontainerPipeline69B0D6EC-main-EventRule/Resource": [
+        "/StkMatchPipelineStack/gitRepo/StkMatchPipelineStackcontainerPipeline49702885-main-EventRule/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "gitRepoStkPipelineAMD64StackcontainerPipeline69B0D6ECmainEventRule67EBDE57"
+            "data": "gitRepoStkMatchPipelineStackcontainerPipeline49702885mainEventRuleD9E92A84"
           }
         ],
-        "/StkPipelineAMD64Stack/BuildNotifications/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "BuildNotificationsDA021452"
-          }
-        ],
-        "/StkPipelineAMD64Stack/BuildNotifications/TokenSubscription:1/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "BuildNotificationsTokenSubscription1567E543C"
-          }
-        ],
-        "/StkPipelineAMD64Stack/BuildNotifications/Policy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "BuildNotificationsPolicyFD25377F"
-          }
-        ],
-        "/StkPipelineAMD64Stack/game-servers/Resource": [
+        "/StkMatchPipelineStack/game-servers/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "gameservers96C3BF90"
           }
         ],
-        "/StkPipelineAMD64Stack/codeBuildDeployRole/Resource": [
+        "/StkMatchPipelineStack/codeBuildDeployRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "codeBuildDeployRole08634CC8"
           }
         ],
-        "/StkPipelineAMD64Stack/codeBuildDeployRole/DefaultPolicy/Resource": [
+        "/StkMatchPipelineStack/codeBuildDeployRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "codeBuildDeployRoleDefaultPolicy0E0416D5"
           }
         ],
-        "/StkPipelineAMD64Stack/STKgameServerDockerBuild/Resource": [
+        "/StkMatchPipelineStack/STKgameServerDockerBuild/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "STKgameServerDockerBuild16674040"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKey/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/ArtifactsBucketEncryptionKey/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineArtifactsBucketEncryptionKeyAlias4460BD45"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/ArtifactsBucket/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineArtifactsBucket24B5D85B"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Policy/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/ArtifactsBucket/Policy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineArtifactsBucketPolicyBA24F528"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/Role/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineRole7FEA970C"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/Role/DefaultPolicy/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/Role/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineRoleDefaultPolicy24580DF1"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineE427408B"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineSourceCodeCommitSourceCodePipelineActionRole9BBD9446"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineSourceCodeCommitSourceCodePipelineActionRoleDefaultPolicyE9C5617F"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/EventsRole/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/EventsRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineEventsRole7F8AAEEF"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/EventsRole/DefaultPolicy/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/EventsRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineEventsRoleDefaultPolicyEC210F09"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineDockerBuildBuildCodeCodePipelineActionRole1809C40C"
           }
         ],
-        "/StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "containerPipelineDockerBuildBuildCodeCodePipelineActionRoleDefaultPolicyB6026FFD"
           }
         ],
-        "/StkPipelineAMD64Stack/buildNotificationRule/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "buildNotificationRule5821673A"
-          }
-        ],
-        "/StkPipelineAMD64Stack/CDKMetadata/Default": [
+        "/StkMatchPipelineStack/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadata"
           }
         ],
-        "/StkPipelineAMD64Stack/BootstrapVersion": [
+        "/StkMatchPipelineStack/BootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BootstrapVersion"
           }
         ],
-        "/StkPipelineAMD64Stack/CheckBootstrapVersion": [
+        "/StkMatchPipelineStack/CheckBootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CheckBootstrapVersion"
           }
         ]
       },
-      "displayName": "StkPipelineAMD64Stack"
+      "displayName": "StkMatchPipelineStack"
     }
   }
 }

@@ -1,14 +1,14 @@
 {
  "Parameters": {
-  "notificationEmail": {
-   "Type": "String",
-   "Default": "xyz@amazon.com",
-   "Description": "The recipient email for pipeline notifications"
-  },
   "gitRepoName": {
    "Type": "String",
    "Default": "stk-docker-build",
    "Description": "The git repository hosting application code"
+  },
+  "baseImageVersion": {
+   "Type": "String",
+   "Default": "latest",
+   "Description": "The supertuxkart docker image version"
   },
   "ecrRepoName": {
    "Type": "String",
@@ -32,16 +32,16 @@
      "BranchName": "main",
      "S3": {
       "Bucket": "cdk-hnb659fds-assets-742301976366-us-east-2",
-      "Key": "ee72d563f8621b85020c5b11ebe3b075d60d70abb505485395637d3c19b2b607.zip"
+      "Key": "63591f8e9a0298c5acb7598434b0faf9d9c1d787ddc728e495fe3c001dfb1db2.zip"
      }
     },
     "RepositoryDescription": "New repository for demo project."
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/gitRepo/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/gitRepo/Resource"
    }
   },
-  "gitRepoStkPipelineAMD64StackcontainerPipeline69B0D6ECmainEventRule67EBDE57": {
+  "gitRepoStkMatchPipelineStackcontainerPipeline49702885mainEventRuleD9E92A84": {
    "Type": "AWS::Events::Rule",
    "Properties": {
     "EventPattern": {
@@ -98,57 +98,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/gitRepo/StkPipelineAMD64StackcontainerPipeline69B0D6EC-main-EventRule/Resource"
-   }
-  },
-  "BuildNotificationsDA021452": {
-   "Type": "AWS::SNS::Topic",
-   "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/BuildNotifications/Resource"
-   }
-  },
-  "BuildNotificationsTokenSubscription1567E543C": {
-   "Type": "AWS::SNS::Subscription",
-   "Properties": {
-    "Protocol": "email",
-    "TopicArn": {
-     "Ref": "BuildNotificationsDA021452"
-    },
-    "Endpoint": {
-     "Ref": "notificationEmail"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/BuildNotifications/TokenSubscription:1/Resource"
-   }
-  },
-  "BuildNotificationsPolicyFD25377F": {
-   "Type": "AWS::SNS::TopicPolicy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sns:Publish",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "codestar-notifications.amazonaws.com"
-       },
-       "Resource": {
-        "Ref": "BuildNotificationsDA021452"
-       },
-       "Sid": "0"
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "Topics": [
-     {
-      "Ref": "BuildNotificationsDA021452"
-     }
-    ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/BuildNotifications/Policy/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/gitRepo/StkMatchPipelineStackcontainerPipeline49702885-main-EventRule/Resource"
    }
   },
   "gameservers96C3BF90": {
@@ -164,7 +114,7 @@
    "UpdateReplacePolicy": "Retain",
    "DeletionPolicy": "Retain",
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/game-servers/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/game-servers/Resource"
    }
   },
   "codeBuildDeployRole08634CC8": {
@@ -185,7 +135,7 @@
     "RoleName": "codeBuildDeployRole"
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/codeBuildDeployRole/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/codeBuildDeployRole/Resource"
    }
   },
   "codeBuildDeployRoleDefaultPolicy0E0416D5": {
@@ -368,7 +318,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/codeBuildDeployRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/codeBuildDeployRole/DefaultPolicy/Resource"
    }
   },
   "STKgameServerDockerBuild16674040": {
@@ -378,11 +328,11 @@
      "Type": "NO_ARTIFACTS"
     },
     "Environment": {
-     "ComputeType": "BUILD_GENERAL1_SMALL",
-     "Image": "aws/codebuild/amazonlinux2-x86_64-standard:2.0",
+     "ComputeType": "BUILD_GENERAL1_LARGE",
+     "Image": "aws/codebuild/amazonlinux2-aarch64-standard:2.0",
      "ImagePullCredentialsType": "CODEBUILD",
      "PrivilegedMode": true,
-     "Type": "LINUX_CONTAINER"
+     "Type": "ARM_CONTAINER"
     },
     "ServiceRole": {
      "Fn::GetAtt": [
@@ -424,7 +374,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/STKgameServerDockerBuild/Resource"
    }
   },
   "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF": {
@@ -458,13 +408,13 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKey/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucketEncryptionKey/Resource"
    }
   },
   "containerPipelineArtifactsBucketEncryptionKeyAlias4460BD45": {
    "Type": "AWS::KMS::Alias",
    "Properties": {
-    "AliasName": "alias/codepipeline-stkpipelineamd64stackcontainerpipeline69b0d6ec",
+    "AliasName": "alias/codepipeline-stkmatchpipelinestackcontainerpipeline49702885",
     "TargetKeyId": {
      "Fn::GetAtt": [
       "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
@@ -475,7 +425,7 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource"
    }
   },
   "containerPipelineArtifactsBucket24B5D85B": {
@@ -506,7 +456,7 @@
    "UpdateReplacePolicy": "Retain",
    "DeletionPolicy": "Retain",
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucket/Resource"
    }
   },
   "containerPipelineArtifactsBucketPolicyBA24F528": {
@@ -556,7 +506,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Policy/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucket/Policy/Resource"
    }
   },
   "containerPipelineRole7FEA970C": {
@@ -576,7 +526,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/Role/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/Role/Resource"
    }
   },
   "containerPipelineRoleDefaultPolicy24580DF1": {
@@ -668,7 +618,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/Role/DefaultPolicy/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/Role/DefaultPolicy/Resource"
    }
   },
   "containerPipelineE427408B": {
@@ -770,7 +720,7 @@
     "containerPipelineRole7FEA970C"
    ],
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/Resource"
    }
   },
   "containerPipelineSourceCodeCommitSourceCodePipelineActionRole9BBD9446": {
@@ -801,7 +751,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource"
    }
   },
   "containerPipelineSourceCodeCommitSourceCodePipelineActionRoleDefaultPolicyE9C5617F": {
@@ -889,7 +839,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
   "containerPipelineEventsRole7F8AAEEF": {
@@ -909,7 +859,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/EventsRole/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/EventsRole/Resource"
    }
   },
   "containerPipelineEventsRoleDefaultPolicyEC210F09": {
@@ -947,7 +897,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/EventsRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/EventsRole/DefaultPolicy/Resource"
    }
   },
   "containerPipelineDockerBuildBuildCodeCodePipelineActionRole1809C40C": {
@@ -978,7 +928,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource"
    }
   },
   "containerPipelineDockerBuildBuildCodeCodePipelineActionRoleDefaultPolicyB6026FFD": {
@@ -1011,44 +961,16 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource"
-   }
-  },
-  "buildNotificationRule5821673A": {
-   "Type": "AWS::CodeStarNotifications::NotificationRule",
-   "Properties": {
-    "DetailType": "FULL",
-    "EventTypeIds": [
-     "codebuild-project-build-state-succeeded",
-     "codebuild-project-build-state-failed"
-    ],
-    "Name": "StkPipelineAMD64StackbuildNotificationRuleC981C88A",
-    "Resource": {
-     "Fn::GetAtt": [
-      "STKgameServerDockerBuild16674040",
-      "Arn"
-     ]
-    },
-    "Targets": [
-     {
-      "TargetAddress": {
-       "Ref": "BuildNotificationsDA021452"
-      },
-      "TargetType": "SNS"
-     }
-    ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/buildNotificationRule/Resource"
+    "aws:cdk:path": "StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Ru27DMAz8luyyWqdF0TXpGKAwnO6BLDMB/ZAMUU4RGP73UpIDpx063R1J3YHUVm7fZb5R35Tpus06rOR09Eq34uNsCuVUDx6c4P5p0rYGbfsevZxKGCyht+4WBlc1C3o5KSLwJHcBWMtpP+oW/F4RiETDo4UlKGyH+raWk54FXMGw1VSOHcQkRs4wXPqyA+pQS+Q4VqQdDh6tCdVfOo6sGQ+SI7T7bx9UPbftEh9w9blbhMtUI3a1nApnG9BxwYWm9oADdGiAJxYWRxY+i7bnlQ4QbQPsOlQURCTJg7xyxno8o1ZhLX7x+SDvN/pbm2cRv4L/9YLmkhYkOzrNuYZ9ZUNP1/xN5q/yedMQYuZG47EHWSb8AfAiKEUmAgAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Qy07DMBD8lt4dQwpCXFuOXKLwAZXrLNUmfkRep6iy8u+s7aDcOM3MPsbjPcrju2wP6ocaPUyNwatMX1HpSXx8u04FZSFCENy/JO0H0N5ajDL1MHvC6MMjD+5qFfRyUUQQSZ4ysJbpvOgJ4lkRiErz0sYqdN6gfuzlqlcBd3BslfrFQHmJkas6/BcBleW23zYy7vZ/xvkz1wXNIFMX/Ai6ZNpobc84g0EHPLGxMrLxVUyWg31Csc1wMqgoi0LWVZQD8DVv6G41I/klaF51bC9Herq3b7J9lc+HkRCbsLiIFmRf8RcCoGWCnAEAAA=="
    },
    "Metadata": {
-    "aws:cdk:path": "StkPipelineAMD64Stack/CDKMetadata/Default"
+    "aws:cdk:path": "StkMatchPipelineStack/CDKMetadata/Default"
    }
   }
  },

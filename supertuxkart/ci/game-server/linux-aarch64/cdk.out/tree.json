@@ -9,24 +9,24 @@
         "path": "Tree",
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.0.126"
+          "version": "10.1.39"
         }
       },
-      "StkPipelineAMD64Stack": {
-        "id": "StkPipelineAMD64Stack",
-        "path": "StkPipelineAMD64Stack",
+      "StkMatchPipelineStack": {
+        "id": "StkMatchPipelineStack",
+        "path": "StkMatchPipelineStack",
         "children": {
-          "notificationEmail": {
-            "id": "notificationEmail",
-            "path": "StkPipelineAMD64Stack/notificationEmail",
+          "gitRepoName": {
+            "id": "gitRepoName",
+            "path": "StkMatchPipelineStack/gitRepoName",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.28.1"
             }
           },
-          "gitRepoName": {
-            "id": "gitRepoName",
-            "path": "StkPipelineAMD64Stack/gitRepoName",
+          "baseImageVersion": {
+            "id": "baseImageVersion",
+            "path": "StkMatchPipelineStack/baseImageVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.28.1"
@@ -34,7 +34,7 @@
           },
           "ecrRepoName": {
             "id": "ecrRepoName",
-            "path": "StkPipelineAMD64Stack/ecrRepoName",
+            "path": "StkMatchPipelineStack/ecrRepoName",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.28.1"
@@ -42,15 +42,15 @@
           },
           "gitRepo": {
             "id": "gitRepo",
-            "path": "StkPipelineAMD64Stack/gitRepo",
+            "path": "StkMatchPipelineStack/gitRepo",
             "children": {
               "PathResolvedCodeAsset": {
                 "id": "PathResolvedCodeAsset",
-                "path": "StkPipelineAMD64Stack/gitRepo/PathResolvedCodeAsset",
+                "path": "StkMatchPipelineStack/gitRepo/PathResolvedCodeAsset",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "StkPipelineAMD64Stack/gitRepo/PathResolvedCodeAsset/Stage",
+                    "path": "StkMatchPipelineStack/gitRepo/PathResolvedCodeAsset/Stage",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.AssetStaging",
                       "version": "2.28.1"
@@ -58,7 +58,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "StkPipelineAMD64Stack/gitRepo/PathResolvedCodeAsset/AssetBucket",
+                    "path": "StkMatchPipelineStack/gitRepo/PathResolvedCodeAsset/AssetBucket",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.BucketBase",
                       "version": "2.28.1"
@@ -72,7 +72,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "StkPipelineAMD64Stack/gitRepo/Resource",
+                "path": "StkMatchPipelineStack/gitRepo/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodeCommit::Repository",
                   "aws:cdk:cloudformation:props": {
@@ -83,7 +83,7 @@
                       "branchName": "main",
                       "s3": {
                         "bucket": "cdk-hnb659fds-assets-742301976366-us-east-2",
-                        "key": "ee72d563f8621b85020c5b11ebe3b075d60d70abb505485395637d3c19b2b607.zip"
+                        "key": "63591f8e9a0298c5acb7598434b0faf9d9c1d787ddc728e495fe3c001dfb1db2.zip"
                       }
                     },
                     "repositoryDescription": "New repository for demo project."
@@ -94,13 +94,13 @@
                   "version": "2.28.1"
                 }
               },
-              "StkPipelineAMD64StackcontainerPipeline69B0D6EC-main-EventRule": {
-                "id": "StkPipelineAMD64StackcontainerPipeline69B0D6EC-main-EventRule",
-                "path": "StkPipelineAMD64Stack/gitRepo/StkPipelineAMD64StackcontainerPipeline69B0D6EC-main-EventRule",
+              "StkMatchPipelineStackcontainerPipeline49702885-main-EventRule": {
+                "id": "StkMatchPipelineStackcontainerPipeline49702885-main-EventRule",
+                "path": "StkMatchPipelineStack/gitRepo/StkMatchPipelineStackcontainerPipeline49702885-main-EventRule",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/gitRepo/StkPipelineAMD64StackcontainerPipeline69B0D6EC-main-EventRule/Resource",
+                    "path": "StkMatchPipelineStack/gitRepo/StkMatchPipelineStackcontainerPipeline49702885-main-EventRule/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Events::Rule",
                       "aws:cdk:cloudformation:props": {
@@ -175,109 +175,13 @@
               "version": "2.28.1"
             }
           },
-          "BuildNotifications": {
-            "id": "BuildNotifications",
-            "path": "StkPipelineAMD64Stack/BuildNotifications",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "StkPipelineAMD64Stack/BuildNotifications/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                  "aws:cdk:cloudformation:props": {}
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
-                  "version": "2.28.1"
-                }
-              },
-              "TokenSubscription:1": {
-                "id": "TokenSubscription:1",
-                "path": "StkPipelineAMD64Stack/BuildNotifications/TokenSubscription:1",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/BuildNotifications/TokenSubscription:1/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
-                      "aws:cdk:cloudformation:props": {
-                        "protocol": "email",
-                        "topicArn": {
-                          "Ref": "BuildNotificationsDA021452"
-                        },
-                        "endpoint": {
-                          "Ref": "notificationEmail"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
-                      "version": "2.28.1"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_sns.Subscription",
-                  "version": "2.28.1"
-                }
-              },
-              "Policy": {
-                "id": "Policy",
-                "path": "StkPipelineAMD64Stack/BuildNotifications/Policy",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/BuildNotifications/Policy/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SNS::TopicPolicy",
-                      "aws:cdk:cloudformation:props": {
-                        "policyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sns:Publish",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "codestar-notifications.amazonaws.com"
-                              },
-                              "Resource": {
-                                "Ref": "BuildNotificationsDA021452"
-                              },
-                              "Sid": "0"
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "topics": [
-                          {
-                            "Ref": "BuildNotificationsDA021452"
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_sns.CfnTopicPolicy",
-                      "version": "2.28.1"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_sns.TopicPolicy",
-                  "version": "2.28.1"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.aws_sns.Topic",
-              "version": "2.28.1"
-            }
-          },
           "game-servers": {
             "id": "game-servers",
-            "path": "StkPipelineAMD64Stack/game-servers",
+            "path": "StkMatchPipelineStack/game-servers",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "StkPipelineAMD64Stack/game-servers/Resource",
+                "path": "StkMatchPipelineStack/game-servers/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
                   "aws:cdk:cloudformation:props": {
@@ -302,11 +206,11 @@
           },
           "codeBuildDeployRole": {
             "id": "codeBuildDeployRole",
-            "path": "StkPipelineAMD64Stack/codeBuildDeployRole",
+            "path": "StkMatchPipelineStack/codeBuildDeployRole",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "StkPipelineAMD64Stack/codeBuildDeployRole/Resource",
+                "path": "StkMatchPipelineStack/codeBuildDeployRole/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                   "aws:cdk:cloudformation:props": {
@@ -332,11 +236,11 @@
               },
               "DefaultPolicy": {
                 "id": "DefaultPolicy",
-                "path": "StkPipelineAMD64Stack/codeBuildDeployRole/DefaultPolicy",
+                "path": "StkMatchPipelineStack/codeBuildDeployRole/DefaultPolicy",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/codeBuildDeployRole/DefaultPolicy/Resource",
+                    "path": "StkMatchPipelineStack/codeBuildDeployRole/DefaultPolicy/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                       "aws:cdk:cloudformation:props": {
@@ -536,11 +440,11 @@
           },
           "STKgameServerDockerBuild": {
             "id": "STKgameServerDockerBuild",
-            "path": "StkPipelineAMD64Stack/STKgameServerDockerBuild",
+            "path": "StkMatchPipelineStack/STKgameServerDockerBuild",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "StkPipelineAMD64Stack/STKgameServerDockerBuild/Resource",
+                "path": "StkMatchPipelineStack/STKgameServerDockerBuild/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
                   "aws:cdk:cloudformation:props": {
@@ -548,11 +452,11 @@
                       "type": "NO_ARTIFACTS"
                     },
                     "environment": {
-                      "type": "LINUX_CONTAINER",
-                      "image": "aws/codebuild/amazonlinux2-x86_64-standard:2.0",
+                      "type": "ARM_CONTAINER",
+                      "image": "aws/codebuild/amazonlinux2-aarch64-standard:2.0",
                       "imagePullCredentialsType": "CODEBUILD",
                       "privilegedMode": true,
-                      "computeType": "BUILD_GENERAL1_SMALL"
+                      "computeType": "BUILD_GENERAL1_LARGE"
                     },
                     "serviceRole": {
                       "Fn::GetAtt": [
@@ -607,15 +511,15 @@
           },
           "containerPipeline": {
             "id": "containerPipeline",
-            "path": "StkPipelineAMD64Stack/containerPipeline",
+            "path": "StkMatchPipelineStack/containerPipeline",
             "children": {
               "ArtifactsBucketEncryptionKey": {
                 "id": "ArtifactsBucketEncryptionKey",
-                "path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKey",
+                "path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucketEncryptionKey",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKey/Resource",
+                    "path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucketEncryptionKey/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::KMS::Key",
                       "aws:cdk:cloudformation:props": {
@@ -658,15 +562,15 @@
               },
               "ArtifactsBucketEncryptionKeyAlias": {
                 "id": "ArtifactsBucketEncryptionKeyAlias",
-                "path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKeyAlias",
+                "path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucketEncryptionKeyAlias",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
+                    "path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
                       "aws:cdk:cloudformation:props": {
-                        "aliasName": "alias/codepipeline-stkpipelineamd64stackcontainerpipeline69b0d6ec",
+                        "aliasName": "alias/codepipeline-stkmatchpipelinestackcontainerpipeline49702885",
                         "targetKeyId": {
                           "Fn::GetAtt": [
                             "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
@@ -688,11 +592,11 @@
               },
               "ArtifactsBucket": {
                 "id": "ArtifactsBucket",
-                "path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucket",
+                "path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucket",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Resource",
+                    "path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucket/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                       "aws:cdk:cloudformation:props": {
@@ -726,11 +630,11 @@
                   },
                   "Policy": {
                     "id": "Policy",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Policy",
+                    "path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucket/Policy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "StkPipelineAMD64Stack/containerPipeline/ArtifactsBucket/Policy/Resource",
+                        "path": "StkMatchPipelineStack/containerPipeline/ArtifactsBucket/Policy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
                           "aws:cdk:cloudformation:props": {
@@ -797,11 +701,11 @@
               },
               "Role": {
                 "id": "Role",
-                "path": "StkPipelineAMD64Stack/containerPipeline/Role",
+                "path": "StkMatchPipelineStack/containerPipeline/Role",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/Role/Resource",
+                    "path": "StkMatchPipelineStack/containerPipeline/Role/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -826,11 +730,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/Role/DefaultPolicy",
+                    "path": "StkMatchPipelineStack/containerPipeline/Role/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "StkPipelineAMD64Stack/containerPipeline/Role/DefaultPolicy/Resource",
+                        "path": "StkMatchPipelineStack/containerPipeline/Role/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -939,7 +843,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "StkPipelineAMD64Stack/containerPipeline/Resource",
+                "path": "StkMatchPipelineStack/containerPipeline/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
                   "aws:cdk:cloudformation:props": {
@@ -1042,19 +946,19 @@
               },
               "Source": {
                 "id": "Source",
-                "path": "StkPipelineAMD64Stack/containerPipeline/Source",
+                "path": "StkMatchPipelineStack/containerPipeline/Source",
                 "children": {
                   "CodeCommit_Source": {
                     "id": "CodeCommit_Source",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source",
+                    "path": "StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole",
+                        "path": "StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource",
+                            "path": "StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -1090,11 +994,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy",
+                            "path": "StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "StkPipelineAMD64Stack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "StkMatchPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -1200,22 +1104,22 @@
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.0.126"
+                      "version": "10.1.39"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.0.126"
+                  "version": "10.1.39"
                 }
               },
               "EventsRole": {
                 "id": "EventsRole",
-                "path": "StkPipelineAMD64Stack/containerPipeline/EventsRole",
+                "path": "StkMatchPipelineStack/containerPipeline/EventsRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/EventsRole/Resource",
+                    "path": "StkMatchPipelineStack/containerPipeline/EventsRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -1240,11 +1144,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/EventsRole/DefaultPolicy",
+                    "path": "StkMatchPipelineStack/containerPipeline/EventsRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "StkPipelineAMD64Stack/containerPipeline/EventsRole/DefaultPolicy/Resource",
+                        "path": "StkMatchPipelineStack/containerPipeline/EventsRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -1299,19 +1203,19 @@
               },
               "DockerBuild": {
                 "id": "DockerBuild",
-                "path": "StkPipelineAMD64Stack/containerPipeline/DockerBuild",
+                "path": "StkMatchPipelineStack/containerPipeline/DockerBuild",
                 "children": {
                   "Build_Code": {
                     "id": "Build_Code",
-                    "path": "StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code",
+                    "path": "StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole",
+                        "path": "StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource",
+                            "path": "StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -1347,11 +1251,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy",
+                            "path": "StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "StkPipelineAMD64Stack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "StkMatchPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -1402,13 +1306,13 @@
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.0.126"
+                      "version": "10.1.39"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.0.126"
+                  "version": "10.1.39"
                 }
               }
             },
@@ -1417,56 +1321,13 @@
               "version": "2.28.1"
             }
           },
-          "buildNotificationRule": {
-            "id": "buildNotificationRule",
-            "path": "StkPipelineAMD64Stack/buildNotificationRule",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "StkPipelineAMD64Stack/buildNotificationRule/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CodeStarNotifications::NotificationRule",
-                  "aws:cdk:cloudformation:props": {
-                    "detailType": "FULL",
-                    "eventTypeIds": [
-                      "codebuild-project-build-state-succeeded",
-                      "codebuild-project-build-state-failed"
-                    ],
-                    "name": "StkPipelineAMD64StackbuildNotificationRuleC981C88A",
-                    "resource": {
-                      "Fn::GetAtt": [
-                        "STKgameServerDockerBuild16674040",
-                        "Arn"
-                      ]
-                    },
-                    "targets": [
-                      {
-                        "targetType": "SNS",
-                        "targetAddress": {
-                          "Ref": "BuildNotificationsDA021452"
-                        }
-                      }
-                    ]
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_codestarnotifications.CfnNotificationRule",
-                  "version": "2.28.1"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.aws_codestarnotifications.NotificationRule",
-              "version": "2.28.1"
-            }
-          },
           "CDKMetadata": {
             "id": "CDKMetadata",
-            "path": "StkPipelineAMD64Stack/CDKMetadata",
+            "path": "StkMatchPipelineStack/CDKMetadata",
             "children": {
               "Default": {
                 "id": "Default",
-                "path": "StkPipelineAMD64Stack/CDKMetadata/Default",
+                "path": "StkMatchPipelineStack/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
                   "version": "2.28.1"
@@ -1475,7 +1336,7 @@
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.0.126"
+              "version": "10.1.39"
             }
           }
         },

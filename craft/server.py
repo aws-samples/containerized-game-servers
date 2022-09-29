@@ -25,13 +25,14 @@ password=os.environ['password']
 host=os.environ['host']
 database=os.environ['database']
 
+pod_name=os.environ['MY_POD_NAME']
+node_name=os.environ['MY_NODE_NAME']
 
-
-region=os.environ['REGION']
-rds_client = boto3.client('rds-data', region_name=region)
-cluster_arn = os.environ['CLUSTER_ARN']
-secret_arn = os.environ['SECRET_ARN']
-database_name = os.environ['DB_NAME']
+#region=os.environ['REGION']
+#rds_client = boto3.client('rds-data', region_name=region)
+#cluster_arn = os.environ['CLUSTER_ARN']
+#secret_arn = os.environ['SECRET_ARN']
+#database_name = os.environ['DB_NAME']
 #agones_port = os.environ['AGONES_SDK_HTTP_PORT']
 
 DEFAULT_HOST = '0.0.0.0'
@@ -407,7 +408,8 @@ class Model(object):
         client.user_id = user_id
         if user_id is None:
             client.nick = 'guest%d' % client.client_id
-            client.send(TALK, 'Visit craft.michaelfogleman.com to register!')
+            client.send(TALK, 'Current pod is '+pod_name)
+            client.send(TALK, 'Current node is '+node_name)
         else:
             client.nick = username
         self.send_nick(client)
@@ -843,7 +845,8 @@ def agones_allocate(model):
 
 def sig_handler(signum,frame):
   log('Signal hanlder called with signal',signum)
-  model.send_talk("Game server maintenance is pending - pls reconnect - don't worry, your universe is saved with us")
+  model.send_talk("Game server maintenance is pending - pls reconnect")
+  model.send_talk("Don't worry, your universe is saved with us")
 
 def main():
     log('main',sys.argv)

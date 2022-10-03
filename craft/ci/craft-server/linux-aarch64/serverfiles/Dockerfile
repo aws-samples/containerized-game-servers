@@ -1,4 +1,4 @@
-FROM arm64v8/python:2
+FROM public.ecr.aws/y4b6s6y1/arm64v8-python-2
 RUN apt-get update -y
 RUN apt-get install -y sqlite3 
 RUN apt-get install -y vim net-tools telnet

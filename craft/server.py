@@ -83,7 +83,7 @@ except ImportError:
 
 
 def execute_rds_statement(sql,param):
-  log('execute_rds_statement',sql)
+  #log('execute_rds_statement',sql)
   try:
     connection = psycopg2.connect(user=user,
                                   password=password,
@@ -95,17 +95,18 @@ def execute_rds_statement(sql,param):
 
     connection.commit()
     count = cursor.rowcount
-    print(count, "Record selected/inserted/updated successfully processed")
+    #print(count, "Record selected/inserted/updated successfully processed")
 
   except (Exception, psycopg2.Error) as error:
     print("Failed to select/insert/update", error)
+    sys.stdout.flush()
 
   finally:
     # closing database connection.
     if connection:
         cursor.close()
         connection.close()
-        print("PostgreSQL connection is closed")
+        #print("PostgreSQL connection is closed")
 
 def execute_rds_statement_data_api(sql, sql_parameters=[]):
     log('execute_rds_statement_data_api',sql,sql_parameters)
@@ -122,6 +123,7 @@ def log(*args):
     now = datetime.datetime.utcnow()
     line = ' '.join(map(str, (now,) + args))
     print line
+    sys.stdout.flush()
     with open(LOG_PATH, 'a') as fp:
         fp.write('%s\n' % line)
 
@@ -177,6 +179,8 @@ class Handler(SocketServer.BaseRequestHandler):
                 if not data:
                     break
                 buf.extend(data.replace('\r\n', '\n'))
+                print('server Handle=%s'%(data))
+                sys.stdout.flush()
                 while '\n' in buf:
                     index = buf.index('\n')
                     line = ''.join(buf[:index])
@@ -330,7 +334,7 @@ class Model(object):
         chunk = self.world.get_chunk(p, q)
         return chunk.get((x, y, z), 0)
     def get_block(self, x, y, z):
-        log('get_block-select from block')
+        #log('get_block-select from block')
         query = (
             'select w from block where '
             'p = :p and q = :q and x = :x and y = :y and z = :z;'
@@ -351,7 +355,7 @@ class Model(object):
         result = execute_rds_statement(sql,params)
         #log('rds_response get_block',result['records'])
         if rows:
-            log('rows from sqlite',rows[0][0])
+            #log('rows from sqlite',rows[0][0])
             return rows[0][0]
         return self.get_default_block(x, y, z)
     def next_client_id(self):
@@ -440,7 +444,7 @@ class Model(object):
         params = [p,q,key]
         #result = execute_rds_statement(query, sql_parameters)
         result = execute_rds_statement(query,params)
-        log('rds_response on_chunk',result)
+        #log('rds_response on_chunk',result)
         if result is not None:
           for _row in result['records']:
             rowid=_row[0]['longValue']

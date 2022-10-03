@@ -1,0 +1,1004 @@
+{
+ "Parameters": {
+  "gitRepoName": {
+   "Type": "String",
+   "Default": "craft-server-docker-build",
+   "Description": "The git repository hosting application code"
+  },
+  "baseImageVersion": {
+   "Type": "String",
+   "Default": "aarch64",
+   "Description": "The Craft docker image version"
+  },
+  "ecrRepoName": {
+   "Type": "String",
+   "Default": "craftci",
+   "Description": "The name of the ecr registry"
+  },
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Resources": {
+  "gitRepoE79A5E14": {
+   "Type": "AWS::CodeCommit::Repository",
+   "Properties": {
+    "RepositoryName": {
+     "Ref": "gitRepoName"
+    },
+    "Code": {
+     "BranchName": "main",
+     "S3": {
+      "Bucket": "cdk-hnb659fds-assets-095974399802-us-west-2",
+      "Key": "48f367563f8646c00e9bf98d3999c1ae6d22bf55bc625fe7920f46e404330e01.zip"
+     }
+    },
+    "RepositoryDescription": "New repository for demo project."
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/gitRepo/Resource"
+   }
+  },
+  "gitRepoCraftPipelineStackcontainerPipeline5809793CmainEventRule5C971177": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "EventPattern": {
+     "source": [
+      "aws.codecommit"
+     ],
+     "resources": [
+      {
+       "Fn::GetAtt": [
+        "gitRepoE79A5E14",
+        "Arn"
+       ]
+      }
+     ],
+     "detail-type": [
+      "CodeCommit Repository State Change"
+     ],
+     "detail": {
+      "event": [
+       "referenceCreated",
+       "referenceUpdated"
+      ],
+      "referenceName": [
+       "main"
+      ]
+     }
+    },
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::Join": [
+        "",
+        [
+         "arn:",
+         {
+          "Ref": "AWS::Partition"
+         },
+         ":codepipeline:us-west-2:095974399802:",
+         {
+          "Ref": "containerPipelineE427408B"
+         }
+        ]
+       ]
+      },
+      "Id": "Target0",
+      "RoleArn": {
+       "Fn::GetAtt": [
+        "containerPipelineEventsRole7F8AAEEF",
+        "Arn"
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/gitRepo/CraftPipelineStackcontainerPipeline5809793C-main-EventRule/Resource"
+   }
+  },
+  "cicraftserversC4C35991": {
+   "Type": "AWS::ECR::Repository",
+   "Properties": {
+    "ImageScanningConfiguration": {
+     "ScanOnPush": true
+    },
+    "RepositoryName": {
+     "Ref": "ecrRepoName"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/ci-craft-servers/Resource"
+   }
+  },
+  "codeBuildDeployRole08634CC8": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codebuild.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "RoleName": "codeBuildDeployRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/codeBuildDeployRole/Resource"
+   }
+  },
+  "codeBuildDeployRoleDefaultPolicy0E0416D5": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ssm:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":logs:us-west-2:095974399802:log-group:/aws/codebuild/",
+           {
+            "Ref": "CraftGameServerDockerBuildCD4979E2"
+           }
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":logs:us-west-2:095974399802:log-group:/aws/codebuild/",
+           {
+            "Ref": "CraftGameServerDockerBuildCD4979E2"
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "codebuild:CreateReportGroup",
+        "codebuild:CreateReport",
+        "codebuild:UpdateReport",
+        "codebuild:BatchPutTestCases",
+        "codebuild:BatchPutCodeCoverages"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":codebuild:us-west-2:095974399802:report-group/",
+          {
+           "Ref": "CraftGameServerDockerBuildCD4979E2"
+          },
+          "-*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "cicraftserversC4C35991",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "cicraftserversC4C35991",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "containerPipelineArtifactsBucket24B5D85B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "containerPipelineArtifactsBucket24B5D85B",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "codeBuildDeployRoleDefaultPolicy0E0416D5",
+    "Roles": [
+     {
+      "Ref": "codeBuildDeployRole08634CC8"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/codeBuildDeployRole/DefaultPolicy/Resource"
+   }
+  },
+  "CraftGameServerDockerBuildCD4979E2": {
+   "Type": "AWS::CodeBuild::Project",
+   "Properties": {
+    "Artifacts": {
+     "Type": "NO_ARTIFACTS"
+    },
+    "Environment": {
+     "ComputeType": "BUILD_GENERAL1_LARGE",
+     "Image": "aws/codebuild/amazonlinux2-aarch64-standard:2.0",
+     "ImagePullCredentialsType": "CODEBUILD",
+     "PrivilegedMode": true,
+     "Type": "ARM_CONTAINER"
+    },
+    "ServiceRole": {
+     "Fn::GetAtt": [
+      "codeBuildDeployRole08634CC8",
+      "Arn"
+     ]
+    },
+    "Source": {
+     "BuildSpec": {
+      "Fn::Join": [
+       "",
+       [
+        "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"TAG=$(date +'%Y%m%d%H%M%S')-arm64v8-python2\",\n        \"docker build -t 095974399802.dkr.ecr.us-west-2.amazonaws.com/",
+        {
+         "Ref": "cicraftserversC4C35991"
+        },
+        ":$TAG .\",\n        \"aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 095974399802.dkr.ecr.us-west-2.amazonaws.com/",
+        {
+         "Ref": "cicraftserversC4C35991"
+        },
+        "\",\n        \"docker push 095974399802.dkr.ecr.us-west-2.amazonaws.com/",
+        {
+         "Ref": "cicraftserversC4C35991"
+        },
+        ":$TAG\",\n        \"aws ssm put-parameter --type String --name craft-image-latest-tag --value $TAG --overwrite\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+       ]
+      ]
+     },
+     "Type": "NO_SOURCE"
+    },
+    "Cache": {
+     "Type": "NO_CACHE"
+    },
+    "EncryptionKey": {
+     "Fn::GetAtt": [
+      "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/CraftGameServerDockerBuild/Resource"
+   }
+  },
+  "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF": {
+   "Type": "AWS::KMS::Key",
+   "Properties": {
+    "KeyPolicy": {
+     "Statement": [
+      {
+       "Action": "kms:*",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":iam::095974399802:root"
+          ]
+         ]
+        }
+       },
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/ArtifactsBucketEncryptionKey/Resource"
+   }
+  },
+  "containerPipelineArtifactsBucketEncryptionKeyAlias4460BD45": {
+   "Type": "AWS::KMS::Alias",
+   "Properties": {
+    "AliasName": "alias/codepipeline-craftpipelinestackcontainerpipeline5809793c",
+    "TargetKeyId": {
+     "Fn::GetAtt": [
+      "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+      "Arn"
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/ArtifactsBucketEncryptionKeyAlias/Resource"
+   }
+  },
+  "containerPipelineArtifactsBucket24B5D85B": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "KMSMasterKeyID": {
+         "Fn::GetAtt": [
+          "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+          "Arn"
+         ]
+        },
+        "SSEAlgorithm": "aws:kms"
+       }
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/ArtifactsBucket/Resource"
+   }
+  },
+  "containerPipelineArtifactsBucketPolicyBA24F528": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "containerPipelineArtifactsBucket24B5D85B"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:*",
+       "Condition": {
+        "Bool": {
+         "aws:SecureTransport": "false"
+        }
+       },
+       "Effect": "Deny",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "containerPipelineArtifactsBucket24B5D85B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "containerPipelineArtifactsBucket24B5D85B",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/ArtifactsBucket/Policy/Resource"
+   }
+  },
+  "containerPipelineRole7FEA970C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codepipeline.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/Role/Resource"
+   }
+  },
+  "containerPipelineRoleDefaultPolicy24580DF1": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "containerPipelineArtifactsBucket24B5D85B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "containerPipelineArtifactsBucket24B5D85B",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey",
+        "kms:Encrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "containerPipelineSourceCodeCommitSourceCodePipelineActionRole9BBD9446",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "containerPipelineDockerBuildBuildCodeCodePipelineActionRole1809C40C",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "containerPipelineRoleDefaultPolicy24580DF1",
+    "Roles": [
+     {
+      "Ref": "containerPipelineRole7FEA970C"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/Role/DefaultPolicy/Resource"
+   }
+  },
+  "containerPipelineE427408B": {
+   "Type": "AWS::CodePipeline::Pipeline",
+   "Properties": {
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "containerPipelineRole7FEA970C",
+      "Arn"
+     ]
+    },
+    "Stages": [
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Source",
+         "Owner": "AWS",
+         "Provider": "CodeCommit",
+         "Version": "1"
+        },
+        "Configuration": {
+         "RepositoryName": {
+          "Fn::GetAtt": [
+           "gitRepoE79A5E14",
+           "Name"
+          ]
+         },
+         "BranchName": "main",
+         "PollForSourceChanges": false
+        },
+        "Name": "CodeCommit_Source",
+        "OutputArtifacts": [
+         {
+          "Name": "Artifact_Source_CodeCommit_Source"
+         }
+        ],
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "containerPipelineSourceCodeCommitSourceCodePipelineActionRole9BBD9446",
+          "Arn"
+         ]
+        },
+        "RunOrder": 1
+       }
+      ],
+      "Name": "Source"
+     },
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Build",
+         "Owner": "AWS",
+         "Provider": "CodeBuild",
+         "Version": "1"
+        },
+        "Configuration": {
+         "ProjectName": {
+          "Ref": "CraftGameServerDockerBuildCD4979E2"
+         }
+        },
+        "InputArtifacts": [
+         {
+          "Name": "Artifact_Source_CodeCommit_Source"
+         }
+        ],
+        "Name": "Build_Code",
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "containerPipelineDockerBuildBuildCodeCodePipelineActionRole1809C40C",
+          "Arn"
+         ]
+        },
+        "RunOrder": 1
+       }
+      ],
+      "Name": "DockerBuild"
+     }
+    ],
+    "ArtifactStore": {
+     "EncryptionKey": {
+      "Id": {
+       "Fn::GetAtt": [
+        "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+        "Arn"
+       ]
+      },
+      "Type": "KMS"
+     },
+     "Location": {
+      "Ref": "containerPipelineArtifactsBucket24B5D85B"
+     },
+     "Type": "S3"
+    }
+   },
+   "DependsOn": [
+    "containerPipelineRoleDefaultPolicy24580DF1",
+    "containerPipelineRole7FEA970C"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/Resource"
+   }
+  },
+  "containerPipelineSourceCodeCommitSourceCodePipelineActionRole9BBD9446": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":iam::095974399802:root"
+          ]
+         ]
+        }
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/Resource"
+   }
+  },
+  "containerPipelineSourceCodeCommitSourceCodePipelineActionRoleDefaultPolicyE9C5617F": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "containerPipelineArtifactsBucket24B5D85B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "containerPipelineArtifactsBucket24B5D85B",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey",
+        "kms:Encrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "containerPipelineArtifactsBucketEncryptionKeyFAE4D6AF",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "codecommit:GetBranch",
+        "codecommit:GetCommit",
+        "codecommit:UploadArchive",
+        "codecommit:GetUploadArchiveStatus",
+        "codecommit:CancelUploadArchive"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "gitRepoE79A5E14",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "containerPipelineSourceCodeCommitSourceCodePipelineActionRoleDefaultPolicyE9C5617F",
+    "Roles": [
+     {
+      "Ref": "containerPipelineSourceCodeCommitSourceCodePipelineActionRole9BBD9446"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/Source/CodeCommit_Source/CodePipelineActionRole/DefaultPolicy/Resource"
+   }
+  },
+  "containerPipelineEventsRole7F8AAEEF": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "events.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/EventsRole/Resource"
+   }
+  },
+  "containerPipelineEventsRoleDefaultPolicyEC210F09": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "codepipeline:StartPipelineExecution",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":codepipeline:us-west-2:095974399802:",
+          {
+           "Ref": "containerPipelineE427408B"
+          }
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "containerPipelineEventsRoleDefaultPolicyEC210F09",
+    "Roles": [
+     {
+      "Ref": "containerPipelineEventsRole7F8AAEEF"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/EventsRole/DefaultPolicy/Resource"
+   }
+  },
+  "containerPipelineDockerBuildBuildCodeCodePipelineActionRole1809C40C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":iam::095974399802:root"
+          ]
+         ]
+        }
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/Resource"
+   }
+  },
+  "containerPipelineDockerBuildBuildCodeCodePipelineActionRoleDefaultPolicyB6026FFD": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild",
+        "codebuild:StopBuild"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "CraftGameServerDockerBuildCD4979E2",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "containerPipelineDockerBuildBuildCodeCodePipelineActionRoleDefaultPolicyB6026FFD",
+    "Roles": [
+     {
+      "Ref": "containerPipelineDockerBuildBuildCodeCodePipelineActionRole1809C40C"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/containerPipeline/DockerBuild/Build_Code/CodePipelineActionRole/DefaultPolicy/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Ry27DIBD8lt4xTdIcek167MVyPyAieButzcNicaII+d+zgCvfepqZfQwDHOTxKHdv6kGN7sfG4FWmn6j0KL5+XauCshAhCO5fkvY9aG8tRpk6mDxh9OGZBze1CPq4KCKIJE8ZWMt0nvUI8awIRKV5aWUVWm9QP7dy1YuAOzi2St1soJzEyFUd/ouAynLbrxsZN/s/43yZ64yml6kNfgBdMq20tiecwKADnlhZGVn5IkbLwb6h2GY4GVSURSHLIsoD8Gve0N1qRvJz0Lzq2F4O9H7ff8r9jj9gIMQmzC6iBdlVfAGLpXP6nAEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "CraftPipelineStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

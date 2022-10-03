@@ -7,6 +7,7 @@ ADD deps /deps
 ADD src /src
 ADD server.py /server.py
 ADD world.py /world.py
+ADD builder.py /builder.py
 RUN gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
 RUN pip install requests boto3 psycopg2
 RUN pip install awscli

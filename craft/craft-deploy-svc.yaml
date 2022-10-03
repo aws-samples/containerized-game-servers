@@ -26,7 +26,7 @@ metadata:
     app: craft
   name: craft
 spec:
-  replicas: 10
+  replicas: 1
   selector:
     matchLabels:
       app: craft
@@ -56,7 +56,7 @@ spec:
               value: "4080"
             - name: SPAWN_POINT
               value: "(0, 0, 0, 0, 0)"
-          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craft:aarch64
+          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221003175129-arm64v8-python2
           imagePullPolicy: Always
           command: ["python","/server.py"]
           readinessProbe:

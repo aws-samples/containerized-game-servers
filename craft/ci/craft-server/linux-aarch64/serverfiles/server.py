@@ -41,7 +41,7 @@ DEFAULT_PORT = int(os.environ['SERVERPORT'])
 DB_PATH = 'craft.db'
 LOG_PATH = 'log.txt'
 
-CHUNK_SIZE = 32
+CHUNK_SIZE = 32 
 BUFFER_SIZE = 4096
 COMMIT_INTERVAL = 5
 
@@ -543,6 +543,7 @@ class Model(object):
         sql = 'insert into block (p, q, x, y, z, w) values (:p, :q, :x, :y, :z, :w) on conflict on constraint unique_block_pqxyz do UPDATE SET w = :w'
         sql = """insert into block (p, q, x, y, z, w) values (%s,%s,%s,%s,%s,%s) on conflict on constraint unique_block_pqxyz do UPDATE SET w =%s"""
         params=[p,q,x,y,z,w,w]
+        log('p=%d,q=%d,x=%d,y=%d,z=%d,w=%d'%(p,q,x,y,z,w))
     #postgres_insert_query = """ INSERT INTO light (p,q,x,y,z,w) VALUES (%s,%s,%s,%s,%s,%s)"""
     #record_to_insert = (1,2,3,4,5,6)
         #response = execute_rds_statement(sql, sql_parameters)

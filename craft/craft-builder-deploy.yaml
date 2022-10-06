@@ -24,7 +24,7 @@ spec:
             - secretRef:
                 name: craft
           env:
-          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221003175129-arm64v8-python2
+          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221005161311-arm64v8-python2
           imagePullPolicy: Always
           command: ["python","/builder.py"]
           resources:

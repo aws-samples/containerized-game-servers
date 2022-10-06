@@ -81,9 +81,31 @@ except ImportError:
     pass
 
 
+def execute_rds_read_statement(sql,param):
+  try:
+    connection = psycopg2.connect(user=user,
+                                  password=password,
+                                  host=host,
+                                  port="5432",
+                                  database=database)
+    cursor = connection.cursor()
+    cursor.execute(sql,param)
+    rows = cursor.fetchall() 
+    #print("execute_rds_read_statement rows=%s"%(rows))
+    #count = cursor.rowcount
+    #print(count, "Record inserted/updated successfully processed")
+    return rows
+  except (Exception, psycopg2.Error) as error:
+    print("Failed to insert/update", error)
+    sys.stdout.flush()
+  finally:
+    # closing database connection.
+    if connection:
+        cursor.close()
+        connection.close()
+        #print("PostgreSQL connection is closed")
 
-def execute_rds_statement(sql,param):
-  #log('execute_rds_statement',sql)
+def execute_rds_write_statement(sql,param):
   try:
     connection = psycopg2.connect(user=user,
                                   password=password,
@@ -95,10 +117,10 @@ def execute_rds_statement(sql,param):
 
     connection.commit()
     count = cursor.rowcount
-    #print(count, "Record selected/inserted/updated successfully processed")
+    #print(count, "Record inserted/updated successfully processed")
 
   except (Exception, psycopg2.Error) as error:
-    print("Failed to select/insert/update", error)
+    print("Failed to insert/update", error)
     sys.stdout.flush()
 
   finally:
@@ -179,7 +201,7 @@ class Handler(SocketServer.BaseRequestHandler):
                 if not data:
                     break
                 buf.extend(data.replace('\r\n', '\n'))
-                print('server Handle=%s'%(data))
+                #print('self.set_block(%s)'%(data))
                 sys.stdout.flush()
                 while '\n' in buf:
                     index = buf.index('\n')
@@ -352,10 +374,10 @@ class Model(object):
         sql = 'select w from block where p = %s and q = %s and x = %s and y = %s and z = %s;'
         sql = """select w from block where p = %s and q = %s and x = %s and y = %s and z = %s;"""
         params = [p,q,x,y,z]
-        result = execute_rds_statement(sql,params)
+        rows = list(execute_rds_read_statement(sql,params))
         #log('rds_response get_block',result['records'])
         if rows:
-            #log('rows from sqlite',rows[0][0])
+            log('rows from sqlite',rows[0][0])
             return rows[0][0]
         return self.get_default_block(x, y, z)
     def next_client_id(self):
@@ -443,45 +465,46 @@ class Model(object):
         )
         params = [p,q,key]
         #result = execute_rds_statement(query, sql_parameters)
-        result = execute_rds_statement(query,params)
+        rows = execute_rds_read_statement(query,params)
         #log('rds_response on_chunk',result)
-        if result is not None:
-          for _row in result['records']:
-            rowid=_row[0]['longValue']
-            x=_row[1]['longValue']
-            y=_row[2]['longValue']
-            z=_row[3]['longValue']
-            w=_row[4]['longValue']
-            log('on_chunk-result[records]',rowid,x,y,z,w)
+        #TBDshould be "is not None" TBD
+        if rows is not None:
+          #for _row in result['records']:
+          #  rowid=_row[0]['longValue']
+          #  x=_row[1]['longValue']
+          #  y=_row[2]['longValue']
+          #  z=_row[3]['longValue']
+          #  w=_row[4]['longValue']
+          #  log('on_chunk-result[records]',rowid,x,y,z,w)
+          #  blocks += 1
+          #  packets.append(packet(BLOCK, p, q, x, y, z, w))
+          #  max_rowid = max(max_rowid, rowid)
+          for rowid, x, y, z, w in rows:
+            log('on_chunk-rows',x,y,z,w)
             blocks += 1
             packets.append(packet(BLOCK, p, q, x, y, z, w))
             max_rowid = max(max_rowid, rowid)
-          #for rowid, x, y, z, w in rows:
-            #log('on_chunk-rows',x,y,z,w)
-            #blocks += 1
-            #packets.append(packet(BLOCK, p, q, x, y, z, w))
-            #max_rowid = max(max_rowid, rowid)
-          query = (
-            'select x, y, z, w from light where '
-            'p = :p and q = :q;'
-          )
-          sql="""select x, y, z, w from light where p=%s and q=%s;'"""
+          #query = (
+          #  'select x, y, z, w from light where '
+          #  'p = :p and q = :q;'
+          #)
+          query="""select x, y, z, w from light where p=%s and q=%s;"""
           params=[p,q]
-          rows = execute_rds_statement(query,params)
+          rows = execute_rds_read_statement(query,params)
           #rows = self.execute(query, dict(p=p, q=q))
 
           lights = 0
           for x, y, z, w in rows:
             lights += 1
             packets.append(packet(LIGHT, p, q, x, y, z, w))
-          query = (
-            'select x, y, z, face, text from sign where '
-            'p = :p and q = :q;'
-          )
+          #query = (
+          #  'select x, y, z, face, text from sign where '
+          #  'p = :p and q = :q;'
+          #)
           #rows = self.execute(query, dict(p=p, q=q))
-          sql="""select x, y, z, face, text from sign where p = %s and q = %s;"""
+          query="""select x, y, z, face, text from sign where p = %s and q = %s;"""
           params=[p,q]
-          rows = execute_rds_statement(query,params)
+          rows = execute_rds_read_statement(query,params)
           signs = 0
           for x, y, z, face, text in rows:
             signs += 1
@@ -547,7 +570,7 @@ class Model(object):
     #postgres_insert_query = """ INSERT INTO light (p,q,x,y,z,w) VALUES (%s,%s,%s,%s,%s,%s)"""
     #record_to_insert = (1,2,3,4,5,6)
         #response = execute_rds_statement(sql, sql_parameters)
-        response = execute_rds_statement(sql,params)
+        response = execute_rds_write_statement(sql,params)
         #log('rds_response_on_block',response)
         for dx in range(-1, 2):
             for dz in range(-1, 2):
@@ -569,8 +592,7 @@ class Model(object):
             sql = """delete from sign where x = %s and y = %s and z = %s"""
             params =[x,y,z]
             #response = execute_rds_statement(sql, sql_parameters)
-            response = execute_rds_statement(sql,params)
-            #log('rds_response_on_delete_sign',response)
+            response = execute_rds_write_statement(sql,params)
             self.execute(query, dict(x=x, y=y, z=z))
             query = (
                 'update light set w = 0 where '
@@ -580,7 +602,7 @@ class Model(object):
             sql = """update light set w = 0 where x = %s and y = %s and z = %s"""
             params=[x,y,z]
             #response = execute_rds_statement(sql, sql_parameters)
-            response = execute_rds_statement(sql,params)
+            response = execute_rds_write_statement(sql,params)
             #log('rds_response_on_update_light',response)
             self.execute(query, dict(x=x, y=y, z=z))
     def on_light(self, client, x, y, z, w):
@@ -607,7 +629,7 @@ class Model(object):
         sql = """insert or replace into light (p, q, x, y, z, w) values (%s,%s,%s,%s,%s,%s)"""
         params=[p,q,x,y,z,w]
         #response = execute_rds_statement(sql, sql_parameters)
-        response = execute_rds_statement(sql,params)
+        response = execute_rds_write_statement(sql,params)
         #log('rds_response_on_insert_to_light',response)
         self.execute(query, dict(p=p, q=q, x=x, y=y, z=z, w=w))
         self.send_light(client, p, q, x, y, z, w)
@@ -633,7 +655,7 @@ class Model(object):
             sql = """insert or replace into sign (p, q, x, y, z, face, text) values (%s,%s,%s,%s,%s,%s,%s)"""
             params[p,q,x,y,z,face,text]
             #response = execute_rds_statement(sql, sql_parameters)
-            response = execute_rds_statement(sql,params)
+            response = execute_rds_write_statement(sql,params)
             #log('rds_response_on_insert_to_sign',response)
             self.execute(query,
                 dict(p=p, q=q, x=x, y=y, z=z, face=face, text=text))
@@ -646,8 +668,7 @@ class Model(object):
             sql = """delete from sign where x = %s and y = %s and z = %s and face = %s"""
             params=[x,y,z,face]
             #response = execute_rds_statement(sql, sql_parameters)
-            response = execute_rds_statement(sql,params)
-            #log('rds_response_on_delete_sign',response)
+            response = execute_rds_write_statement(sql,params)
             self.execute(query, dict(x=x, y=y, z=z, face=face))
         self.send_sign(client, p, q, x, y, z, face, text)
     def on_position(self, client, x, y, z, rx, ry):

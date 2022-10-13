@@ -3,31 +3,31 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: craftbuilder
-  name: craftbuilder
+    app: craftbuilderai
+  name: craftbuilderai
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: craftbuilder
+      app: craftbuilderai
   template:
     metadata:
-      name: craftbuilder
+      name: craftbuilderai
       labels:
-        app: craftbuilder
+        app: craftbuilderai
     spec:
       nodeSelector:
         karpenter.sh/provisioner-name: craft
       containers:
-        - name: craftbuilder
+        - name: craftbuilderai
           envFrom:
             - secretRef:
                 name: craft
           env:
-          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221008011837-arm64v8-python2
+          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221009165514-arm64v8-python2
           imagePullPolicy: Always
-          command: ["python","/builder.py"]
+          command: ["python","/builder-ai.py"]
           resources:
             requests:
-              cpu: 1024m
-              memory: 1024Mi
+              cpu: 512m
+              memory: 512Mi

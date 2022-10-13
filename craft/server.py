@@ -42,7 +42,9 @@ DB_PATH = 'craft.db'
 LOG_PATH = 'log.txt'
 
 CHUNK_SIZE = 32 
-BUFFER_SIZE = 4096
+
+#BUFFER_SIZE = 4096
+BUFFER_SIZE = int(os.environ['BUFFER_SIZE'])
 COMMIT_INTERVAL = 5
 
 AUTH_REQUIRED = False
@@ -91,19 +93,14 @@ def execute_rds_read_statement(sql,param):
     cursor = connection.cursor()
     cursor.execute(sql,param)
     rows = cursor.fetchall() 
-    #print("execute_rds_read_statement rows=%s"%(rows))
-    #count = cursor.rowcount
-    #print(count, "Record inserted/updated successfully processed")
     return rows
   except (Exception, psycopg2.Error) as error:
     print("Failed to insert/update", error)
     sys.stdout.flush()
   finally:
-    # closing database connection.
     if connection:
         cursor.close()
-        connection.close()
-        #print("PostgreSQL connection is closed")
+        connection.close()  
 
 def execute_rds_write_statement(sql,param):
   try:
@@ -117,21 +114,16 @@ def execute_rds_write_statement(sql,param):
 
     connection.commit()
     count = cursor.rowcount
-    #print(count, "Record inserted/updated successfully processed")
-
   except (Exception, psycopg2.Error) as error:
     print("Failed to insert/update", error)
     sys.stdout.flush()
-
   finally:
-    # closing database connection.
     if connection:
         cursor.close()
         connection.close()
-        #print("PostgreSQL connection is closed")
 
 def execute_rds_statement_data_api(sql, sql_parameters=[]):
-    log('execute_rds_statement_data_api',sql,sql_parameters)
+    #log('execute_rds_statement_data_api',sql,sql_parameters)
     response = rds_client.execute_statement(
         secretArn=secret_arn,
         database=database_name,
@@ -377,7 +369,6 @@ class Model(object):
         rows = list(execute_rds_read_statement(sql,params))
         #log('rds_response get_block',result['records'])
         if rows:
-            log('rows from sqlite',rows[0][0])
             return rows[0][0]
         return self.get_default_block(x, y, z)
     def next_client_id(self):
@@ -408,7 +399,6 @@ class Model(object):
             func = self.commands[command]
             func(client, *args)
     def on_disconnect(self, client):
-        #log('DISC', client.client_id, *client.client_address)
         self.clients.remove(client)
         self.send_disconnect(client)
         #self.send_talk('%s has disconnected from the server.' % client.nick)
@@ -420,7 +410,6 @@ class Model(object):
             client.stop()
             return
         client.version = version
-        # TODO: client.start() here
     def on_authenticate(self, client, username, access_token):
         user_id = None
         if username and access_token:
@@ -439,7 +428,6 @@ class Model(object):
         else:
             client.nick = username
         self.send_nick(client)
-        # TODO: has left message if was already authenticated
         self.send_talk('%s has joined the game.' % client.nick)
         #agones_allocate(self)
 
@@ -480,7 +468,7 @@ class Model(object):
           #  packets.append(packet(BLOCK, p, q, x, y, z, w))
           #  max_rowid = max(max_rowid, rowid)
           for rowid, x, y, z, w in rows:
-            log('on_chunk-rows',x,y,z,w)
+            #log('on_chunk-rows',x,y,z,w)
             blocks += 1
             packets.append(packet(BLOCK, p, q, x, y, z, w))
             max_rowid = max(max_rowid, rowid)
@@ -566,7 +554,7 @@ class Model(object):
         sql = 'insert into block (p, q, x, y, z, w) values (:p, :q, :x, :y, :z, :w) on conflict on constraint unique_block_pqxyz do UPDATE SET w = :w'
         sql = """insert into block (p, q, x, y, z, w) values (%s,%s,%s,%s,%s,%s) on conflict on constraint unique_block_pqxyz do UPDATE SET w =%s"""
         params=[p,q,x,y,z,w,w]
-        log('p=%d,q=%d,x=%d,y=%d,z=%d,w=%d'%(p,q,x,y,z,w))
+        log('insert into block - p=%d,q=%d,x=%d,y=%d,z=%d,w=%d'%(p,q,x,y,z,w))
     #postgres_insert_query = """ INSERT INTO light (p,q,x,y,z,w) VALUES (%s,%s,%s,%s,%s,%s)"""
     #record_to_insert = (1,2,3,4,5,6)
         #response = execute_rds_statement(sql, sql_parameters)

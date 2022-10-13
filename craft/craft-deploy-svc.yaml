@@ -36,8 +36,10 @@ spec:
       labels:
         app: craft
     spec:
+      shareProcessNamespace: true
       nodeSelector:
         karpenter.sh/provisioner-name: craft
+      serviceAccountName: adaptivecraft
       containers:
         - name: craft
           envFrom:
@@ -54,16 +56,24 @@ spec:
                   fieldPath: metadata.name
             - name: SERVERPORT
               value: "4080"
+            - name: BUFFER_SIZE
+              value: "8192"
             - name: SPAWN_POINT
-              value: "(0, 0, 0, 0, 0)"
-          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221006205558-arm64v8-python2
+              value: "(32,13,32,25,0)"
+            - name: MAX_SESSIONS_IN_GS
+              value: "3"
+            - name: DEPLOY_NAME
+              value: "craft"
+            - name: SCALE_UP_COOLDOWN
+              value: "60"
+          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221013011203-arm64v8-python2
           imagePullPolicy: Always
-          command: ["python","/server.py"]
+          command: ["/start.sh"]
           readinessProbe:
-            tcpSocket:
-              port: 4080
-            initialDelaySeconds: 5
-            periodSeconds: 10
+            exec:
+              command:
+                - cat
+                - /tmp/healthy
           livenessProbe:
             tcpSocket:
               port: 4080
@@ -71,5 +81,5 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              cpu: 2048m
-              memory: 2048Mi
+              cpu: 4096m
+              memory: 4096Mi

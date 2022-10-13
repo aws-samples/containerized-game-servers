@@ -69,7 +69,6 @@ spec:
           image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221013011203-arm64v8-python2
           imagePullPolicy: Always
           command: ["/start.sh"]
-          #command: ["python","/server.py"]
           readinessProbe:
             exec:
               command:

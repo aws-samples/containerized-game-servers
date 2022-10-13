@@ -123,7 +123,7 @@ export class PipelineStack extends Stack {
               `curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp`,
               `mv /tmp/eksctl /usr/local/bin`,
               `aws eks update-kubeconfig --region ${ this.region } --name ${ clusterName.valueAsString }`,
-              `IMAGE_TAG=$(aws ssm get-parameter --name stk-image-latest-tag | jq '.Parameter.Value')`,
+              `IMAGE_TAG=$(aws ssm get-parameter --name stk-image-latest-tag | jq '.Parameter.Value' | tr -d '"')`,
               `aws s3 cp ${ serverManifest.s3ObjectUrl } stk-server.yaml`,
               `aws s3 cp ${ clientManifest.s3ObjectUrl } stk-client.yaml`,
               `envsubst < stk-server.yaml | kubectl apply -f -`,

@@ -1,8 +1,15 @@
 FROM public.ecr.aws/y4b6s6y1/arm64v8-python-2
+<<<<<<< HEAD
 #RUN apt-get update -y
 #RUN apt-get install -y sqlite3 
 #RUN apt-get install -y vim net-tools telnet
 #RUN /usr/local/bin/python -m pip install --upgrade pip
+=======
+RUN apt-get update -y
+RUN apt-get install -y sqlite3 
+RUN apt-get install -y vim net-tools telnet
+RUN /usr/local/bin/python -m pip install --upgrade pip
+>>>>>>> d355e668f86c3e6163d78474ec7c1a62d8ce8c51
 ADD deps /deps
 ADD src /src
 ADD server.py /server.py

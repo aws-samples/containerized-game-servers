@@ -42,6 +42,7 @@ DB_PATH = 'craft.db'
 LOG_PATH = 'log.txt'
 
 CHUNK_SIZE = 32 
+
 #BUFFER_SIZE = 4096
 BUFFER_SIZE = int(os.environ['BUFFER_SIZE'])
 COMMIT_INTERVAL = 5

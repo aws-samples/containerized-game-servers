@@ -42,7 +42,6 @@ DB_PATH = 'craft.db'
 LOG_PATH = 'log.txt'
 
 CHUNK_SIZE = 32 
-
 #BUFFER_SIZE = 4096
 BUFFER_SIZE = int(os.environ['BUFFER_SIZE'])
 COMMIT_INTERVAL = 5
@@ -100,7 +99,7 @@ def execute_rds_read_statement(sql,param):
   finally:
     if connection:
         cursor.close()
-        connection.close()  
+        connection.close()
 
 def execute_rds_write_statement(sql,param):
   try:
@@ -193,7 +192,7 @@ class Handler(SocketServer.BaseRequestHandler):
                 if not data:
                     break
                 buf.extend(data.replace('\r\n', '\n'))
-                #print('self.set_block(%s)'%(data))
+                print('server Handle=%s'%(data))
                 sys.stdout.flush()
                 while '\n' in buf:
                     index = buf.index('\n')

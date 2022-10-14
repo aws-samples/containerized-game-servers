@@ -1,10 +1,11 @@
-# This file allows you to programmatically create blocks in Craft.
-# Please use this wisely. Test on your own server first. Do not abuse it.
-
+from math import floor
 import requests
 import socket
 import sqlite3
 import sys
+import os
+import psycopg2
+import time
 
 DEFAULT_HOST = 'craft.yahav.sa.aws.dev'
 DEFAULT_PORT = 4080
@@ -44,6 +45,43 @@ OFFSETS = [
     (0.5, 0.5, -0.5),
     (0.5, 0.5, 0.5),
 ]
+
+user=os.environ['user']
+password=os.environ['password']
+host=os.environ['host']
+database=os.environ['database']
+
+CHUNK_SIZE = 32
+
+def execute_rds_statement(sql,param):
+  print('param='+str(param))
+  sys.stdout.flush()
+  try:
+    connection = psycopg2.connect(user=user,
+                                  password=password,
+                                  host=host,
+                                  port="5432",
+                                  database=database)
+    cursor = connection.cursor()
+    cursor.execute(sql,param)
+
+    connection.commit()
+    count = cursor.rowcount
+    print(count, "Record selected/inserted/updated successfully processed")
+
+  except (Exception, psycopg2.Error) as error:
+    print("Failed to select/insert/update", error)
+    sys.stdout.flush()
+
+  finally:
+    if connection:
+     cursor.close()
+     connection.close()
+     print("PostgreSQL connection is closed")
+     sys.stdout.flush()
+
+def chunked(x):
+    return int(floor(round(x) / CHUNK_SIZE))
 
 def sphere(cx, cy, cz, r, fill=False, fx=False, fy=False, fz=False):
     result = set()
@@ -145,7 +183,7 @@ class Client(object):
         self.conn.connect((host, port))
         #self.authenticate()
     def authenticate(self):
-        username, identity_token = get_identity()
+        #username, identity_token = get_identity()
         url = 'https://craft.michaelfogleman.com/api/1/identity'
         payload = {
             'username': username,
@@ -158,13 +196,23 @@ class Client(object):
         else:
             raise Exception('Failed to authenticate.')
     def set_block(self, x, y, z, w):
+        time.sleep(0.1)
         resp=self.conn.sendall('B,%d,%d,%d,%d\n' % (x,y,z,w))
-        print("self.conn.sendall- %d,%d,%d,%d response=%s\n" % (x,y,z,w,resp))
+        print("self.conn.sendall- %d,%d,%d,%d response=%s\n" % (x,y,z,w,resp)) 
         sys.stdout.flush()
+        #p, q = chunked(x), chunked(z)
+        #sql = """insert into block (p, q, x, y, z, w) values (%s,%s,%s,%s,%s,%s) on conflict on constraint unique_block_pqxyz do UPDATE SET w =%s"""
+        #params=[p,q,x,y,z,w,w]
+        #response = execute_rds_statement(sql,params)
+        #print("db response="+str(response)) 
+    def write_in_blocks(self,blocks):
+        key = lambda block: (block[1], block[0], block[2])
+        for x, y, z in sorted(blocks, key=key):
+          self.set_block(x, y, z, w)
     def set_blocks(self, blocks, w):
         key = lambda block: (block[1], block[0], block[2])
         for x, y, z in sorted(blocks, key=key):
-            self.set_block(x, y, z, w)
+          self.set_block(x, y, z, w)
     def bitmap(self, sx, sy, sz, d1, d2, data, lookup):
         x, y, z = sx, sy, sz
         dx1, dy1, dz1 = d1
@@ -191,60 +239,74 @@ def main():
     client = get_client()
     set_block = client.set_block
     set_blocks = client.set_blocks
-    set_blocks(circle_y(0, 32, 0, 16, True), STONE)
-    set_blocks(circle_y(0, 33, 0, 16), BRICK)
-    set_blocks(cuboid(-1, 1, 1, 31, -1, 1), CEMENT)
-    set_blocks(cuboid(-1024, 1024, 32, 32, -3, 3), STONE)
-    set_blocks(cuboid(-3, 3, 32, 32, -1024, 1024), STONE)
-    set_blocks(cuboid(-1024, 1024, 33, 33, -3, -3), BRICK)
-    set_blocks(cuboid(-1024, 1024, 33, 33, 3, 3), BRICK)
-    set_blocks(cuboid(-3, -3, 33, 33, -1024, 1024), BRICK)
-    set_blocks(cuboid(3, 3, 33, 33, -1024, 1024), BRICK)
-    set_blocks(sphere(0, 32, 0, 16), GLASS)
-    for y in range(1, 32):
-        set_blocks(circle_y(0, y, 0, 4, True), CEMENT)
-    set_blocks(circle_x(16, 33, 0, 3), BRICK)
-    set_blocks(circle_x(-16, 33, 0, 3), BRICK)
-    set_blocks(circle_z(0, 33, 16, 3), BRICK)
-    set_blocks(circle_z(0, 33, -16, 3), BRICK)
-    for x in range(0, 1024, 32):
-        set_blocks(cuboid(x - 1, x + 1, 31, 32, -1, 1), CEMENT)
-        set_blocks(cuboid(-x - 1, -x + 1, 31, 32, -1, 1), CEMENT)
-        set_blocks(cuboid(x, x, 1, 32, -1, 1), CEMENT)
-        set_blocks(cuboid(-x, -x, 1, 32, -1, 1), CEMENT)
-    for z in range(0, 1024, 32):
-        set_blocks(cuboid(-1, 1, 31, 32, z - 1, z + 1), CEMENT)
-        set_blocks(cuboid(-1, 1, 31, 32, -z - 1, -z + 1), CEMENT)
-        set_blocks(cuboid(-1, 1, 1, 32, z, z), CEMENT)
-        set_blocks(cuboid(-1, 1, 1, 32, -z, -z), CEMENT)
-    for x in range(0, 1024, 8):
-        set_block(x, 32, 0, CEMENT)
-        set_block(-x, 32, 0, CEMENT)
-    for z in range(0, 1024, 8):
-        set_block(0, 32, z, CEMENT)
-        set_block(0, 32, -z, CEMENT)
-    set_blocks(pyramid(32, 32+64-1, 12, 32, 32+64-1), COBBLE)
-    outer = circle_y(0, 11, 0, 176 + 3, True)
-    inner = circle_y(0, 11, 0, 176 - 3, True)
-    set_blocks(outer - inner, STONE)
-    a = sphere(-32, 48, -32, 24, True)
-    b = sphere(-24, 40, -24, 24, True)
-    set_blocks(a - b, PLANK)
-    set_blocks(cylinder_x(-64, 64, 32, 0, 8), STONE)
-    data = [
-        '...............................',
-        '..xxx..xxxx...xxx..xxxxx.xxxxx.',
-        '.x...x.x...x.x...x.x.......x...',
-        '.x.....xxxx..xxxxx.xxx.....x...',
-        '.x...x.x..x..x...x.x.......x...',
-        '..xxx..x...x.x...x.x.......x...',
-        '...............................',
-    ]
-    lookup = {
-        'x': STONE,
-        '.': PLANK,
-    }
-    client.bitmap(0, 32, 32, (1, 0, 0), (0, -1, 0), data, lookup)
+    while(True):
+      for y in range(12,14):
+        set_blocks(circle_y(65,y,0,3),BRICK)
+      for y in range(12,14):
+        set_blocks(circle_y(65,y,0,3),EMPTY)
+
+    #set_blocks(circle_y(0, 33, 0, 16), BRICK)
+    #set_blocks(circle_y(0, 33, 0, 16), EMPTY)
+    #set_blocks(cuboid(-1, 1, 1, 31, -1, 1), CEMENT)
+    #set_blocks(cuboid(-1, 1, 1, 31, -1, 1), EMPTY)
+    #set_blocks(cuboid(-1024, 1024, 32, 32, -3, 3), STONE)
+    #set_blocks(cuboid(-1024, 1024, 32, 32, -3, 3), EMPTY)
+    #set_blocks(cuboid(-3, 3, 32, 32, -1024, 1024), STONE)
+    #set_blocks(cuboid(-3, 3, 32, 32, -1024, 1024), EMPTY)
+    #set_blocks(cuboid(-1024, 1024, 33, 33, -3, -3), BRICK)
+    #set_blocks(cuboid(-1024, 1024, 33, 33, -3, -3), EMPTY)
+    #set_blocks(cuboid(-1024, 1024, 33, 33, 3, 3), BRICK)
+    #set_blocks(cuboid(-1024, 1024, 33, 33, 3, 3), EMPTY)
+    #set_blocks(cuboid(-3, -3, 33, 33, -1024, 1024), BRICK)
+    #set_blocks(cuboid(-3, -3, 33, 33, -1024, 1024), EMPTY)
+    #set_blocks(cuboid(3, 3, 33, 33, -1024, 1024), BRICK)
+    #set_blocks(cuboid(3, 3, 33, 33, -1024, 1024), EMPTY)
+    #set_blocks(sphere(0, 32, 0, 16), GLASS)
+    #set_blocks(sphere(0, 32, 0, 16), EMPTY)
+    #for y in range(1, 32):
+    #    set_blocks(circle_y(0, y, 0, 4, True), CEMENT)
+    #set_blocks(circle_x(16, 33, 0, 3), BRICK)
+    #set_blocks(circle_x(-16, 33, 0, 3), BRICK)
+    #set_blocks(circle_z(0, 33, 16, 3), BRICK)
+    #set_blocks(circle_z(0, 33, -16, 3), BRICK)
+    #for x in range(0, 1024, 32):
+    #    set_blocks(cuboid(x - 1, x + 1, 31, 32, -1, 1), CEMENT)
+    #    set_blocks(cuboid(-x - 1, -x + 1, 31, 32, -1, 1), CEMENT)
+    #    set_blocks(cuboid(x, x, 1, 32, -1, 1), CEMENT)
+    #    set_blocks(cuboid(-x, -x, 1, 32, -1, 1), CEMENT)
+    #for z in range(0, 1024, 32):
+    #     set_blocks(cuboid(-1, 1, 31, 32, z - 1, z + 1), CEMENT)
+    #     set_blocks(cuboid(-1, 1, 31, 32, -z - 1, -z + 1), CEMENT)
+    #     set_blocks(cuboid(-1, 1, 1, 32, z, z), CEMENT)
+    #     set_blocks(cuboid(-1, 1, 1, 32, -z, -z), CEMENT)
+    #for x in range(0, 1024, 8):
+    #     set_block(x, 32, 0, CEMENT)
+    #     set_block(-x, 32, 0, CEMENT)
+    #for z in range(0, 1024, 8):
+    #     set_block(0, 32, z, CEMENT)
+    #     set_block(0, 32, -z, CEMENT)
+    #set_blocks(pyramid(32, 32+64-1, 12, 32, 32+64-1), COBBLE)
+    #outer = circle_y(0, 11, 0, 176 + 3, True)
+    #inner = circle_y(0, 11, 0, 176 - 3, True)
+    #set_blocks(outer - inner, STONE)
+    #a = sphere(-32, 48, -32, 24, True)
+    #b = sphere(-24, 40, -24, 24, True)
+    #set_blocks(a - b, PLANK)
+    #set_blocks(cylinder_x(-64, 64, 32, 0, 8), STONE)
+    #data = [
+    #     '...............................',
+    #     '..xxx..xxxx...xxx..xxxxx.xxxxx.',
+    #     '.x...x.x...x.x...x.x.......x...',
+    #     '.x.....xxxx..xxxxx.xxx.....x...',
+    #     '.x...x.x..x..x...x.x.......x...',
+    #     '..xxx..x...x.x...x.x.......x...',
+    #     '...............................',
+    #]
+    #lookup = {
+    #     'x': STONE,
+    #     '.': PLANK,
+    #}
+    # client.bitmap(0, 32, 32, (1, 0, 0), (0, -1, 0), data, lookup)
 
 if __name__ == '__main__':
     main()

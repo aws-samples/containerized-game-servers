@@ -1,8 +1,8 @@
 import { Stack, StackProps, CfnParameter  } from 'aws-cdk-lib';
 import { Construct } from 'constructs'
 import * as codecommit from 'aws-cdk-lib/aws-codecommit';
-import * as sns from 'aws-cdk-lib/aws-sns';
-import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+//import * as sns from 'aws-cdk-lib/aws-sns';
+//import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';

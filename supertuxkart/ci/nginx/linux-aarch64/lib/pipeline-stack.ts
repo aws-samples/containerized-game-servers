@@ -1,13 +1,13 @@
 import { Stack, StackProps, CfnParameter  } from 'aws-cdk-lib';
 import { Construct } from 'constructs'
 import * as codecommit from 'aws-cdk-lib/aws-codecommit';
-import * as sns from 'aws-cdk-lib/aws-sns';
-import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+//import * as sns from 'aws-cdk-lib/aws-sns';
+//import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
-import * as notifications from 'aws-cdk-lib/aws-codestarnotifications';
+//import * as notifications from 'aws-cdk-lib/aws-codestarnotifications';
 
 export class NginxPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {

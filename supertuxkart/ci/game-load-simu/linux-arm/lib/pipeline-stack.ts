@@ -1,13 +1,13 @@
 import { Stack, StackProps, CfnParameter  } from 'aws-cdk-lib';
 import { Construct } from 'constructs'
 import * as codecommit from 'aws-cdk-lib/aws-codecommit';
-import * as sns from 'aws-cdk-lib/aws-sns';
-import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+//import * as sns from 'aws-cdk-lib/aws-sns';
+//import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
-import * as notifications from 'aws-cdk-lib/aws-codestarnotifications';
+//import * as notifications from 'aws-cdk-lib/aws-codestarnotifications';
 import * as iam from "aws-cdk-lib/aws-iam";
 
 export class gameLoadSimuPipeline extends Stack {
@@ -16,11 +16,11 @@ export class gameLoadSimuPipeline extends Stack {
 
   //parameters that can be passed from the command line
   
-  const notificationEmail = new CfnParameter(this, "notificationEmail", {
+  /*const notificationEmail = new CfnParameter(this, "notificationEmail", {
   type: "String",
   description: "The recipient email for pipeline notifications",
   default: "xyz@amazon.com"
-  });
+  });*/
   
   const gitRepoName = new CfnParameter(this, "gitRepoName", {
   type: "String",
@@ -45,8 +45,8 @@ export class gameLoadSimuPipeline extends Stack {
   });
     
   //sns topic for pipeline notifications
-  const pipelineNotifications = new sns.Topic(this, 'BuildNotifications');
-  pipelineNotifications.addSubscription(new subscriptions.EmailSubscription(`${notificationEmail.valueAsString}`));
+  /*const pipelineNotifications = new sns.Topic(this, 'BuildNotifications');
+  pipelineNotifications.addSubscription(new subscriptions.EmailSubscription(`${notificationEmail.valueAsString}`));*/
     
     
   //docker repository to store container images
@@ -130,17 +130,15 @@ export class gameLoadSimuPipeline extends Stack {
         }
       ]
     });
-    
 
-    
-    const buildNotificationRule = new notifications.NotificationRule(this, 'buildNotificationRule', {
+   /* const buildNotificationRule = new notifications.NotificationRule(this, 'buildNotificationRule', {
     source: buildproject,
     events: [
       'codebuild-project-build-state-succeeded',
       'codebuild-project-build-state-failed',
     ],
     targets: [pipelineNotifications],
-  });
+  });*/
 
   }
 }

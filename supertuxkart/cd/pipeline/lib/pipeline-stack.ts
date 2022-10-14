@@ -2,13 +2,13 @@ import { Stack, StackProps, CfnParameter, RemovalPolicy, CfnOutput } from "aws-c
 import { Construct } from "constructs";
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import * as codecommit from "aws-cdk-lib/aws-codecommit";
-import * as sns from "aws-cdk-lib/aws-sns";
-import * as subscriptions from "aws-cdk-lib/aws-sns-subscriptions";
+//import * as sns from "aws-cdk-lib/aws-sns";
+//import * as subscriptions from "aws-cdk-lib/aws-sns-subscriptions";
 import * as ecr from "aws-cdk-lib/aws-ecr";
 import * as codebuild from "aws-cdk-lib/aws-codebuild";
 import * as codepipeline from "aws-cdk-lib/aws-codepipeline";
 import * as codepipeline_actions from "aws-cdk-lib/aws-codepipeline-actions";
-import * as notifications from "aws-cdk-lib/aws-codestarnotifications";
+//import * as notifications from "aws-cdk-lib/aws-codestarnotifications";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as ssm from 'aws-cdk-lib/aws-ssm';
 import * as path from 'path';
@@ -19,7 +19,9 @@ export class PipelineStack extends Stack {
     super(scope, id, props);
 
     //parameters that can be passed from the command line
-    const notifyPhone = new CfnParameter(this, "notifyPhone", {
+
+    //notification parameters
+    /*const notifyPhone = new CfnParameter(this, "notifyPhone", {
       type: "String",
       description: "The recipient phone number for pipeline notification",
       default: "+11111111111",
@@ -29,7 +31,7 @@ export class PipelineStack extends Stack {
       type: "String",
       description: "The recipient email for pipeline notifications",
       default: "user@email.com",
-    });
+    });*/
 
 
     const ecrRepoName = new CfnParameter(this, "ecrRepoName", {
@@ -40,18 +42,15 @@ export class PipelineStack extends Stack {
     
     
     //sns topic for pipeline notifications
-    const pipelineNotifications = new sns.Topic(this, "BuildNotifications");
+    /*const pipelineNotifications = new sns.Topic(this, "BuildNotifications");
     pipelineNotifications.addSubscription(
       new subscriptions.SmsSubscription(`${notifyPhone.valueAsString}`)
     );
     pipelineNotifications.addSubscription(
       new subscriptions.EmailSubscription(`${notificationEmail.valueAsString}`)
-    );
-    
+    );*/
     
 
-
-  
      //name of target EKS cluster
     const clusterName = new CfnParameter(this, "clusterName", {
       type: "String",
@@ -95,13 +94,7 @@ export class PipelineStack extends Stack {
       actions: ['s3:*'],
     }));
     
-       
-      
-    //TODO
-    //add the code build service role to the system masters group in EKS
-    //Manual command: `eksctl create iamidentitymapping --cluster ${  clusterName.valueAsString } --region ${ this.region  } --arn ${ deployRole.roleArn } --group system:masters`,
-   //const eksCluster = eks.Cluster.fromClusterAttributes(this, 'eksluster', {  clusterName: clusterName.valueAsString });
-   
+
    new CfnOutput(this, 'iamidentitymapping command', { value: `eksctl create iamidentitymapping --cluster ${  clusterName.valueAsString } --region ${ this.region  } --arn ${ deployRole.roleArn } --group system:masters` });
 
     //deploy docker image using codebuild
@@ -172,13 +165,14 @@ export class PipelineStack extends Stack {
       ],
     });
     
-    const deployNotificationRule = new notifications.NotificationRule(this, 'deployNotificationRule', {
+    /*const deployNotificationRule = new notifications.NotificationRule(this, 'deployNotificationRule', {
     source: deployproject,
     events: [
       'codebuild-project-build-state-succeeded',
       'codebuild-project-build-state-failed',
     ],
     targets: [pipelineNotifications],
-  });
+  });*/
+
   }
 }

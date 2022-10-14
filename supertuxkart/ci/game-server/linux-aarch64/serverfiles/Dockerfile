@@ -44,4 +44,11 @@ RUN cd stk-code
 RUN mkdir cmake_build
 RUN cmake ../stk-code -B ./cmake_build -DSERVER_ONLY=ON
 RUN cd cmake_build && make -j$(nproc) -f ./Makefile install
-COPY . .
+
+ADD server_config.xml /stk-code/server_config.xml
+ADD start-server.sh /stk-code/start-server.sh
+ADD start-client.sh /stk-code/start-client.sh
+COPY udp-health-probe.py /udp-health-probe.py
+RUN chmod +x /stk-code/start-server.sh
+RUN chmod +x /stk-code/start-client.sh
+RUN chmod +x /udp-health-probe.py

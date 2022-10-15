@@ -2,10 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: stk-svc
-
 spec:
   selector:
-    app: stksvc
+    app: stk
   ports:
     - protocol: UDP
       port: 8081
@@ -31,19 +30,19 @@ spec:
     spec:
       shareProcessNamespace: true
       containers:
-      - name: nginx
-        image: public.ecr.aws/nginx/nginx:latest
-        imagePullPolicy: Always
-        command: ["nginx","-g","daemon off;"]
-        ports:
-          - name: tcp
-            containerPort: 80
-            protocol: TCP
-        readinessProbe:
-          tcpSocket:
-            port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+#      - name: nginx
+#        image: public.ecr.aws/nginx/nginx:latest
+#        imagePullPolicy: Always
+#        command: ["nginx","-g","daemon off;"]
+#        ports:
+#          - name: tcp
+#            containerPort: 80
+#            protocol: TCP
+#        readinessProbe:
+#          tcpSocket:
+#            port: 80
+#          initialDelaySeconds: 10
+#          periodSeconds: 10
       - name: stk
         env:
         - name: UDP_SOCKET_PORT
@@ -59,12 +58,12 @@ spec:
           - name: udp
             containerPort: 8081
             protocol: UDP
-        livenessProbe:
-          exec:
-            command:
-            - /udp-health-probe.py
-          initialDelaySeconds: 30
-          periodSeconds: 100
+#        livenessProbe:
+#          exec:
+#            command:
+#            - /udp-health-probe.py
+#          initialDelaySeconds: 30
+#          periodSeconds: 100
         securityContext:
           capabilities:
             add:

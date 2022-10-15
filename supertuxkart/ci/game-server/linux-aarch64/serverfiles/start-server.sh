@@ -22,6 +22,10 @@ game_max_players=`awk -v min=2 -v max=25 'BEGIN{srand(); print int(min+rand()*(m
 echo export MAX_PLAYERS=$game_max_players >> /root/.bashrc
 
 #LOCATION=`kubectl get nodes -o json | jq '.items[].metadata.labels."topology.kubernetes.io/zone"'`
+if [ -z "$game_server_dynamic_port" ]
+then
+  game_server_dynamic_port=8081
+fi
 PUBLIC_IPV4=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
 ENDPOINT=$PUBLIC_IPV4:$game_server_dynamic_port
 echo export ENDPOINT=$ENDPOINT >> /root/.bashrc
@@ -34,7 +38,7 @@ else
   aws sqs send-message --queue-url ${REGISTER_Q} --message-body "${id}"
   echo "sqs exit code="$?
 fi
-
 cd /stk-code
 #/cmake_build/bin/supertuxkart --server-config=/stk-code/server_config.xml --log=0 --connection-debug 
-/cmake_build/bin/supertuxkart --server-config=/stk-code/server_config.xml --mode $MODE --port=$game_server_dynamic_port $MISC_ARGS --difficulty=$game_difficulty --max-players=$game_max_players --track=$game_track
+#/cmake_build/bin/supertuxkart --server-config=/stk-code/server_config.xml --mode $MODE --port=$game_server_dynamic_port $MISC_ARGS --difficulty=$game_difficulty --max-players=$game_max_players --track=$game_track
+/cmake_build/bin/supertuxkart --server-config=/stk-code/server_config.xml --port=$game_server_dynamic_port $MISC_ARGS

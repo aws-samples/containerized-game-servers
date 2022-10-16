@@ -61,7 +61,7 @@ export class PipelineStack extends Stack {
     
     //packaging deployment manifests as assets
     const serverManifest = new Asset(this, 'serverManifest', {
-      path: path.join(__dirname, 'stk-server.yaml')
+      path: path.join(__dirname, 'stk-server-nodeport.yaml')
     });
     
     const clientManifest = new Asset(this, 'clientManifest', {
@@ -117,10 +117,8 @@ export class PipelineStack extends Stack {
               `mv /tmp/eksctl /usr/local/bin`,
               `aws eks update-kubeconfig --region ${ this.region } --name ${ clusterName.valueAsString }`,
               `IMAGE_TAG=$(aws ssm get-parameter --name stk-image-latest-tag | jq '.Parameter.Value' | tr -d '"')`,
-              `aws s3 cp ${ serverManifest.s3ObjectUrl } stk-server.yaml`,
-              `aws s3 cp ${ clientManifest.s3ObjectUrl } stk-client.yaml`,
-              `envsubst < stk-server.yaml | kubectl apply -f -`,
-              "envsubst < stk-client.yaml | kubectl apply -f -"
+              `aws s3 cp ${ serverManifest.s3ObjectUrl } stk-server-nodeport.yaml`,
+              `envsubst < stk-server-nodeport.yaml | kubectl apply -f -`,
             ],
           },
         },

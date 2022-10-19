@@ -67,7 +67,7 @@ spec:
               value: "craft"
             - name: SCALE_UP_COOLDOWN
               value: "60"
-          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221013211551-arm64v8-python2
+          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221018175604-arm64v8-python2
           imagePullPolicy: Always
           command: ["/start.sh"]
           readinessProbe:

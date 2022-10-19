@@ -20,6 +20,8 @@ import base64
 import psycopg2
 from botocore.exceptions import ClientError
 
+cmd = "rm -rf /tmp/healthy"
+
 user=os.environ['user']
 password=os.environ['password']
 host=os.environ['host']
@@ -858,8 +860,11 @@ def agones_allocate(model):
 
 def sig_handler(signum,frame):
   log('Signal hanlder called with signal',signum)
+  log('execute ',cmd)
+  os.system(cmd)
   model.send_talk("Game server maintenance is pending - pls reconnect")
   model.send_talk("Don't worry, your universe is saved with us")
+  model.send_talk('Removing the server from load balancer %s'%(cmd))
 
 def main():
     log('main',sys.argv)

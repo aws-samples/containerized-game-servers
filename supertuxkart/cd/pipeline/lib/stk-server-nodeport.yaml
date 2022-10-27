@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: default
   name: stk-svc
 spec:
   selector:
@@ -15,6 +16,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: default
   labels:
     app: stk
   name: stk

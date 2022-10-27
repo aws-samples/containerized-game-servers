@@ -60,14 +60,14 @@ spec:
             - name: BUFFER_SIZE
               value: "8192"
             - name: SPAWN_POINT
-              value: "(32,13,32,25,0)"
+              value: "(33,13,32,25,0)"
             - name: MAX_SESSIONS_IN_GS
               value: "3"
             - name: DEPLOY_NAME
               value: "craft"
             - name: SCALE_UP_COOLDOWN
               value: "60"
-          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221018175604-arm64v8-python2
+          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221026191724-arm64v8-python2
           imagePullPolicy: Always
           command: ["/start.sh"]
           readinessProbe:
@@ -87,5 +87,5 @@ spec:
                 command: ["/bin/sh", "-c", "kill $(ps aux | grep server.py| grep -v grep| awk '{print $2}') && sleep 120"]
           resources:
             requests:
-              cpu: 2048m
-              memory: 2048Mi
+              cpu: 1048m
+              memory: 1048Mi

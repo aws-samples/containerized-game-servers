@@ -7,7 +7,7 @@ echo "sqs exit code="$?
 if (( $?>0 ))
 then
   echo "ERR-SQS"
-  j=0.1
+  j=0
 else
   receipt_handle=`cat $sqs_file | jq '.Messages[].ReceiptHandle'|sed 's/"//g'`
   j=`cat $sqs_file | jq '.Messages[].Body'|sed 's/"//g'`
@@ -23,7 +23,7 @@ prev_clients=0
 prev_servers=0
 
 #simulator sine wave range. From $j to 3.14 in 0.1 increments
-_seq=`seq $j 0.021 3.14`
+_seq=`seq $j $RADIAN_INTERVAL $RADIAN_MAX`
 echo "first seq is "$_seq
 while true; do
 for i in $_seq; do
@@ -43,12 +43,12 @@ for i in $_seq; do
   echo "i=" $i
   aws sqs send-message --queue-url ${QUEUE_URL} --message-body "$i"
 
-  clients=`echo $(( sinx * 4 ))`
-  servers=`echo $(( sinx * 1/2 ))`
+  clients=`echo $(( sinx * 4 + $MIN_AT_CYCLE_START ))`
+  servers=`echo $(( sinx * 1/2 + $MIN_AT_CYCLE_START ))`
   deploys=`kubectl get deploy | grep $DEPLOY_PREFIX | awk '{print $1}'`
   for deploy in $deploys
   do
-   if [[ "$deploy" == "stknlb"* ]]; then
+   if [[ "$deploy" == "stksrv"* ]]; then
         kubectl scale deploy/$deploy --replicas=$servers
         aws cloudwatch put-metric-data --metric-name current_gameservers --namespace ${DEPLOY_NAME} --value ${servers}
         echo "gameservers="$servers" sinx="$sinx
@@ -67,6 +67,8 @@ for i in $_seq; do
   kubectl delete po `kubectl get po | egrep 'Evicted|CrashLoopBackOff|CreateContainerError|ExitCode|OOMKilled|RunContainerError'|awk '{print $1}'`
   sleep $sleeptime"m"
 done
-_seq=`seq 0.01 0.021 3.14`
+#longer cycle _seq=`seq 0.01 0.021 3.14`
+_seq=`seq $j $RADIAN_INTERVAL $RADIAN_MAX`
+#_seq=`seq 0.01 0.168 3.14`
 echo "new cycle "$_seq
 done

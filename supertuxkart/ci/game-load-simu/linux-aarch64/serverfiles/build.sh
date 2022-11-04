@@ -1,9 +1,8 @@
 #!/bin/bash
-  
 account=$(aws sts get-caller-identity --output text --query Account)
 region=us-west-2
 repo="game-load-simu"
-ver="latest"
+ver=$(date +'%Y%m%d%H%M%S')
 
 repo_name='.dkr.ecr.'$region'.amazonaws.com/'$repo':'$ver
 repo_url=$account$repo_name

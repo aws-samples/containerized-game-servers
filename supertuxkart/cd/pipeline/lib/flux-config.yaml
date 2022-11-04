@@ -1,0 +1,17 @@
+
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: ddosudpsimu-us-west-2
+  region: us-west-2
+gitops:
+  flux:
+    gitProvider: github      # required. options are github, gitlab or git
+    flags:                   # required. arbitrary map[string]string for all flux args.
+      owner: yahavb
+      repository: ddosudpsimu-us-west-2
+      branch: main
+      namespace: default
+      path: clusters/ddosudpsimu-us-west-2
+

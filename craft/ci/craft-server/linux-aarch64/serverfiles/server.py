@@ -19,6 +19,7 @@ import boto3
 import base64
 import psycopg2
 from botocore.exceptions import ClientError
+from datetime import datetime as dt
 
 cmd = "rm -rf /tmp/healthy"
 
@@ -536,12 +537,13 @@ class Model(object):
         if RECORD_HISTORY:
             self.execute(query, dict(timestamp=time.time(),
                 user_id=client.user_id, x=x, y=y, z=z, w=w))
+        
         query = (
             'insert or replace into block (p, q, x, y, z, w) '
-            'values (:p, :q, :x, :y, :z, :w);'
+            'values (:p,:q,:x,:y,:z,:w);'
         )
         #log('about to insert ',str(p)+' '+str(q)+' '+str(x)+' '+str(y)+' '+str(z)+' '+str(w))
-        self.execute(query, dict(p=p, q=q, x=x, y=y, z=z, w=w))
+        self.execute(query, dict(updated_at=dt.now(),p=p, q=q, x=x, y=y, z=z, w=w))
         self.send_block(client, p, q, x, y, z, w)
 
         sql_parameters = [
@@ -553,9 +555,10 @@ class Model(object):
             {'name':'w', 'value':{'doubleValue': w}},
         ]
         sql = 'insert into block (p, q, x, y, z, w) values (:p, :q, :x, :y, :z, :w) on conflict on constraint unique_block_pqxyz do UPDATE SET w = :w'
-        sql = """insert into block (p, q, x, y, z, w) values (%s,%s,%s,%s,%s,%s) on conflict on constraint unique_block_pqxyz do UPDATE SET w =%s"""
-        params=[p,q,x,y,z,w,w]
-        log('insert into block - p=%d,q=%d,x=%d,y=%d,z=%d,w=%d'%(p,q,x,y,z,w))
+        sql = """insert into block (updated_at,p, q, x, y, z, w) values (%s,%s,%s,%s,%s,%s,%s) on conflict on constraint unique_block_pqxyz do UPDATE SET w =%s"""
+        now=dt.now()
+        params=[now,p,q,x,y,z,w,w]
+        log('insert into block - updated_at=%s,p=%d,q=%d,x=%d,y=%d,z=%d,w=%d'%(now,p,q,x,y,z,w))
     #postgres_insert_query = """ INSERT INTO light (p,q,x,y,z,w) VALUES (%s,%s,%s,%s,%s,%s)"""
     #record_to_insert = (1,2,3,4,5,6)
         #response = execute_rds_statement(sql, sql_parameters)

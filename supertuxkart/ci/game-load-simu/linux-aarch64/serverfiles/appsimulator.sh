@@ -24,6 +24,7 @@ prev_servers=0
 
 #simulator sine wave range. From $j to 3.14 in 0.1 increments
 _seq=`seq $j $RADIAN_INTERVAL $RADIAN_MAX`
+#_seq=`seq 0.01 0.168 3.14`
 echo "first seq is "$_seq
 while true; do
 for i in $_seq; do

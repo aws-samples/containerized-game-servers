@@ -2,6 +2,7 @@ create SEQUENCE rowid_seq start 1;
 
 create table block (
   rowid bigint default nextval('public.rowid_seq'::regclass) primary key,
+  updated_at timestamp,
   p int not null,
   q int not null,
   x int not null,

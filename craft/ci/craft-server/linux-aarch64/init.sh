@@ -6,4 +6,4 @@ npm install aws-cdk-lib
 . ~/.bash_profile
 cdk bootstrap aws://$account/$region
 npm install
-cdk deploy --parameters gitRepoName=craft-server
+cdk deploy --parameters gitRepoName=apg-limitless-craft-server

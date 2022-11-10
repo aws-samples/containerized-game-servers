@@ -1,4 +1,4 @@
-FROM 095974399802.dkr.ecr.us-west-2.amazonaws.com/craft-base-image:arm64v8-python-2
+FROM arm64v8/python:2
 RUN apt-get update -y
 RUN apt-get install -y sqlite3 
 RUN apt-get install -y vim net-tools telnet

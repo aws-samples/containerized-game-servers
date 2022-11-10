@@ -1,4 +1,4 @@
-FROM public.ecr.aws/m2l1d0b2/arm64v8-python-2
+FROM public.ecr.aws/y4b6s6y1/arm64v8-python-2:latest
 RUN apt-get update -y
 RUN apt-get install -y sqlite3 
 RUN apt-get install -y vim net-tools telnet
@@ -9,9 +9,8 @@ ADD server.py /server.py
 ADD world.py /world.py
 ADD builder.py /builder.py
 RUN gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
+RUN pip install requests boto3 psycopg2
 
-#port packages to base-image
-#RUN pip install requests boto3 psycopg2
 #Install aws cli
 #RUN pip install awscli
 #RUN mkdir /root/.aws

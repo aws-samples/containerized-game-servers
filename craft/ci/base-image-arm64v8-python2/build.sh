@@ -6,7 +6,7 @@ repo="craft-base-image"
 priv_repo_name='.dkr.ecr.'$region'.amazonaws.com/'$repo':arm64v8-python-2'
 priv_repo_url=$account$repo_name
 
-pub_repo_url="public.ecr.aws/y4b6s6y1/arm64v8-python-2"
+pub_repo_url="public.ecr.aws/m2l1d0b2/arm64v8-python-2"
 aws ecr get-login-password --region $region | docker login --username AWS --password-stdin $priv_repo_url
 docker build -t $pub_repo_url .
 

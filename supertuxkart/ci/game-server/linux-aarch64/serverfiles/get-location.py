@@ -20,6 +20,7 @@ class StkLocation(Enum):
   useast2d=14
   useast2e=15
 
-t=str(StkLocation(random.randint(1,15)))
+#t=str(StkLocation(random.randint(1,15)))
+t=str(StkLocation(1))
 
 print(t.split(".",1)[1])

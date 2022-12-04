@@ -25,6 +25,7 @@ class StkTrack(Enum):
   stk_enterprise=19
   xr591=20
 
-t=str(StkTrack(random.randint(1,20)))
+#t=str(StkTrack(random.randint(1,20)))
+t=str(StkTrack(1))
 
 print(t.split(".",1)[1])

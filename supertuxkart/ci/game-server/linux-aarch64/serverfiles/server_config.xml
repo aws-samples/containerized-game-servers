@@ -86,7 +86,7 @@ limitations under the License.
     <official-tracks-threshold value="0.7" />
 
     <!-- Only auto start kart selection when number of connected player is larger than or equals this value, for owner less or ranked server, after start-game-counter reaches 0. -->
-    <min-start-game-players value="2" />
+    <min-start-game-players value="1" />
 
     <!-- Automatically end linear race game after 1st player finished for some time (currently his finished time * 0.25 + 15.0). -->
     <auto-end value="false" />
@@ -113,10 +113,10 @@ limitations under the License.
     <flag-deactivated-time value="3" />
 
     <!-- Hit limit of free for all, zero to disable hit limit. -->
-    <hit-limit value="20" />
+    <hit-limit value="0" />
 
     <!-- Time limit of free for all in seconds, zero to disable time limit. -->
-    <time-limit-ffa value="360" />
+    <time-limit-ffa value="0" />
 
     <!-- Capture limit of CTF, zero to disable capture limit. -->
     <capture-limit value="5" />

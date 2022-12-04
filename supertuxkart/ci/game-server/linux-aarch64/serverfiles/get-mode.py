@@ -14,5 +14,6 @@ class StkMode(Enum):
   freeforall=7
   capturetheflag=8
 
-m=str(StkMode(random.randint(0,8)))
+#m=str(StkMode(random.randint(0,8)))
+m=str(StkMode(0))
 print(m.split(".",1)[1])

@@ -1,9 +1,0 @@
--e .
-pytest
-
-aws-cdk.core
-aws-cdk.aws_autoscaling
-aws-cdk.aws_ec2
-
-# Work around for jsii#413
-aws-cdk.aws-autoscaling-common

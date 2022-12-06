@@ -196,7 +196,7 @@ class Client(object):
         else:
             raise Exception('Failed to authenticate.')
     def set_block(self, x, y, z, w):
-        time.sleep(0.1)
+        time.sleep(1)
         resp=self.conn.sendall('B,%d,%d,%d,%d\n' % (x,y,z,w))
         print("self.conn.sendall- %d,%d,%d,%d response=%s\n" % (x,y,z,w,resp)) 
         sys.stdout.flush()

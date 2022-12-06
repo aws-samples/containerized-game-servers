@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: craftwriter
+  name: craftwriter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: craftwriter
+  template:
+    metadata:
+      name: craftwriter
+      labels:
+        app: craftwriter
+    spec:
+      nodeSelector:
+        karpenter.sh/provisioner-name: craft
+      containers:
+        - name: craftwriter
+          envFrom:
+            - secretRef:
+                name: craft
+          env:
+          image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/craftci:20221008005435-arm64v8-python2
+          imagePullPolicy: Always
+          command: ["python","/writer.py"]
+          resources:
+            requests:
+              cpu: 256m
+              memory: 256Mi

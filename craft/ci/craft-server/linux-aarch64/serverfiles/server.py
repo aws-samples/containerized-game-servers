@@ -47,7 +47,7 @@ LOG_PATH = 'log.txt'
 CHUNK_SIZE = 32 
 #BUFFER_SIZE = 4096
 BUFFER_SIZE = int(os.environ['BUFFER_SIZE'])
-COMMIT_INTERVAL = 5
+COMMIT_INTERVAL = 1
 
 AUTH_REQUIRED = False
 AUTH_URL = 'https://craft.michaelfogleman.com/api/1/access'

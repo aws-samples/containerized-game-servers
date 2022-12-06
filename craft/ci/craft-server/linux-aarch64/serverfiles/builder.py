@@ -5,8 +5,10 @@ import requests
 import socket
 import sqlite3
 import sys
+import time
+import os
 
-DEFAULT_HOST = 'craft.yahav.sa.aws.dev'
+DEFAULT_HOST=os.environ['CRAFT_HOST']
 DEFAULT_PORT = 4080
 
 EMPTY = 0
@@ -161,6 +163,7 @@ class Client(object):
         resp=self.conn.sendall('B,%d,%d,%d,%d\n' % (x,y,z,w))
         print("self.conn.sendall- %d,%d,%d,%d response=%s\n" % (x,y,z,w,resp))
         sys.stdout.flush()
+        time.sleep(2)
     def set_blocks(self, blocks, w):
         key = lambda block: (block[1], block[0], block[2])
         for x, y, z in sorted(blocks, key=key):
@@ -248,4 +251,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    print("build world done")

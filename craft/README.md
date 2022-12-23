@@ -3,45 +3,97 @@
 We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. It is a python-based game server.
 
 ## Deploy steps
-### Create Aurora Serverless PostrgeSQL 
-* Obtain the Aurora cluster endpoint
 
-### Create the database schema
-* execute [create_db_schema.sql](./create_db_schema.sql)
-### Deploy the ECR docker registry 
-* Execute:
 ```bash
-./ecr-repos.sh
+export CLUSTER_NAME=craft-usw2
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 ```
-### Build the image
-* Execute:
-```
+
+TODO: automate public ecr repo create
+### Deploy the ECR docker registry 
+* create public ecr image and populate the `BASE_IMAGE_REPO` env
+```bash
+export BASE_IMAGE_REPO="public.ecr.aws/b1w9c8y8/arm64v8-python-3"
+cd ci/base-image-arm64v8-python3/
 ./build.sh
 ```
+* create the game image
+
+```bash
+cd ci/craft-server/serverfiles/
+./create-ecr.sh
+./build.sh
+```
+
+### Create EKS cluster
+```bash
+eksctl create cluster -f eks-cluster-spec.yml
+```
+
+### Deploy Karpenter
+Follow [karpenter install steps](https://karpenter.sh/v0.20.0/getting-started/getting-started-with-eksctl/)
+
+TODO: move from k8s-octo-pancake
+### Deploy container insights
+Follow [container insights deploy steps](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-EKS-quickstart.html)
+```bash
+./cd/deploy-container-insights.sh
+```
+
+TODO: move from k8s-octo-pancake
+### Deploy AWS LoadBalancer Controller
+Follow [aws-loadbalancer-controllers](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)
+```bash
+./cd/create-iamsa-aws-loadbalancer.sh
+./cd/helm-install-aws-loadbalancer.sh
+```
+
+### Create Aurora Serverless PostrgeSQL 
+Use https://github.com/aws-samples/amazon-aurora-call-to-amazon-sagemaker-sample/tree/master/multiplayer-matchmaker/aurora-pg-cdk
+* Obtain the Aurora cluster endpoint
+
+### Create IAM permissions for Craft
+
+* create iam service account
+```bash
+./craft-iamserviceaccount.sh  --override-existing-serviceaccounts
+```
+
+* create k8s service accounts (k8s rbac)
+```bash
+kubectl apply -f craft-role-sa.yaml 
+```
+
 ### Create a k8s database secret 
-* Edit `craft.secrets` with thr Aurora PostgreSQL endpoint
+Deploy the databse secrets. The CDK script that deployed the db also creates secrets in AWS Secrets Manager. We will deploy these secrets from Secrets Manager into the application pods.
+
+Install the secrets store CSI driver and AWS Secrets and Configuration Provider (ASCP):
 
 ```bash
-user=mypguser
-password=mypgpassword
-host=mypghost
-port=5432
-database=mypgdb
+helm repo add secrets-store-csi-driver \
+  https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+
+helm install -n kube-system csi-secrets-store \
+  --set syncSecret.enabled=true \
+  --set enableSecretRotation=true \
+  secrets-store-csi-driver/secrets-store-csi-driver
+
+kubectl apply -f https://raw.githubusercontent.com/aws/secrets-store-csi-driver-provider-aws/main/deployment/aws-provider-installer.yaml
 ```
-* Execute: 
+
+Create SecretProviderClass custom resource with `provider:aws`
 
 ```bash
-./create_secrets.sh
+export SECRET=`aws secretsmanager list-secrets --query SecretList[].Name --output text` 
+export SECRET_FILE="/mnt/secrets/$SECRET"
+cat db-secret-provider-class.yaml | envsubst | kubectl -f -
 ```
-### Deploy EKS components 
-* Deploy [cluster autoscaler](./cluster-autoscaler-autodiscover.yaml). Update the cluster name under `node-group-auto-discovery`
 
-* Deploy [aws-loadbalancer-controllers](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)
+### Create the database schema
+Deploy the k8s job [craft-initdb.yaml](./cd/craft-initdb.yaml)
 
-* Setup [Container Insights on the cluster](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/deploy-container-insights-EKS.html)
-
-### Populate the Aurora cluster and secret ARN in the game server pod spec
-* The service and deployment spec is [craft-deploy.yaml](./craft-deploy.yaml)
+### Deploy Craft 
+* The service and deployment spec is [craft-deploy.yaml](./cd/craft-deploy.yaml)
 * execute:
 ```bash
 kubectl apply -f craft-deploy.yaml
@@ -50,4 +102,4 @@ kubectl apply -f craft-deploy.yaml
 Wait for few minutes for the game server to start and registered as healthy in the NLB target groups. 
 
 ### Play the game
-Download the client binaries or compile it from https://github.com/fogleman/Craft
+Download the client binaries or compile it from https://github.com/yahavb/Craft

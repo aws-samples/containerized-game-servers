@@ -4,7 +4,7 @@ export PGDATABASE=`cat $SECRET_FILE | jq -r '.username'`
 export PGPASSWORD=`cat $SECRET_FILE | jq -r '.password'`
 export PGHOST=`cat $SECRET_FILE | jq -r '.host'`
 export PGPORT=`cat $SECRET_FILE | jq -r '.port'`
-
+touch /tmp/healthy
 cd craft
-./monitor_active_game_sessions.sh&
+#./monitor_active_game_sessions.sh&
 python server.py

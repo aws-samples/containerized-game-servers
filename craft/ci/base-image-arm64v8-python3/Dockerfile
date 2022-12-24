@@ -1,9 +1,9 @@
 FROM arm64v8/python:3
 RUN apt-get update -y --fix-missing
 RUN apt-get install -y sqlite3 
-RUN apt-get install -y vim net-tools telnet iproute2
+RUN apt-get install -y vim net-tools telnet iproute2 jq
 RUN /usr/local/bin/python -m pip install --upgrade pip
-RUN pip install requests boto3 psycopg2 jq
+RUN pip install requests boto3 psycopg2 urllib3 
 
 #Install aws cli
 RUN pip install awscli

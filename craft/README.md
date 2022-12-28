@@ -93,13 +93,35 @@ cat db-secret-provider-class.yaml | envsubst | kubectl -f -
 Deploy the k8s job [craft-initdb.yaml](./cd/craft-initdb.yaml)
 
 ### Deploy Craft 
-* The service and deployment spec is [craft-deploy.yaml](./cd/craft-deploy.yaml)
+* The service and deployment spec is [craft-deploy.yaml](https://github.com/yahavb/k8s-octo-pancake-config/blob/main/clusters/craft-usw2/default/craft-deploy-svc.yaml)
 * execute:
 ```bash
-kubectl apply -f craft-deploy.yaml
+kubectl apply -f craft/cd/craft-deploy-svc.yaml
 ```
 
 Wait for few minutes for the game server to start and registered as healthy in the NLB target groups. 
 
+### Deploy Craft auth service 
+Follow https://github.com/yahavb/craft-auth-disco
+
+
 ### Play the game
 Download the client binaries or compile it from https://github.com/yahavb/Craft
+
+Create a player user 
+```bash
+curl http://craft.auth.yahav.sa.aws.dev/auth/adduser/?username=yahavb
+```
+
+Generate token for the user
+```bash
+curl http://craft.auth.yahav.sa.aws.dev/auth/getoken/?username=yahavb
+```
+
+Use the token in the Craft game client 
+
+```
+/identity yahavb mytoken
+```
+
+Enjoy

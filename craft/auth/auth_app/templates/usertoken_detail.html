@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+        <div class="mw6 center pa3 sans-serif">
+
+            <h1 class="mb4">User Token: {{ usertoken.uuid | linebreaks }}</h1>
+            <h2 class="mb4">Created at: {{ usertoken.created_at | linebreaks }}</h2>
+            <h2 class="mb4">Updated at: {{ usertoken.updated_at | linebreaks }}</h2>
+            <h2 class="mb4">Username: {{ usertoken.username | linebreaks }}</h2>
+            <h3 class="mb4">execute: ./craft craft.yahav.sa.aws.dev 4080</h3>
+            <h3 class="mb4">in the game prompt: /identity {{ usertoken.username}} {{ usertoken.uuid }} </h3>
+
+        </div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+        <div class="mw6 center pa3 sans-serif">
+
+            <h1 class="mb4">User: {{ user.uuid | linebreaks }}</h1>
+            <h2 class="mb4">Created at: {{ user.created_at | linebreaks }}</h2>
+            <h2 class="mb4">Updated at: {{ user.updated_at | linebreaks }}</h2>
+            <h2 class="mb4">Username: {{ user.username | linebreaks }}</h2>
+
+        </div>
+
+{% endblock %}

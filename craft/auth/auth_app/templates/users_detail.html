@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+      <div class="mw6 center pa3 sans-serif">
+         <h1 class="mb4">Craft users</h1>
+      </div>
+
+        {% for user in users %}
+            <p class="mb4">User: {{ user.uuid }} Created at: {{ user.created_at }} Updated at: {{ user.updated_at }} Username: {{ user.username }}</p>
+        {% endfor %}
+
+{% endblock %}

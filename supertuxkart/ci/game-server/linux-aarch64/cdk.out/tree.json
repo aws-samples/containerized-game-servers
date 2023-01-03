@@ -21,7 +21,7 @@
             "path": "StkMatchPipelineStack/gitRepoName",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
-              "version": "2.28.1"
+              "version": "2.50.0"
             }
           },
           "baseImageVersion": {
@@ -29,7 +29,7 @@
             "path": "StkMatchPipelineStack/baseImageVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
-              "version": "2.28.1"
+              "version": "2.50.0"
             }
           },
           "ecrRepoName": {
@@ -37,7 +37,7 @@
             "path": "StkMatchPipelineStack/ecrRepoName",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
-              "version": "2.28.1"
+              "version": "2.50.0"
             }
           },
           "gitRepo": {
@@ -53,7 +53,7 @@
                     "path": "StkMatchPipelineStack/gitRepo/PathResolvedCodeAsset/Stage",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.AssetStaging",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   },
                   "AssetBucket": {
@@ -61,13 +61,13 @@
                     "path": "StkMatchPipelineStack/gitRepo/PathResolvedCodeAsset/AssetBucket",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "Resource": {
@@ -82,8 +82,8 @@
                     "code": {
                       "branchName": "main",
                       "s3": {
-                        "bucket": "cdk-hnb659fds-assets-742301976366-us-east-2",
-                        "key": "63591f8e9a0298c5acb7598434b0faf9d9c1d787ddc728e495fe3c001dfb1db2.zip"
+                        "bucket": "cdk-hnb659fds-assets-441218111557-us-west-2",
+                        "key": "b70790410ee63c1dc976c441494d1530061f843622c3dc73d2411c8af6b9b115.zip"
                       }
                     },
                     "repositoryDescription": "New repository for demo project."
@@ -91,7 +91,7 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_codecommit.CfnRepository",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "StkMatchPipelineStackcontainerPipeline49702885-main-EventRule": {
@@ -141,7 +141,7 @@
                                   {
                                     "Ref": "AWS::Partition"
                                   },
-                                  ":codepipeline:us-east-2:742301976366:",
+                                  ":codepipeline:us-west-2:441218111557:",
                                   {
                                     "Ref": "containerPipelineE427408B"
                                   }
@@ -160,19 +160,19 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_events.CfnRule",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_events.Rule",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_codecommit.Repository",
-              "version": "2.28.1"
+              "version": "2.50.0"
             }
           },
           "game-servers": {
@@ -195,13 +195,13 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_ecr.CfnRepository",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_ecr.Repository",
-              "version": "2.28.1"
+              "version": "2.50.0"
             }
           },
           "codeBuildDeployRole": {
@@ -231,7 +231,7 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "DefaultPolicy": {
@@ -267,7 +267,7 @@
                                       {
                                         "Ref": "AWS::Partition"
                                       },
-                                      ":logs:us-east-2:742301976366:log-group:/aws/codebuild/",
+                                      ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
                                       {
                                         "Ref": "STKgameServerDockerBuild16674040"
                                       }
@@ -282,7 +282,7 @@
                                       {
                                         "Ref": "AWS::Partition"
                                       },
-                                      ":logs:us-east-2:742301976366:log-group:/aws/codebuild/",
+                                      ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
                                       {
                                         "Ref": "STKgameServerDockerBuild16674040"
                                       },
@@ -309,7 +309,7 @@
                                     {
                                       "Ref": "AWS::Partition"
                                     },
-                                    ":codebuild:us-east-2:742301976366:report-group/",
+                                    ":codebuild:us-west-2:441218111557:report-group/",
                                     {
                                       "Ref": "STKgameServerDockerBuild16674040"
                                     },
@@ -423,19 +423,19 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_iam.Policy",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_iam.Role",
-              "version": "2.28.1"
+              "version": "2.50.0"
             }
           },
           "STKgameServerDockerBuild": {
@@ -470,15 +470,15 @@
                         "Fn::Join": [
                           "",
                           [
-                            "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"TAG=$(date +'%Y%m%d%H%M%S')\",\n        \"docker build -t 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
+                            "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"TAG=$(date +'%Y%m%d%H%M%S')\",\n        \"docker build -t 441218111557.dkr.ecr.us-west-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
-                            ":$TAG .\",\n        \"aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
+                            ":$TAG .\",\n        \"aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 441218111557.dkr.ecr.us-west-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
-                            "\",\n        \"docker push 742301976366.dkr.ecr.us-east-2.amazonaws.com/",
+                            "\",\n        \"docker push 441218111557.dkr.ecr.us-west-2.amazonaws.com/",
                             {
                               "Ref": "gameservers96C3BF90"
                             },
@@ -500,13 +500,13 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_codebuild.Project",
-              "version": "2.28.1"
+              "version": "2.50.0"
             }
           },
           "containerPipeline": {
@@ -537,7 +537,7 @@
                                       {
                                         "Ref": "AWS::Partition"
                                       },
-                                      ":iam::742301976366:root"
+                                      ":iam::441218111557:root"
                                     ]
                                   ]
                                 }
@@ -551,13 +551,13 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_kms.CfnKey",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_kms.Key",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "ArtifactsBucketEncryptionKeyAlias": {
@@ -581,13 +581,13 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_kms.CfnAlias",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_kms.Alias",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "ArtifactsBucket": {
@@ -625,7 +625,7 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   },
                   "Policy": {
@@ -684,19 +684,19 @@
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
-                          "version": "2.28.1"
+                          "version": "2.50.0"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_s3.Bucket",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "Role": {
@@ -725,7 +725,7 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   },
                   "DefaultPolicy": {
@@ -826,19 +826,19 @@
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                          "version": "2.28.1"
+                          "version": "2.50.0"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.Policy",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "Resource": {
@@ -941,7 +941,7 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_codepipeline.CfnPipeline",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "Source": {
@@ -976,7 +976,7 @@
                                               {
                                                 "Ref": "AWS::Partition"
                                               },
-                                              ":iam::742301976366:root"
+                                              ":iam::441218111557:root"
                                             ]
                                           ]
                                         }
@@ -989,7 +989,7 @@
                             },
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                              "version": "2.28.1"
+                              "version": "2.50.0"
                             }
                           },
                           "DefaultPolicy": {
@@ -1086,19 +1086,19 @@
                                 },
                                 "constructInfo": {
                                   "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                                  "version": "2.28.1"
+                                  "version": "2.50.0"
                                 }
                               }
                             },
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.aws_iam.Policy",
-                              "version": "2.28.1"
+                              "version": "2.50.0"
                             }
                           }
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_iam.Role",
-                          "version": "2.28.1"
+                          "version": "2.50.0"
                         }
                       }
                     },
@@ -1139,7 +1139,7 @@
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   },
                   "DefaultPolicy": {
@@ -1165,7 +1165,7 @@
                                         {
                                           "Ref": "AWS::Partition"
                                         },
-                                        ":codepipeline:us-east-2:742301976366:",
+                                        ":codepipeline:us-west-2:441218111557:",
                                         {
                                           "Ref": "containerPipelineE427408B"
                                         }
@@ -1186,19 +1186,19 @@
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                          "version": "2.28.1"
+                          "version": "2.50.0"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_iam.Policy",
-                      "version": "2.28.1"
+                      "version": "2.50.0"
                     }
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               },
               "DockerBuild": {
@@ -1233,7 +1233,7 @@
                                               {
                                                 "Ref": "AWS::Partition"
                                               },
-                                              ":iam::742301976366:root"
+                                              ":iam::441218111557:root"
                                             ]
                                           ]
                                         }
@@ -1246,7 +1246,7 @@
                             },
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                              "version": "2.28.1"
+                              "version": "2.50.0"
                             }
                           },
                           "DefaultPolicy": {
@@ -1288,19 +1288,19 @@
                                 },
                                 "constructInfo": {
                                   "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                                  "version": "2.28.1"
+                                  "version": "2.50.0"
                                 }
                               }
                             },
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.aws_iam.Policy",
-                              "version": "2.28.1"
+                              "version": "2.50.0"
                             }
                           }
                         },
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.aws_iam.Role",
-                          "version": "2.28.1"
+                          "version": "2.50.0"
                         }
                       }
                     },
@@ -1318,7 +1318,7 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_codepipeline.Pipeline",
-              "version": "2.28.1"
+              "version": "2.50.0"
             }
           },
           "CDKMetadata": {
@@ -1330,7 +1330,7 @@
                 "path": "StkMatchPipelineStack/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
-                  "version": "2.28.1"
+                  "version": "2.50.0"
                 }
               }
             },
@@ -1342,13 +1342,13 @@
         },
         "constructInfo": {
           "fqn": "aws-cdk-lib.Stack",
-          "version": "2.28.1"
+          "version": "2.50.0"
         }
       }
     },
     "constructInfo": {
       "fqn": "aws-cdk-lib.App",
-      "version": "2.28.1"
+      "version": "2.50.0"
     }
   }
 }

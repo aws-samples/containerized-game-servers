@@ -25,8 +25,7 @@ cd ./base-image-arm64v8-python3/src
 
 * create the registry for game image
 ```bash
-cd ../../
-cd ./craft-image/src/
+cd ../../craft-image/src/
 ./create-ecr.sh
 ./build.sh
 ```

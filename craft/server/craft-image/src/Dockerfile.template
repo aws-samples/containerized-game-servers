@@ -1,0 +1,15 @@
+FROM $BASE_IMAGE_REPO
+
+ARG GITHUB_CRAFT_BRANCH
+ENV GITHUB_CRAFT_BRANCH=$GITHUB_CRAFT_BRANCH
+
+ARG GITHUB_CRAFT
+ENV GITHUB_CRAFT=$GITHUB_CRAFT
+
+RUN git clone $GITHUB_CRAFT --branch $GITHUB_CRAFT_BRANCH craft && \
+    cd ./craft && \
+    gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
+ADD start.sh /start.sh
+ADD initdb.sh /initdb.sh
+ADD monitor_active_game_sessions.sh /craft/monitor_active_game_sessions.sh
+ADD release_gs.sh /craft/release_gs.sh

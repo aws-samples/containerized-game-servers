@@ -1,26 +1,32 @@
 # A sandbox stateful multiplayer video game 
 
-We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. It is a python-based game server.
+We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. It is a CPP game with python3-based game server.
 
 ## Deploy steps
 
 ```bash
-export CLUSTER_NAME=craft-usw2
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
+export AWS_REGION=us-west-2
+export BASE_IMAGE=baseimage
+export BASE_IMAGE_TAG=arm64v8-python3
+export GAME_IMAGE=craft
+export GAME_IMAGE_TAG=arm64py3
+export GITHUB_CRAFT="https://github.com/yahavb/Craft.git"
+export GITHUB_CRAFT_BRANCH=master
 ```
 
-TODO: automate public ecr repo create
-### Deploy the ECR docker registry 
-* create public ecr image and populate the `BASE_IMAGE_REPO` env
+### Create and deploy the ECR docker registry and images for base image and game image
+* create image registry for the base image
 ```bash
-export BASE_IMAGE_REPO="public.ecr.aws/b1w9c8y8/arm64v8-python-3"
-cd ci/base-image-arm64v8-python3/
+cd ./base-image-arm64v8-python3/src
+./create-ecr.sh
 ./build.sh
 ```
-* create the game image
 
+* create the registry for game image
 ```bash
-cd ci/craft-server/serverfiles/
+cd ../../
+cd ./craft-image/src/
 ./create-ecr.sh
 ./build.sh
 ```

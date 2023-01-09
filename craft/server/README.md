@@ -1,6 +1,6 @@
 # A sandbox stateful multiplayer video game 
 
-We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. It is a CPP game with python3-based game server.
+We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. A simple Minecraft clone written in C using modern OpenGL (shaders)
 
 ## Deploy steps
 
@@ -13,6 +13,9 @@ export GAME_IMAGE=craft
 export GAME_IMAGE_TAG=arm64py3
 export GITHUB_CRAFT="https://github.com/yahavb/Craft.git"
 export GITHUB_CRAFT_BRANCH=master
+export INSTANCE_FAMILY=t4g
+export INSTANCE_ARCH=arm
+export CLUSTER_NAME=craft-usw1
 ```
 
 ### Create and deploy the ECR docker registry and images for base image and game image
@@ -32,25 +35,71 @@ cd ../../craft-image/src/
 
 ### Create EKS cluster
 ```bash
+cat <<-EOF > eks-cluster-spec.yml
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: ${CLUSTER_NAME}
+  region: ${AWS_REGION}
+  version: "1.23"
+  tags:
+    karpenter.sh/discovery: ${CLUSTER_NAME}
+managedNodeGroups:
+  - instanceType: ${INSTANCE_FAMILY}.large
+    amiFamily: AmazonLinux2
+    name: ${CLUSTER_NAME}-ng
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 10
+iam:
+  withOIDC: true
+addons:
+- name: vpc-cni
+  attachPolicyARNs:
+    - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+EOF
+
 eksctl create cluster -f eks-cluster-spec.yml
+```
+
+### Deploy Agones - Optional 
+```bash
+helm upgrade agones agones/agones --namespace agones-system --install --wait --create-namespace \
+    --set agones.featureGates=PlayerTracking=true
 ```
 
 ### Deploy Karpenter
 Follow [karpenter install steps](https://karpenter.sh/v0.20.0/getting-started/getting-started-with-eksctl/)
 
-TODO: move from k8s-octo-pancake
 ### Deploy container insights
 Follow [container insights deploy steps](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-EKS-quickstart.html)
 ```bash
-./cd/deploy-container-insights.sh
+ClusterName=${CLUSTER_NAME}
+RegionName=${AWS_REGION}
+FluentBitHttpPort='2020'
+FluentBitReadFromHead='Off'
+[[ ${FluentBitReadFromHead} = 'On' ]] && FluentBitReadFromTail='Off'|| FluentBitReadFromTail='On'
+[[ -z ${FluentBitHttpPort} ]] && FluentBitHttpServer='Off' || FluentBitHttpServer='On'
+curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluent-bit-quickstart.yaml | sed 's/{{cluster_name}}/'${ClusterName}'/;s/{{region_name}}/'${RegionName}'/;s/{{http_server_toggle}}/"'${FluentBitHttpServer}'"/;s/{{http_server_port}}/"'${FluentBitHttpPort}'"/;s/{{read_from_head}}/"'${FluentBitReadFromHead}'"/;s/{{read_from_tail}}/"'${FluentBitReadFromTail}'"/' | kubectl apply -f -
 ```
 
-TODO: move from k8s-octo-pancake
 ### Deploy AWS LoadBalancer Controller
 Follow [aws-loadbalancer-controllers](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)
 ```bash
-./cd/create-iamsa-aws-loadbalancer.sh
-./cd/helm-install-aws-loadbalancer.sh
+eksctl create iamserviceaccount \
+  --cluster=${CLUSTER_NAME} \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name "AmazonEKSLoadBalancerControllerRole" \
+  --attach-policy-arn=arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=${CLUSTER_NAME} \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
 ```
 
 ### Create Aurora Serverless PostrgeSQL 
@@ -61,7 +110,18 @@ Use https://github.com/aws-samples/amazon-aurora-call-to-amazon-sagemaker-sample
 
 * create iam service account
 ```bash
-./craft-iamserviceaccount.sh  --override-existing-serviceaccounts
+aws iam create-policy \
+    --policy-name craftIAMPolicy \
+    --policy-document file://craft_iam_policy.json
+
+eksctl create iamserviceaccount \
+  --cluster=${CLUSTER_NAME} \
+  --namespace=default \
+  --name=adaptivecraft \
+  --role-name "CraftRole" \
+  --attach-policy-arn=arn:aws:iam::${AWS_ACCOUNT_ID}:policy/craftIAMPolicy \
+  --approve
+  --override-existing-serviceaccounts
 ```
 
 * create k8s service accounts (k8s rbac)
@@ -95,19 +155,20 @@ cat db-secret-provider-class.yaml | envsubst | kubectl -f -
 ```
 
 ### Create the database schema
-Deploy the k8s job [craft-initdb.yaml](./cd/craft-initdb.yaml)
+Deploy the k8s job [craft-initdb.yaml](https://github.com/yahavb/k8s-octo-pancake-config/blob/main/clusters/craft-usw2/default/craft-initdb.yaml)
+Note - need to modify account names and secrets
 
 ### Deploy Craft 
 * The service and deployment spec is [craft-deploy.yaml](https://github.com/yahavb/k8s-octo-pancake-config/blob/main/clusters/craft-usw2/default/craft-deploy-svc.yaml)
-* execute:
+* copy and modify the account details and execute:
 ```bash
-kubectl apply -f craft/cd/craft-deploy-svc.yaml
+kubectl apply -f craft-deploy-svc.yaml
 ```
 
 Wait for few minutes for the game server to start and registered as healthy in the NLB target groups. 
 
 ### Deploy Craft auth service 
-Follow https://github.com/yahavb/craft-auth-disco
+Follow [auth](../auth)
 
 
 ### Play the game

@@ -13,7 +13,6 @@ psql -A -q -t -w -c "
 "
 echo "psql exit code="$?
 
-
 max_sessions_per_game_server=$MAX_SESSIONS_IN_GS
 cooldown_after_scale_up=$SCALE_UP_COOLDOWN
 is_cooled_down=0
@@ -22,6 +21,10 @@ do
   current_num_of_game_servers=$(kubectl get fleet $DEPLOY_NAME | grep -v NAME | awk '{print $4}')
   num_of_active_sessions=$(netstat -anp | grep $(/sbin/ip addr| grep inet | grep -v inet6| grep -v 127.0.0.1| awk '{print $2}'| awk -F\/ '{print $1}') | grep 4080 | grep ESTABLISHED| wc -l)
   echo `date` num_of_active_sessions=$num_of_active_sessions num_of_game_servers=$current_num_of_game_servers
+  if (( $num_of_active_sessions == 0 ))
+  then
+    curl -s -d "{}" -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/ready
+  fi
   if (( $num_of_active_sessions >= $max_sessions_per_game_server ))
   then
     if (( $is_cooled_down == 0 ))

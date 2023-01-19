@@ -1,4 +1,4 @@
-Name: craft-containerized-game-server-e2e
+Name: craft-containerized-gameserver-e2e
 SchemaVersion: "1.0"
 
 # Optional - Set automatic triggers.
@@ -9,3 +9,29 @@ Triggers:
 
 # Required - Define action configurations.
 Actions:
+  EnvVariables_59:
+    # Identifies the action. Do not modify this value.
+    Identifier: aws/build@v1
+
+    # Specifies the source and/or artifacts to pass to the action as input.
+    Inputs:
+      # Optional
+      Sources:
+        - WorkflowSource # This specifies that the action requires this Workflow as a source
+
+    Outputs:
+      # Optional; Automatically discover reports for popular test frameworks
+      AutoDiscoverReports:
+        Enabled: true
+        # Use as prefix for the report files
+        ReportNamePrefix: rpt
+
+    # Defines the action's properties.
+    Configuration:
+      # Required - Steps are sequential instructions that run shell commands
+      Steps:
+        - Run: echo "Hello, World!"
+        - Run: echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" >> report.xml
+        - Run: echo "<testsuite tests=\"1\" name=\"TestAgentJunit\" >" >> report.xml
+        - Run: echo "<testcase classname=\"TestAgentJunit\" name=\"Dummy
+            Test\"/></testsuite>" >> report.xml

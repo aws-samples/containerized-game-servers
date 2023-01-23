@@ -1,4 +1,4 @@
-FROM 953892292675.dkr.ecr.us-west-2.amazonaws.com/baseimage:arm64v8-python3
+FROM 953892292675.dkr.ecr.us-west-2.amazonaws.com/baseimage:multiarch-python3
 
 ARG GITHUB_CRAFT_BRANCH
 ENV GITHUB_CRAFT_BRANCH=master

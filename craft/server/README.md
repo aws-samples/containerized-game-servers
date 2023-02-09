@@ -8,20 +8,23 @@ We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. A simp
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=us-west-2
 export BASE_IMAGE=baseimage
-export BASE_IMAGE_TAG=arm64v8-python3
+export BASE_IMAGE_TAG=multiarch-py3
 export GAME_IMAGE=craft
-export GAME_IMAGE_TAG=arm64py3
+export GAME_IMAGE_TAG=multiarch-py3
 export GITHUB_CRAFT="https://github.com/yahavb/Craft.git"
 export GITHUB_CRAFT_BRANCH=master
 export INSTANCE_FAMILY=t4g
-export INSTANCE_ARCH=arm
 export CLUSTER_NAME=craft-usw1
+```
+### Enable multi-arch builds (linux/arm64 and linux/amd64)
+```bash
+docker buildx create --name craftbuilder
 ```
 
 ### Create and deploy the ECR docker registry and images for base image and game image
 * create image registry for the base image
 ```bash
-cd ./base-image-arm64v8-python3/src
+cd ./base-image-multiarch-python3/src
 ./create-ecr.sh
 ./build.sh
 ```

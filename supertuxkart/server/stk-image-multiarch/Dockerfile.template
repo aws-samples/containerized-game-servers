@@ -1,0 +1,18 @@
+FROM $BASE_IMAGE_REPO
+ARG SVN_STK
+ENV SVN_STK=$SVN_STK
+RUN svn cleanup $SVN_STK
+RUN svn checkout $SVN_STK stk-assets
+
+ARG GITHUB_STK_BRANCH
+ENV GITHUB_STK_BRANCH=$GITHUB_STK_BRANCH
+
+ARG GITHUB_STK
+ENV GITHUB_STK=$GITHUB_STK
+
+RUN git clone $GITHUB_STK stk-code --branch $GITHUB_STK_BRANCH && \
+    cd stk-code && \
+    mkdir cmake_build && \
+    cmake ../stk-code -B ./cmake_build -DSERVER_ONLY=ON && \
+    cd cmake_build && \
+    make -j$(nproc) -f ./Makefile install

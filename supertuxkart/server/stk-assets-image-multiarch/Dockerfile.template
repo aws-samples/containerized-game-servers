@@ -1,0 +1,4 @@
+FROM $BASE_IMAGE
+ARG SVN_STK
+ENV SVN_STK=$SVN_STK
+RUN svn co $SVN_STK stk-assets

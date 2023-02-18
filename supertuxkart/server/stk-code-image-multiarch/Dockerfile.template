@@ -19,3 +19,5 @@ RUN git clone $GITHUB_STK stk-code --branch $GITHUB_STK_BRANCH && \
     cmake ../stk-code -B ./cmake_build -DSERVER_ONLY=ON && \
     cd cmake_build && \
     make -j$(nproc) -f ./Makefile install
+
+COPY . .

@@ -194,3 +194,9 @@ Use the token in the Craft game client
 ```
 
 Enjoy
+
+
+### Scale the game server with HPA
+
+[Install the Kubernetes Metrics Server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
+

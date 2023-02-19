@@ -11,7 +11,7 @@ Below is the sequence of execution steps for building a game docker image that r
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=us-west-2
 export CODE_COMMIT_REPO=stkci
-export BASE_REPO=baseimageci
+export BASE_REPO=baseimage
 export BASE_IMAGE_TAG=multiarch-py3
 export GAME_REPO=stkci
 export GAME_ASSETS_TAG=stk-assets-multiarch

@@ -1,0 +1,21 @@
+FROM $BASE_IMAGE AS stk_base
+
+ARG GITHUB_STK
+ENV GITHUB_STK=$GITHUB_STK
+
+ARG GITHUB_STK_BRANCH
+ENV GITHUB_STK_BRANCH=$GITHUB_STK_BRANCH
+
+FROM $GAME_ASSETS_IMAGE AS stk_assets
+
+FROM stk_base AS stk_code
+COPY --from=1 /stk-assets /stk-assets
+
+RUN git clone $GITHUB_STK stk-code --branch $GITHUB_STK_BRANCH && \
+    cd stk-code && \
+    mkdir cmake_build && \
+    cmake ../stk-code -B ./cmake_build -DSERVER_ONLY=ON && \
+    cd cmake_build && \
+    make -j$(nproc) -f ./Makefile install
+
+COPY . .

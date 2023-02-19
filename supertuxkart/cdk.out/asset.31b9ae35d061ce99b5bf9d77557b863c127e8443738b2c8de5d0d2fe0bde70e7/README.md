@@ -10,10 +10,10 @@ Below is the sequence of execution steps for building a game docker image that r
 ```bash
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=us-west-2
-export CODE_COMMIT_REPO=stkci
-export BASE_REPO=baseimageci
+export CODE_COMMIT_REPO=stk
+export BASE_REPO=baseimage
 export BASE_IMAGE_TAG=multiarch-py3
-export GAME_REPO=stkci
+export GAME_REPO=stk
 export GAME_ASSETS_TAG=stk-assets-multiarch
 export GAME_CODE_TAG=stk-code-multiarch
 export GAME_SERVER_TAG=stk-server-multiarch

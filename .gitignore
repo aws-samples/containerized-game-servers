@@ -5,3 +5,4 @@ cdk.out/*
 node_modules
 */package.json
 *.secrets
+*package-lock.json

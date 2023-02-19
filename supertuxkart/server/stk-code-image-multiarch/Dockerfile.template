@@ -7,8 +7,6 @@ ARG GITHUB_STK_BRANCH
 ENV GITHUB_STK_BRANCH=$GITHUB_STK_BRANCH
 
 FROM $GAME_ASSETS_IMAGE AS stk_assets
-RUN pwd
-RUN ls -ltra
 
 FROM stk_base AS stk_code
 COPY --from=1 /stk-assets /stk-assets

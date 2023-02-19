@@ -2,8 +2,8 @@
 
 We use the [Supertuxkart](https://supertuxkart.net/) game. SuperTuxKart is a free kart racing game. It focuses on fun and not on realistic kart physics. 
 
-## Deploy steps
-Below is the sequence of execution steps for building a game docker image that runs on ARM64 and AMD64 CPU arch.
+## Manual deploy steps
+Below is the sequence of manual execution steps for building a game docker image that runs on ARM64 and AMD64 CPU arch.We also offer automation with CodePipeline and CodeBuild in the next section
 
 1/ Populate the following enviroment variables. 
 
@@ -31,7 +31,7 @@ export CLUSTER_NAME=ddosudpsimu-us-west-2
 This is the image that includes the generic tools and libraries needed for the game. We used CPU architecture agnostic packages to allow dynamic compile and linkage to local architecture. The persona that most interested in this build is the IT/Devops that optimizes for stability and security
 
 ```bash
-cd ./base-image-multiarch-python3
+cd ./server/base-image-multiarch-python3
 ./build.sh
 ```
 
@@ -40,7 +40,7 @@ cd ./base-image-multiarch-python3
 This is the game images, video, and audio files. The persona that owns this step is the game artist. The media files (audio, images, and videos) can be stored on storage solutions such as SVN and S3. The original location for STK is https://github.com/supertuxkart/stk-assets-mobile/releases/download/git/stk-assets-full.zip but we copied it to S3 and broke it into 256MB pieces to allow optimized Docker layer cache.
 
 ```bash
-cd ./stk-assets-image-multiarch
+cd ./server/stk-assets-image-multiarch
 ./build.sh
 ```
 
@@ -49,7 +49,7 @@ cd ./stk-assets-image-multiarch
 Build the game executables. The persona that owns this is the game developer.
 
 ```bash
-cd ./stk-code-image-multiarch
+cd ./server/stk-code-image-multiarch
 ./build.sh
 ```
 
@@ -58,6 +58,12 @@ cd ./stk-code-image-multiarch
 This is the game governance piece. It includes the scripts the controls the game lifecycle and the game ecosystem like matchmaking, leaderboard, and messaging applications. The persona that owns this step is the game live/devops team that operates the game.
 
 ```bash
-cd ./stk-game-server-image-multiarch
+cd ./server/stk-game-server-image-multiarch
 ./build.sh
+```
+## Automated deploy steps
+The following will create a CodePipline that copy the build scripts in `server/` folder into a CodeCommit repository and run the steps above in a separate CodeBuild jobs.
+
+```bash
+./init-pipeline.sh
 ```

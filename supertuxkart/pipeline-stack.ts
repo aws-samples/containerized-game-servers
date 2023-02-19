@@ -131,7 +131,7 @@ export class StkPipelineStack extends Stack {
         phases: {
           build: {
             commands: [
-              `chmod +x ./enable-buildx.sh && ./enable-buildx.sh`,
+              //`chmod +x ./enable-buildx.sh && ./enable-buildx.sh`,
               `export AWS_ACCOUNT_ID="${this.account}"`,
               `export AWS_REGION="${this.region}"`,
               `export BASE_REPO="${BASE_REPO.valueAsString}"`,
@@ -167,7 +167,7 @@ export class StkPipelineStack extends Stack {
         phases: {
           build: {
             commands: [
-              `chmod +x ./enable-buildx.sh && ./enable-buildx.sh`,
+              //`chmod +x ./enable-buildx.sh && ./enable-buildx.sh`,
               `export AWS_ACCOUNT_ID="${this.account}"`,
               `export AWS_REGION="${this.region}"`,
               `export GAME_REPO="${GAME_REPO.valueAsString}"`,

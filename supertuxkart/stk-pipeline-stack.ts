@@ -67,7 +67,7 @@ export class StkPipelineStack extends Stack {
               `chmod +x ./enable-buildx.sh && ./enable-buildx.sh`,
               `export AWS_ACCOUNT_ID="${this.account}"`,
               `export AWS_REGION="${this.region}"`,
-              `export BUILX_VER="${BUILX_VER.valueAsString}"`,
+              `export BUILDX_VER="${BUILDX_VER.valueAsString}"`,
               `export BASE_REPO="${BASE_REPO.valueAsString}"`,
               `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
               `export GAME_REPO="${GAME_REPO.valueAsString}"`,
@@ -249,7 +249,7 @@ export class StkPipelineStack extends Stack {
        actions: [
        new codepipeline_actions.CodeCommitSourceAction({
          actionName: 'CodeCommit_Source',
-         repository: repo,
+         repository: gitrepo,
          output: sourceOuput,
          branch: 'main'
        }),

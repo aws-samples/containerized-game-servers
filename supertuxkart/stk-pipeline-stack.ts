@@ -3,6 +3,7 @@ import { Construct } from 'constructs'
 import * as codecommit from 'aws-cdk-lib/aws-codecommit';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
+import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -242,70 +243,68 @@ export class StkPipelineStack extends Stack {
   // here we define our pipeline and put together the assembly line
   // using each of the components we created earlier
   const sourceOuput = new codepipeline.Artifact();
-  const pipeline = new codepipeline.Pipeline(this,`STKPipeline`, {
-    stages: [
-     {
-       stageName: 'Source',
-       actions: [
-       new codepipeline_actions.CodeCommitSourceAction({
-         actionName: 'CodeCommit_Source',
-         repository: gitrepo,
-         output: sourceOuput,
-         branch: 'main'
-       }),
-       ]
-     },
-     {
-       stageName: 'STKAssetsImageBuild',
-       actions: [
-       new codepipeline_actions.CodeBuildAction({
-         actionName: 'Build_Code',
-         input: sourceOuput,
-         project: stk_assets_image_build
-       }),
-       ]
-     },
-     {
-       stageName: 'STKCodeARMImageBuild',
-       actions: [
-       new codepipeline_actions.CodeBuildAction({
-         actionName: 'Build_Code',
-         input: sourceOuput,
-         project: stk_code_image_arm_build
-       }),
-       ]
-     },
-     {
-       stageName: 'STKCodeAMDImageBuild',
-       actions: [
-       new codepipeline_actions.CodeBuildAction({
-         actionName: 'Build_Code',
-         input: sourceOuput,
-         project: stk_code_image_amd_build
-       }),
-       ]
-     },
-     {
-       stageName: 'STKCodeImageMultiarchAssembly',
-       actions: [
-       new codepipeline_actions.CodeBuildAction({
-         actionName: 'Build_Code',
-         input: sourceOuput,
-         project: stk_code_image_assembly
-       }),
-       ]
-     },
-     {
-       stageName: 'STKGameImageBuild',
-       actions: [
-       new codepipeline_actions.CodeBuildAction({
-         actionName: 'Build_Code',
-         input: sourceOuput,
-         project: stk_game_image_build
-       }),
-       ]
-     }
-    ]
-    });
+  
+  const pipeline = new codepipeline.Pipeline(this,`STKPipeline`);
+  pipeline.addStage({
+      stageName: 'Source',
+      actions: [
+      new codepipeline_actions.CodeCommitSourceAction({
+        actionName: 'CodeCommit_Source',
+        repository: gitrepo,
+        output: sourceOuput,
+        branch: 'main'
+      }),
+      ]
+  });
+  pipeline.addStage({
+      stageName: 'STKAssetsImageBuild',
+      actions: [
+      new codepipeline_actions.CodeBuildAction({
+        actionName: 'Build_Code',
+        input: sourceOuput,
+        project: stk_assets_image_build
+      }),
+      ]
+  });
+  pipeline.addStage({
+      stageName: 'STKCodeARMImageBuild',
+      actions: [
+      new codepipeline_actions.CodeBuildAction({
+        actionName: 'Build_Code',
+        input: sourceOuput,
+        project: stk_code_image_arm_build
+      })
+      ]
+  });
+  pipeline.addStage({
+      stageName: 'STKCodeAMDImageBuild',
+      actions: [
+      new codepipeline_actions.CodeBuildAction({
+        actionName: 'Build_Code',
+        input: sourceOuput,
+        project: stk_code_image_amd_build
+      })
+      ]
+  });
+  pipeline.addStage({
+      stageName: 'STKCodeImageMultiarchAssembly',
+      actions: [
+      new codepipeline_actions.CodeBuildAction({
+        actionName: 'Build_Code',
+        input: sourceOuput,
+        project: stk_code_image_assembly
+      })
+      ]
+  });
+  pipeline.addStage({
+      stageName: 'STKGameImageBuild',
+      actions: [
+      new codepipeline_actions.CodeBuildAction({
+        actionName: 'Build_Code',
+        input: sourceOuput,
+        project: stk_game_image_build
+      })
+      ]
+  });
   }
 }

@@ -45,6 +45,8 @@ Actions:
           Value: t4g
         - Name: CLUSTER_NAME
           Value: ddosudpsimu-us-west-2
+        - Name: AWS_ACCOUNT_ID
+          Value: "742301976366"
     Outputs:
       AutoDiscoverReports:
         Enabled: false
@@ -69,7 +71,7 @@ Actions:
     Inputs:
       Sources:
         - WorkflowSource
-      
+
     Outputs:
       AutoDiscoverReports:
         Enabled: true
@@ -80,11 +82,13 @@ Actions:
         - Run: export
             BASE_IMAGE="${Build_BaseImage.AWS_ACCOUNT_ID}.dkr.ecr.${Build_BaseImage.AWS_REGION}.amazonaws.com/${Build_BaseImage.BASE_REPO}:${Build_BaseImage.BASE_IMAGE_TAG}"
         - Run: cat Dockerfile.template | envsubst > Dockerfile
-        - Run: aws ecr get-login-password --region ${{Build_BaseImage.AWS_REGION} | docker login --username
-            AWS --password-stdin ${Build_BaseImage.GAME_ASSETS_IMAGE}
+        - Run: aws ecr get-login-password --region ${{Build_BaseImage.AWS_REGION} | docker
+            login --username AWS --password-stdin
+            ${Build_BaseImage.GAME_ASSETS_IMAGE}
         - Run: docker buildx use craftbuilder
         - Run: docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg
-            SVN_STK=${{Build_BaseImage.SVN_STK} -t ${{Build_BaseImage.GAME_ASSETS_IMAGE} .
+            SVN_STK=${{Build_BaseImage.SVN_STK} -t
+            ${{Build_BaseImage.GAME_ASSETS_IMAGE} .
     Compute:
       Type: EC2
       Fleet: Linux.x86-64.Large
@@ -110,11 +114,13 @@ Actions:
         - Run: export
             BASE_IMAGE="${Build_BaseImage.AWS_ACCOUNT_ID}.dkr.ecr.${Build_BaseImage.AWS_REGION}.amazonaws.com/${Build_BaseImage.BASE_REPO}:${Build_BaseImage.BASE_IMAGE_TAG}"
         - Run: cat Dockerfile.template | envsubst > Dockerfile
-        - Run: aws ecr get-login-password --region ${Build_BaseImage.AWS_REGION} | docker login --username
-            AWS --password-stdin ${Build_BaseImage.GAME_ASSETS_IMAGE}
+        - Run: aws ecr get-login-password --region ${Build_BaseImage.AWS_REGION} | docker
+            login --username AWS --password-stdin
+            ${Build_BaseImage.GAME_ASSETS_IMAGE}
         - Run: docker buildx use craftbuilder
         - Run: docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg
-            SVN_STK=${Build_BaseImage.SVN_STK} -t ${Build_BaseImage.GAME_ASSETS_IMAGE} .
+            SVN_STK=${Build_BaseImage.SVN_STK} -t
+            ${Build_BaseImage.GAME_ASSETS_IMAGE} .
     Compute:
       Type: EC2
     DependsOn:
@@ -139,10 +145,12 @@ Actions:
         - Run: export
             GAME_CODE_IMAGE="${Build_BaseImage.AWS_ACCOUNT_ID}.dkr.ecr.${Build_BaseImage.AWS_REGION}.amazonaws.com/${Build_BaseImage.GAME_REPO}:${Build_BaseImage.GAME_CODE_TAG}"
         - Run: cat Dockerfile.template | envsubst > Dockerfile
-        - Run: aws ecr get-login-password --region ${Build_BaseImage.AWS_REGION} | docker login --username
-            AWS --password-stdin ${Build_BaseImage.GAME_SERVER_IMAGE}
+        - Run: aws ecr get-login-password --region ${Build_BaseImage.AWS_REGION} | docker
+            login --username AWS --password-stdin
+            ${Build_BaseImage.GAME_SERVER_IMAGE}
         - Run: docker buildx use craftbuilder
-        - Run: docker buildx build --push --platform linux/arm64  -t ${Build_BaseImage.GAME_SERVER_IMAGE} .
+        - Run: docker buildx build --push --platform linux/arm64  -t
+            ${Build_BaseImage.GAME_SERVER_IMAGE} .
     Compute:
       Type: EC2
       Fleet: Linux.x86-64.Large

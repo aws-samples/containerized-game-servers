@@ -50,9 +50,9 @@ Actions:
         Enabled: false
     Configuration:
       Steps:
-        - Run: BASE_IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BASE_REPO:$BASE_IMAGE_TAG
+        - Run: BASE_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${BASE_REPO}:${BASE_IMAGE_TAG}
         - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username
-            AWS --password-stdin $BASE_IMAGE
+            AWS --password-stdin ${BASE_IMAGE}
         - Run: docker buildx use craftbuilder
         - Run: docker buildx build --push --platform linux/arm64,linux/amd64 -t
             $BASE_IMAGE .
@@ -106,15 +106,15 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
-        - Run: GAME_ASSETS_IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_ASSETS_TAG
+        - Run: GAME_ASSETS_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${GAME_REPO}:${GAME_ASSETS_TAG}
         - Run: export
-            BASE_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BASE_REPO:$BASE_IMAGE_TAG"
+            BASE_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${BASE_REPO:$BASE_IMAGE_TAG}"
         - Run: cat Dockerfile.template | envsubst > Dockerfile
-        - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username
-            AWS --password-stdin $GAME_ASSETS_IMAGE
+        - Run: aws ecr get-login-password --region ${AWS_REGION} | docker login --username
+            AWS --password-stdin ${GAME_ASSETS_IMAGE}
         - Run: docker buildx use craftbuilder
         - Run: docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg
-            SVN_STK=$SVN_STK -t $GAME_ASSETS_IMAGE .
+            SVN_STK=${SVN_STK} -t ${GAME_ASSETS_IMAGE} .
     Compute:
       Type: EC2
       Fleet: Linux.x86-64.Large
@@ -167,15 +167,15 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
-        - Run: GAME_ASSETS_IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_ASSETS_TAG
+        - Run: GAME_ASSETS_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${GAME_REPO}:${GAME_ASSETS_TAG}
         - Run: export
-            BASE_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BASE_REPO:$BASE_IMAGE_TAG"
+            BASE_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${BASE_REPO}:${BASE_IMAGE_TAG}"
         - Run: cat Dockerfile.template | envsubst > Dockerfile
-        - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username
-            AWS --password-stdin $GAME_ASSETS_IMAGE
+        - Run: aws ecr get-login-password --region ${AWS_REGION} | docker login --username
+            AWS --password-stdin ${GAME_ASSETS_IMAGE}
         - Run: docker buildx use craftbuilder
         - Run: docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg
-            SVN_STK=$SVN_STK -t $GAME_ASSETS_IMAGE .
+            SVN_STK=${SVN_STK} -t ${GAME_ASSETS_IMAGE} .
     Compute:
       Type: EC2
     DependsOn:
@@ -227,14 +227,14 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
-        - Run: GAME_SERVER_IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_SERVER_TAG
+        - Run: GAME_SERVER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${GAME_REPO}:${GAME_SERVER_TAG}
         - Run: export
-            GAME_CODE_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_CODE_TAG"
+            GAME_CODE_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${GAME_REPO}:${GAME_CODE_TAG}"
         - Run: cat Dockerfile.template | envsubst > Dockerfile
-        - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username
-            AWS --password-stdin $GAME_SERVER_IMAGE
+        - Run: aws ecr get-login-password --region ${AWS_REGION} | docker login --username
+            AWS --password-stdin ${GAME_SERVER_IMAGE}
         - Run: docker buildx use craftbuilder
-        - Run: docker buildx build --push --platform linux/arm64  -t $GAME_SERVER_IMAGE .
+        - Run: docker buildx build --push --platform linux/arm64  -t ${GAME_SERVER_IMAGE} .
     Compute:
       Type: EC2
       Fleet: Linux.x86-64.Large

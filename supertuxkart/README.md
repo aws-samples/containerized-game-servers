@@ -66,6 +66,14 @@ cd ./server/stk-game-server-image-multiarch
 ## Automated deploy steps
 The following will create a CodePipline that copy the build scripts in `server/` folder into a CodeCommit repository and run the steps above in a separate CodeBuild jobs.
 
+1/ deploy the pipeline that creates the base image
+
 ```bash
-./init-pipeline.sh
+./init-base-pipeline.sh
+```
+
+2/ deploy the pipeline that creates the stk image game
+
+```bash
+./init-stk-pipeline.sh
 ```

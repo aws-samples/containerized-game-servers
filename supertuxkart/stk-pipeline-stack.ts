@@ -245,6 +245,7 @@ export class StkPipelineStack extends Stack {
   const sourceOuput = new codepipeline.Artifact();
   
   const pipeline = new codepipeline.Pipeline(this,`STKPipeline`);
+
   pipeline.addStage({
       stageName: 'Source',
       actions: [

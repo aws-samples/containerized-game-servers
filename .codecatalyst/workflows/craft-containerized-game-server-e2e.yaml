@@ -52,6 +52,12 @@ Actions:
         Enabled: false
     Configuration:
       Steps:
+        - Run: export DOCKER_BUILDKIT=1
+        - Run: docker build --platform=local -o . git://github.com/docker/buildx
+        - Run: mkdir -p ~/.docker/cli-plugins
+        - Run: mv buildx ~/.docker/cli-plugins/docker-buildx
+        - Run: chmod a+x ~/.docker/cli-plugins/docker-buildx
+        - Run: docker run --privileged --rm tonistiigi/binfmt --install all
         - Run: BASE_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${BASE_REPO}:${BASE_IMAGE_TAG}
         - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username
             AWS --password-stdin ${BASE_IMAGE}
@@ -113,6 +119,12 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
+        - Run: export DOCKER_BUILDKIT=1
+        - Run: docker build --platform=local -o . git://github.com/docker/buildx
+        - Run: mkdir -p ~/.docker/cli-plugins
+        - Run: mv buildx ~/.docker/cli-plugins/docker-buildx
+        - Run: chmod a+x ~/.docker/cli-plugins/docker-buildx
+        - Run: docker run --privileged --rm tonistiigi/binfmt --install all
         - Run: GAME_ASSETS_IMAGE=${Build_BaseImage.AWS_ACCOUNT_ID}.dkr.ecr.${Build_BaseImage.AWS_REGION}.amazonaws.com/${Build_BaseImage.GAME_REPO}:${Build_BaseImage.GAME_ASSETS_TAG}
         - Run: export
             BASE_IMAGE="${Build_BaseImage.AWS_ACCOUNT_ID}.dkr.ecr.${Build_BaseImage.AWS_REGION}.amazonaws.com/${Build_BaseImage.BASE_REPO}:${Build_BaseImage.BASE_IMAGE_TAG}"
@@ -144,6 +156,12 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
+        - Run: export DOCKER_BUILDKIT=1
+        - Run: docker build --platform=local -o . git://github.com/docker/buildx
+        - Run: mkdir -p ~/.docker/cli-plugins
+        - Run: mv buildx ~/.docker/cli-plugins/docker-buildx
+        - Run: chmod a+x ~/.docker/cli-plugins/docker-buildx
+        - Run: docker run --privileged --rm tonistiigi/binfmt --install all
         - Run: GAME_SERVER_IMAGE=${Build_BaseImage.AWS_ACCOUNT_ID}.dkr.ecr.${Build_BaseImage.AWS_REGION}.amazonaws.com/${Build_BaseImage.GAME_REPO}:${Build_BaseImage.GAME_SERVER_TAG}
         - Run: export
             GAME_CODE_IMAGE="${Build_BaseImage.AWS_ACCOUNT_ID}.dkr.ecr.${Build_BaseImage.AWS_REGION}.amazonaws.com/${Build_BaseImage.GAME_REPO}:${Build_BaseImage.GAME_CODE_TAG}"

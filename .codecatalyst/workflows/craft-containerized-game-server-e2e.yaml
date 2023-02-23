@@ -61,7 +61,7 @@ Actions:
       Fleet: Linux.x86-64.Large
     Environment:
       Connections:
-        - Role: CodeCatalystPreviewDevelopmentAdministrator-tyzxmm
+        - Role: quokka-web-app-t804x
           Name: "742301976366"
       Name: gameservers-us-east-1
   GameAssets_Linking:
@@ -122,7 +122,7 @@ Actions:
       - Build_BaseImage
     Environment:
       Connections:
-        - Role: CodeCatalystPreviewDevelopmentAdministrator-tyzxmm
+        - Role: quokka-web-app-t804x
           Name: "742301976366"
       Name: gameservers-us-east-1
   Build_GameBinaries:
@@ -180,6 +180,11 @@ Actions:
       Type: EC2
     DependsOn:
       - GameAssets_Linking
+    Environment:
+      Connections:
+        - Role: quokka-web-app-t804x
+          Name: "742301976366"
+      Name: gameservers-us-east-1
   Build_DeploymentGameImage:
     Identifier: aws/build@v1
     Inputs:
@@ -232,5 +237,11 @@ Actions:
         - Run: docker buildx build --push --platform linux/arm64  -t $GAME_SERVER_IMAGE .
     Compute:
       Type: EC2
+      Fleet: Linux.x86-64.Large
     DependsOn:
       - GameAssets_Linking
+    Environment:
+      Connections:
+        - Role: quokka-web-app-t804x
+          Name: "742301976366"
+      Name: gameservers-us-east-1

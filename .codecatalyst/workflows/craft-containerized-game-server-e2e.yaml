@@ -64,9 +64,6 @@ Actions:
         - Run: docker buildx use craftbuilder
         - Run: docker buildx build --push --platform linux/arm64,linux/amd64 -t
             $BASE_IMAGE .
-      Container:
-        Registry: DockerHub
-        Image: buildx-bin
     Compute:
       Type: EC2
       Fleet: Linux.x86-64.Large

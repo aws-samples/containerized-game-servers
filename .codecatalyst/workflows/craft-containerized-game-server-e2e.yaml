@@ -9,29 +9,58 @@ Triggers:
 
 # Required - Define action configurations.
 Actions:
-  EnvVariables_59:
-    # Identifies the action. Do not modify this value.
+  Build_BaseImage:
     Identifier: aws/build@v1
-
-    # Specifies the source and/or artifacts to pass to the action as input.
     Inputs:
-      # Optional
       Sources:
-        - WorkflowSource # This specifies that the action requires this Workflow as a source
-
+        - WorkflowSource
+      Variables:
+        - Name: AWS_REGION
+          Value: us-west-2
+        - Name: BUILDX_VER
+          Value: v0.10.3
+        - Name: BASE_REPO
+          Value: baseimage-ci
+        - Name: BASE_IMAGE_TAG
+          Value: multiarch-py3
+        - Name: GAME_REPO
+          Value: stk-ci
+        - Name: GAME_ASSETS_TAG
+          Value: stk-assets-multiarch
+        - Name: GAME_ARM_CODE_TAG
+          Value: stk-code-arm
+        - Name: GAME_AMD_CODE_TAG
+          Value: stk-code-amd
+        - Name: GAME_CODE_TAG
+          Value: stk-code-multiarch
+        - Name: GAME_SERVER_TAG
+          Value: stk-server-multiarch
+        - Name: GITHUB_STK
+          Value: https://github.com/yahavb/stk-code
+        - Name: GITHUB_STK_BRANCH
+          Value: master
+        - Name: SVN_STK
+          Value: https://svn.code.sf.net/p/supertuxkart/code/stk-assets
+        - Name: INSTANCE_FAMILY
+          Value: t4g
+        - Name: CLUSTER_NAME
+          Value: ddosudpsimu-us-west-2
     Outputs:
-      # Optional; Automatically discover reports for popular test frameworks
       AutoDiscoverReports:
-        Enabled: true
-        # Use as prefix for the report files
-        ReportNamePrefix: rpt
-
-    # Defines the action's properties.
+        Enabled: false
     Configuration:
-      # Required - Steps are sequential instructions that run shell commands
       Steps:
-        - Run: echo "Hello, World!"
-        - Run: echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" >> report.xml
-        - Run: echo "<testsuite tests=\"1\" name=\"TestAgentJunit\" >" >> report.xml
-        - Run: echo "<testcase classname=\"TestAgentJunit\" name=\"Dummy
-            Test\"/></testsuite>" >> report.xml
+        - Run: BASE_IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BASE_REPO:$BASE_IMAGE_TAG
+        - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username
+            AWS --password-stdin $BASE_IMAGE
+        - Run: docker buildx use craftbuilder
+        - Run: docker buildx build --push --platform linux/arm64,linux/amd64 -t
+            $BASE_IMAGE .
+    Compute:
+      Type: EC2
+      Fleet: Linux.x86-64.Large
+    Environment:
+      Connections:
+        - Role: CodeCatalystPreviewDevelopmentAdministrator-tyzxmm
+          Name: "742301976366"
+      Name: gameservers-us-east-1

@@ -3,9 +3,9 @@ SchemaVersion: "1.0"
 
 # Optional - Set automatic triggers.
 Triggers:
-  - Type: Push
+  - Type: PUSH
     Branches:
-      - main
+      - master
 
 # Required - Define action configurations.
 Actions:
@@ -168,11 +168,14 @@ Actions:
     Configuration:
       Steps:
         - Run: GAME_ASSETS_IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_ASSETS_TAG
-        - Run: export BASE_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BASE_REPO:$BASE_IMAGE_TAG"
+        - Run: export
+            BASE_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BASE_REPO:$BASE_IMAGE_TAG"
         - Run: cat Dockerfile.template | envsubst > Dockerfile
-        - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $GAME_ASSETS_IMAGE
+        - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username
+            AWS --password-stdin $GAME_ASSETS_IMAGE
         - Run: docker buildx use craftbuilder
-        - Run: docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg SVN_STK=$SVN_STK -t $GAME_ASSETS_IMAGE . 
+        - Run: docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg
+            SVN_STK=$SVN_STK -t $GAME_ASSETS_IMAGE .
     Compute:
       Type: EC2
     DependsOn:
@@ -220,11 +223,13 @@ Actions:
     Configuration:
       Steps:
         - Run: GAME_SERVER_IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_SERVER_TAG
-        - Run: export GAME_CODE_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_CODE_TAG"
+        - Run: export
+            GAME_CODE_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_CODE_TAG"
         - Run: cat Dockerfile.template | envsubst > Dockerfile
-        - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $GAME_SERVER_IMAGE
+        - Run: aws ecr get-login-password --region $AWS_REGION | docker login --username
+            AWS --password-stdin $GAME_SERVER_IMAGE
         - Run: docker buildx use craftbuilder
-        - Run: docker buildx build --push --platform linux/arm64  -t $GAME_SERVER_IMAGE . 
+        - Run: docker buildx build --push --platform linux/arm64  -t $GAME_SERVER_IMAGE .
     Compute:
       Type: EC2
     DependsOn:

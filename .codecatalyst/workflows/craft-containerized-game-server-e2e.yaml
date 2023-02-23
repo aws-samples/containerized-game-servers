@@ -182,7 +182,7 @@ Actions:
     Inputs:
       Sources:
         - WorkflowSource
-    Variables:
+      Variables:
         - Name: AWS_REGION
           Value: us-west-2
         - Name: BUILDX_VER

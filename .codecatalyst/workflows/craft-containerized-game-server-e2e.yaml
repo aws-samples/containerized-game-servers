@@ -183,36 +183,36 @@ Actions:
       Sources:
         - WorkflowSource
     Variables:
-    - Name: AWS_REGION
-      Value: us-west-2
-    - Name: BUILDX_VER
-      Value: v0.10.3
-    - Name: BASE_REPO
-      Value: baseimage-ci
-    - Name: BASE_IMAGE_TAG
-      Value: multiarch-py3
-    - Name: GAME_REPO
-      Value: stk-ci
-    - Name: GAME_ASSETS_TAG
-      Value: stk-assets-multiarch
-    - Name: GAME_ARM_CODE_TAG
-      Value: stk-code-arm
-    - Name: GAME_AMD_CODE_TAG
-      Value: stk-code-amd
-    - Name: GAME_CODE_TAG
-      Value: stk-code-multiarch
-    - Name: GAME_SERVER_TAG
-      Value: stk-server-multiarch
-    - Name: GITHUB_STK
-      Value: https://github.com/yahavb/stk-code
-    - Name: GITHUB_STK_BRANCH
-      Value: master
-    - Name: SVN_STK
-      Value: https://svn.code.sf.net/p/supertuxkart/code/stk-assets
-    - Name: INSTANCE_FAMILY
-      Value: t4g
-    - Name: CLUSTER_NAME
-      Value: ddosudpsimu-us-west-2
+        - Name: AWS_REGION
+          Value: us-west-2
+        - Name: BUILDX_VER
+          Value: v0.10.3
+        - Name: BASE_REPO
+          Value: baseimage-ci
+        - Name: BASE_IMAGE_TAG
+          Value: multiarch-py3
+        - Name: GAME_REPO
+          Value: stk-ci
+        - Name: GAME_ASSETS_TAG
+          Value: stk-assets-multiarch
+        - Name: GAME_ARM_CODE_TAG
+          Value: stk-code-arm
+        - Name: GAME_AMD_CODE_TAG
+          Value: stk-code-amd
+        - Name: GAME_CODE_TAG
+          Value: stk-code-multiarch
+        - Name: GAME_SERVER_TAG
+          Value: stk-server-multiarch
+        - Name: GITHUB_STK
+          Value: https://github.com/yahavb/stk-code
+        - Name: GITHUB_STK_BRANCH
+          Value: master
+        - Name: SVN_STK
+          Value: https://svn.code.sf.net/p/supertuxkart/code/stk-assets
+        - Name: INSTANCE_FAMILY
+          Value: t4g
+        - Name: CLUSTER_NAME
+          Value: ddosudpsimu-us-west-2
     Outputs:
       AutoDiscoverReports:
         Enabled: true

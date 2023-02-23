@@ -60,7 +60,7 @@ Actions:
             $BASE_IMAGE .
       Container:
         Registry: DockerHub
-        Image: docker/buildx-bin
+        Image: buildx-bin
     Compute:
       Type: EC2
       Fleet: Linux.x86-64.Large

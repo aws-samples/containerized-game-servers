@@ -39,6 +39,19 @@ cd ../../craft-image/src/
 ./build.sh
 ```
 
+#### automated pipeline for base image and the craft image
+Create a multi-arch base image pipeline. It will create a gitcommit repo that triggers the pipeline upone code changes. 
+
+```bash
+./deploy-base-pipeline.sh
+```
+
+Create a multi-arch image.
+
+```bash
+./deploy-craft-server-pipeline.sh
+```
+
 ### Create EKS cluster
 ```bash
 cat <<-EOF > eks-cluster-spec.yml

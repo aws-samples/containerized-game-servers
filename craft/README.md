@@ -7,10 +7,13 @@ We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. A simp
 ```bash
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=us-west-2
-export BASE_IMAGE=baseimage
+export BUILDX_VER=v0.10.3
+export BASE_REPO=baseimage-ci
 export BASE_IMAGE_TAG=multiarch-py3
-export GAME_IMAGE=craft
-export GAME_IMAGE_TAG=multiarch-py3
+export GAME_REPO=craft-ci
+export GAME_ARM_CODE_TAG=craft-arm64
+export GAME_AMD_CODE_TAG=craft-amd64
+export GAME_CODE_TAG=craft-multiarch
 export GITHUB_CRAFT="https://github.com/yahavb/Craft.git"
 export GITHUB_CRAFT_BRANCH=master
 export INSTANCE_FAMILY=t4g

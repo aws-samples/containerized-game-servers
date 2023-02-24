@@ -1,11 +1,10 @@
-#!/bin/bash 
+#!/bin/bash -x
 
-GAME_IMAGE_REPO=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_IMAGE:$GAME_IMAGE_TAG
-export BASE_IMAGE_REPO="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BASE_IMAGE:$BASE_IMAGE_TAG"
+GAME_SERVER_IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_CODE_TAG
+export BASE_IMAGE_REPO="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BASE_REPO:$BASE_IMAGE_TAG"
 cat Dockerfile.template | envsubst > Dockerfile
-aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $GAME_IMAGE_REPO
-
-docker buildx use craftbuilder
-docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg GITHUB_CRAFT=$GITHUB_CRAFT --build-arg GITHUB_CRAFT_BRANCH=$GITHUB_CRAFT_BRANCH -t $GAME_IMAGE_REPO -f ./Dockerfile . 
-#docker build --build-arg GITHUB_CRAFT=$GITHUB_CRAFT --build-arg GITHUB_CRAFT_BRANCH=$GITHUB_CRAFT_BRANCH -t $GAME_IMAGE_REPO -f ./Dockerfile . 
-#docker push $GAME_IMAGE_REPO
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $GAME_SERVER_IMAGE
+#docker buildx use craftbuilder
+#docker buildx build --push --platform linux/amd64,linux/arm64  -t $GAME_SERVER_IMAGE . 
+docker build -t $GAME_SERVER_IMAGE . 
+docker push $GAME_SERVER_IMAGE

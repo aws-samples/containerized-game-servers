@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/purell v1.1.0 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/docker/distribution v2.6.0-rc.1.0.20180313231215-34c706e75924+incompatible // indirect
+	github.com/docker/distribution v2.8.0+incompatible // indirect
 	github.com/emicklei/go-restful v2.6.0+incompatible // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-openapi/jsonpointer v0.0.0-20170102174223-779f45308c19 // indirect

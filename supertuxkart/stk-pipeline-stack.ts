@@ -275,6 +275,7 @@ export class StkPipelineStack extends Stack {
       new codepipeline_actions.CodeCommitSourceAction({
         actionName: 'CodeCommit_Source',
         repository: gitrepo,
+        runOrder: 1,
         output: sourceOuput,
         branch: 'main'
       }),
@@ -286,6 +287,7 @@ export class StkPipelineStack extends Stack {
       new codepipeline_actions.CodeBuildAction({
         actionName: 'Build_Code',
         input: sourceOuput,
+        runOrder: 2,
         project: stk_assets_image_build
       }),
       ]
@@ -296,6 +298,7 @@ export class StkPipelineStack extends Stack {
       new codepipeline_actions.CodeBuildAction({
         actionName: 'Build_Code',
         input: sourceOuput,
+        runOrder: 3,
         project: stk_code_image_arm_build
       })
       ]
@@ -306,6 +309,7 @@ export class StkPipelineStack extends Stack {
       new codepipeline_actions.CodeBuildAction({
         actionName: 'Build_Code',
         input: sourceOuput,
+        runOrder: 3,
         project: stk_code_image_amd_build
       })
       ]
@@ -316,6 +320,7 @@ export class StkPipelineStack extends Stack {
       new codepipeline_actions.CodeBuildAction({
         actionName: 'Build_Code',
         input: sourceOuput,
+        runOrder: 4,
         project: stk_code_image_assembly
       })
       ]
@@ -326,6 +331,7 @@ export class StkPipelineStack extends Stack {
       new codepipeline_actions.CodeBuildAction({
         actionName: 'Build_Code',
         input: sourceOuput,
+        runOrder: 5,
         project: stk_game_image_build
       })
       ]

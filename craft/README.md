@@ -84,6 +84,8 @@ eksctl create cluster -f eks-cluster-spec.yml
 
 ### Deploy Agones - Optional 
 ```bash
+helm repo add agones https://agones.dev/chart/stable
+helm repo update
 helm upgrade agones agones/agones --namespace agones-system --install --wait --create-namespace \
     --set agones.featureGates=PlayerTracking=true
 ```

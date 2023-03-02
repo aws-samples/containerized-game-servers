@@ -2,8 +2,8 @@ import { Stack, StackProps, CfnParameter  } from 'aws-cdk-lib';
 import { Construct } from 'constructs'
 import * as codecommit from 'aws-cdk-lib/aws-codecommit';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
-import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -23,6 +23,7 @@ export class StkPipelineStack extends Stack {
   const SVN_STK = new CfnParameter(this,"SVNSTK",{type:"String"});
   const GITHUB_STK = new CfnParameter(this,"GITHUBSTK",{type:"String"});
   const GITHUB_STK_BRANCH = new CfnParameter(this,"GITHUBSTKBRANCH",{type:"String"});
+  const S3_STK_ASSETS = new CfnParameter(this,"S3STKASSETS",{type:"String"});
   
   //codecommit repository that will contain the containerized app to build
   const gitrepo = new codecommit.Repository(this, `gitrepo`, {
@@ -33,6 +34,7 @@ export class StkPipelineStack extends Stack {
   //const gitrepo = codecommit.Repository.fromRepositoryName(this,`gitrepo`,CODE_COMMIT_REPO.valueAsString)
     
   const base_registry = ecr.Repository.fromRepositoryName(this,`base_repo`,BASE_REPO.valueAsString)
+  const stk_assets_bucket = s3.Bucket.fromBucketName(this,`game_assets_bucket`,S3_STK_ASSETS.valueAsString)
 
   const stk_registry = new ecr.Repository(this,`game_repo`,{
     repositoryName:GAME_REPO.valueAsString,
@@ -74,6 +76,7 @@ export class StkPipelineStack extends Stack {
               `export GAME_REPO="${GAME_REPO.valueAsString}"`,
               `export GAME_ASSETS_TAG="${GAME_ASSETS_TAG.valueAsString}"`,
               `export SVN_STK="${SVN_STK.valueAsString}"`,
+              `export S3_STK_ASSETS="${S3_STK_ASSETS.valueAsString}"`,
               `cd stk-assets-image-multiarch`,
               `chmod +x ./build.sh && ./build.sh`
             ],
@@ -88,7 +91,7 @@ export class StkPipelineStack extends Stack {
     
   const stk_code_image_arm_build = new codebuild.Project(this, `STKCodeImageArmBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+//    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
       {
@@ -126,7 +129,7 @@ export class StkPipelineStack extends Stack {
 
   const stk_code_image_amd_build = new codebuild.Project(this, `STKCodeImageAmdBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+ //   cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
       {
@@ -242,9 +245,11 @@ export class StkPipelineStack extends Stack {
   stk_registry.grantPullPush(stk_code_image_amd_build.grantPrincipal);
   stk_registry.grantPullPush(stk_code_image_assembly.grantPrincipal);
   stk_registry.grantPullPush(stk_game_image_build.grantPrincipal);
+  stk_assets_bucket.grantRead(stk_assets_image_build.grantPrincipal);
 
   const sourceOuput = new codepipeline.Artifact();
-  
+
+    
   const gameImagePipeline = new codepipeline.Pipeline(this,`STKDevOpsGamePipeline`);
   gameImagePipeline.addStage({
       stageName: 'Source',
@@ -261,21 +266,22 @@ export class StkPipelineStack extends Stack {
       stageName: 'STKGameImageBuild',
       actions: [
       new codepipeline_actions.CodeBuildAction({
-        actionName: 'Build_Code',
+        actionName: 'BuildDevOps',
         input: sourceOuput,
         project: stk_game_image_build
       })
       ]
   });
 
-  const pipeline = new codepipeline.Pipeline(this,`STKPipeline`);
-  pipeline.addStage({
+ const pipeline = new codepipeline.Pipeline(this,`STKPipeline`);
+   
+ pipeline.addStage({
       stageName: 'Source',
       actions: [
       new codepipeline_actions.CodeCommitSourceAction({
         actionName: 'CodeCommit_Source',
         repository: gitrepo,
-        runOrder: 1,
+        //runOrder: 1,
         output: sourceOuput,
         branch: 'main'
       }),
@@ -287,40 +293,34 @@ export class StkPipelineStack extends Stack {
       new codepipeline_actions.CodeBuildAction({
         actionName: 'Build_Code',
         input: sourceOuput,
-        runOrder: 2,
+        //runOrder: 2,
         project: stk_assets_image_build
       }),
       ]
   });
   pipeline.addStage({
-      stageName: 'STKCodeARMImageBuild',
+      stageName: 'STKCodeBuildImage',
       actions: [
-      new codepipeline_actions.CodeBuildAction({
-        actionName: 'Build_Code',
-        input: sourceOuput,
-        runOrder: 3,
-        project: stk_code_image_arm_build
-      })
-      ]
-  });
-  pipeline.addStage({
-      stageName: 'STKCodeAMDImageBuild',
-      actions: [
-      new codepipeline_actions.CodeBuildAction({
-        actionName: 'Build_Code',
-        input: sourceOuput,
-        runOrder: 3,
-        project: stk_code_image_amd_build
-      })
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'BuildARMCode',
+          input: sourceOuput,
+          runOrder: 1,
+          project: stk_code_image_arm_build
+        }),
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'BuildAMDCode',
+          input: sourceOuput,
+          runOrder: 1,
+          project: stk_code_image_amd_build
+        })
       ]
   });
   pipeline.addStage({
       stageName: 'STKCodeImageMultiarchAssembly',
       actions: [
       new codepipeline_actions.CodeBuildAction({
-        actionName: 'Build_Code',
+        actionName: 'AssembleSingleBuild',
         input: sourceOuput,
-        runOrder: 4,
         project: stk_code_image_assembly
       })
       ]
@@ -329,9 +329,8 @@ export class StkPipelineStack extends Stack {
       stageName: 'STKGameImageBuild',
       actions: [
       new codepipeline_actions.CodeBuildAction({
-        actionName: 'Build_Code',
+        actionName: 'AddAgonesAndMatchmaking',
         input: sourceOuput,
-        runOrder: 5,
         project: stk_game_image_build
       })
       ]

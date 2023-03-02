@@ -23,6 +23,7 @@ export GAME_SERVER_TAG=stk-server-multiarch
 export GITHUB_STK="https://github.com/yahavb/stk-code"
 export GITHUB_STK_BRANCH=master
 export SVN_STK="https://svn.code.sf.net/p/supertuxkart/code/stk-assets"
+export S3_STK_ASSETS="supertuxkart-assets"
 
 export INSTANCE_FAMILY=t4g
 export CLUSTER_NAME=ddosudpsimu-us-west-2

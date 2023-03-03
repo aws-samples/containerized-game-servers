@@ -16,6 +16,8 @@ export class StkPipelineStack extends Stack {
   const BASE_IMAGE_TAG = new CfnParameter(this,"BASEIMAGETAG",{type:"String"});
   const GAME_REPO = new CfnParameter(this,"GAMEREPO",{type:"String"});
   const GAME_ASSETS_TAG = new CfnParameter(this,"GAMEASSETSTAG",{type:"String"});
+  const GAME_ARM_ASSETS_TAG = new CfnParameter(this,"GAMEARMASSETSTAG",{type:"String"});
+  const GAME_AMD_ASSETS_TAG = new CfnParameter(this,"GAMEAMDASSETSTAG",{type:"String"});
   const GAME_CODE_TAG = new CfnParameter(this,"GAMECODETAG",{type:"String"});
   const GAME_ARM_CODE_TAG = new CfnParameter(this,"GAMEARMCODETAG",{type:"String"});
   const GAME_AMD_CODE_TAG = new CfnParameter(this,"GAMEAMDCODETAG",{type:"String"});
@@ -88,7 +90,106 @@ export class StkPipelineStack extends Stack {
       }
     ),
   });
-    
+  const stk_assets_image_amd_build = new codebuild.Project(this, `STKAssetsImageAmdBuild`, {
+    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3},
+    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    role: buildRole,
+    buildSpec: codebuild.BuildSpec.fromObject(
+      {
+        version: "0.2",
+        env: {
+          'exported-variables': [
+            'AWS_ACCOUNT_ID','AWS_REGION','BASE_REPO','BASE_IMAGE_TAG','GAME_REPO','GAME_AMD_ASSETS_TAG','SVN_STK'
+          ],
+        },
+        phases: {
+          build: {
+            commands: [
+              `export AWS_ACCOUNT_ID="${this.account}"`,
+              `export AWS_REGION="${this.region}"`,
+              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
+              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
+              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
+              `export GAME_ASSETS_TAG="${GAME_AMD_ASSETS_TAG.valueAsString}"`,
+              `export SVN_STK="${SVN_STK.valueAsString}"`,
+              `export S3_STK_ASSETS="${S3_STK_ASSETS.valueAsString}"`,
+              `cd stk-assets-image-multiarch`,
+              `chmod +x ./build.sh && ./build.sh`
+            ],
+          }
+        },
+        artifacts: {
+          files: ['imageDetail.json']
+        },
+      }
+    ),
+  });
+  const stk_assets_image_arm_build = new codebuild.Project(this, `STKAssetsImageArmBuild`, {
+    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
+    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    role: buildRole,
+    buildSpec: codebuild.BuildSpec.fromObject(
+      {
+        version: "0.2",
+        env: {
+          'exported-variables': [
+            'AWS_ACCOUNT_ID','AWS_REGION','BASE_REPO','BASE_IMAGE_TAG','GAME_REPO','GAME_ARM_ASSETS_TAG','SVN_STK'
+          ],
+        },
+        phases: {
+          build: {
+            commands: [
+              `export AWS_ACCOUNT_ID="${this.account}"`,
+              `export AWS_REGION="${this.region}"`,
+              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
+              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
+              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
+              `export GAME_ASSETS_TAG="${GAME_ARM_ASSETS_TAG.valueAsString}"`,
+              `export SVN_STK="${SVN_STK.valueAsString}"`,
+              `export S3_STK_ASSETS="${S3_STK_ASSETS.valueAsString}"`,
+              `cd stk-assets-image-multiarch`,
+              `chmod +x ./build.sh && ./build.sh`
+            ],
+          }
+        },
+        artifacts: {
+          files: ['imageDetail.json']
+        },
+      }
+    ),
+  });  
+    const stk_assets_image_assembly = new codebuild.Project(this, `STKAssetsImageMultiarchAssembly`, {
+    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
+    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    role: buildRole,
+    buildSpec: codebuild.BuildSpec.fromObject(
+      {
+        version: "0.2",
+        env: {
+          'exported-variables': [
+            'AWS_ACCOUNT_ID','AWS_REGION','GAME_REPO','GAME_ASSETS_TAG','GAME_AMD_ASSETS_TAG','GAME_ARM_ASSETS_TAG'
+          ],
+        },
+        phases: {
+          build: {
+            commands: [
+              `export AWS_ACCOUNT_ID="${this.account}"`,
+              `export AWS_REGION="${this.region}"`,
+              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
+              `export GAME_ASSETS_TAG="${GAME_ASSETS_TAG.valueAsString}"`,
+              `export GAME_AMD_ASSETS_TAG="${GAME_AMD_ASSETS_TAG.valueAsString}"`,
+              `export GAME_ARM_ASSETS_TAG="${GAME_ARM_ASSETS_TAG.valueAsString}"`,
+              `cd stk-assets-image-multiarch`,
+              `chmod +x ./assemble_multiarch_image.sh && ./assemble_multiarch_image.sh`
+            ],
+          }
+        },
+        artifacts: {
+          files: ['imageDetail.json']
+        },
+      }
+    ),
+  });
   const stk_code_image_arm_build = new codebuild.Project(this, `STKCodeImageArmBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
 //    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
@@ -166,7 +267,7 @@ export class StkPipelineStack extends Stack {
   });
 
   const stk_code_image_assembly = new codebuild.Project(this, `STKCodeImageMultiarchAssembly`, {
-    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3},
+    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
     cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
@@ -212,7 +313,7 @@ export class StkPipelineStack extends Stack {
         version: "0.2",
         env: {
           'exported-variables': [
-            'AWS_ACCOUNT_ID','AWS_REGION','GAME_REPO','GAME_SERVER_TAG','GAME_CODE_TAG','BUILDX_VER'
+            'AWS_ACCOUNT_ID','AWS_REGION','BASE_REPO','BASE_IMAGE_TAG','GAME_REPO','GAME_SERVER_TAG','GAME_ASSETS_TAG','GAME_CODE_TAG','BUILDX_VER'
           ],
         },
         phases: {
@@ -222,8 +323,11 @@ export class StkPipelineStack extends Stack {
               `export AWS_ACCOUNT_ID="${this.account}"`,
               `export AWS_REGION="${this.region}"`,
               `export BUILDX_VER="${BUILDX_VER.valueAsString}"`,
+              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
+              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
               `export GAME_REPO="${GAME_REPO.valueAsString}"`,
               `export GAME_CODE_TAG="${GAME_CODE_TAG.valueAsString}"`,
+              `export GAME_ASSETS_TAG="${GAME_ASSETS_TAG.valueAsString}"`,
               `export GAME_SERVER_TAG="${GAME_SERVER_TAG.valueAsString}"`,
               `cd stk-game-server-image-multiarch`,
               `chmod +x ./build.sh && ./build.sh`
@@ -249,7 +353,7 @@ export class StkPipelineStack extends Stack {
 
   const sourceOuput = new codepipeline.Artifact();
 
-    
+/*    
   const gameImagePipeline = new codepipeline.Pipeline(this,`STKDevOpsGamePipeline`);
   gameImagePipeline.addStage({
       stageName: 'Source',
@@ -272,7 +376,7 @@ export class StkPipelineStack extends Stack {
       })
       ]
   });
-
+*/
  const pipeline = new codepipeline.Pipeline(this,`STKPipeline`);
    
  pipeline.addStage({
@@ -287,7 +391,7 @@ export class StkPipelineStack extends Stack {
       }),
       ]
   });
-  pipeline.addStage({
+  /*pipeline.addStage({
       stageName: 'STKAssetsImageBuild',
       actions: [
       new codepipeline_actions.CodeBuildAction({
@@ -296,6 +400,29 @@ export class StkPipelineStack extends Stack {
         //runOrder: 2,
         project: stk_assets_image_build
       }),
+      ]
+  });*/
+ pipeline.addStage({
+      stageName: 'STKAssetsBuildImage',
+      actions: [
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'BuildARMAssets',
+          input: sourceOuput,
+          runOrder: 1,
+          project: stk_assets_image_arm_build
+        }),
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'BuildAMDAssets',
+          input: sourceOuput,
+          runOrder: 1,
+          project: stk_assets_image_amd_build
+        }),
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'AssembleAssetsBuilds',
+          input: sourceOuput,
+          runOrder: 2,
+          project: stk_assets_image_assembly
+        })
       ]
   });
   pipeline.addStage({
@@ -312,17 +439,13 @@ export class StkPipelineStack extends Stack {
           input: sourceOuput,
           runOrder: 1,
           project: stk_code_image_amd_build
+        }),
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'AssembleCodeBuilds',
+          input: sourceOuput,
+          runOrder: 2,
+          project: stk_code_image_assembly
         })
-      ]
-  });
-  pipeline.addStage({
-      stageName: 'STKCodeImageMultiarchAssembly',
-      actions: [
-      new codepipeline_actions.CodeBuildAction({
-        actionName: 'AssembleSingleBuild',
-        input: sourceOuput,
-        project: stk_code_image_assembly
-      })
       ]
   });
   pipeline.addStage({

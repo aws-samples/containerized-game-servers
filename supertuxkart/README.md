@@ -101,7 +101,72 @@ The following will create a CodePipline that copy the build scripts in `server/`
 ./deploy-stk-pipeline.sh
 ```
 
-### Base-image Pipeline
+#### Base-image Pipeline
+
+The Source stage includes the [code and config](./server/base-image-multiarch-python3/). Note the [Dockerfile](./server/base-image-multiarch-python3/Dockerfile) includes no processor architecture specific so the libraries and packages linked dynamically via the packaged tools e.g., `apt` or `yum`
+
 ![alt text](./readmeimages/baseimage-ci.png "Base-image pipeline")
 
+The resulted images of the base-image pipeline are two images: a 601.11 MB (AMD64) and 582.56 MB (ARM64) docker images. 
+![alt text](./readmeimages/baseimage-ecr.png "Base-image pipeline result in ECR")
 
+#### Game Artist Pipeline
+
+The source stage includes the [code and config](./server/stk-assets-image-multiarch/). Note the build process pulls six assets files from S3 (256MB each) and copy to `/stk-assets` sub-directory. The Dockerfile pre-processed with `envsubst` command for setting the enviroment variables. 
+
+![alt text](./readmeimages/stk-assets-ci.png "Supertuxkart game assets pipeline")
+
+The resulted image of the developer pipeline are two images, `stk-assets-amd` 4637.98 for AMD64 and `stk-assets-arm` 4637.43 for ARM64 and Image Index. 
+![alt text](./readmeimages/stk-assets-ecr.png "Supertuxkart assets pipeline result in ECR")
+
+
+#### Game Developer Pipeline
+
+The source stage includes the [code and config](./server/stk-code-image-multiarch/). 
+
+![alt text](./readmeimages/stk-code-ci.png "Supertuxkart game developer pipeline")
+
+We first copy the assets folder from the previous step.
+
+```bash
+FROM stk_base AS stk_code
+	COPY --from=1 /stk-assets /stk-assets
+```
+
+Then we pull the code from a separate Git repository that compatible with the assets (`GITHUB_STK` and `GITHUB_STK_BRANCH`)
+
+```bash
+RUN git clone $GITHUB_STK stk-code --branch $GITHUB_STK_BRANCH && \
+	    cd stk-code && \
+	    mkdir cmake_build && \
+	    cmake ../stk-code -B ./cmake_build -DSERVER_ONLY=ON && \
+	    cd cmake_build && \
+	    make -j$(nproc) -f ./Makefile install
+```
+
+The pipeline includes two identical build actions that runs on [ARM64](https://github.com/aws-samples/containerized-game-servers/blob/master/supertuxkart/stk-pipeline-stack.ts#L283) and [AMD64](https://github.com/aws-samples/containerized-game-servers/blob/master/supertuxkart/stk-pipeline-stack.ts#L318) instances. The third build action assembles the two images into a docker image index (manifest) by the [assemble_multiarch_image.sh](./server/stk-code-multiarch/assemble_multiarch_image.sh)
+
+The resulted image of the developer pipeline are two images, `stk-code-amd` 3074.09 for AMD64 and `stk-code-arm` 3054.94 for ARM64 and Image Index. 
+![alt text](./readmeimages/stk-code-ecr.png "Supertuxkart developer pipeline result in ECR")
+
+
+#### Game Devops Pipeline
+
+The source stage includes the [code and config](./server/stk-game-server-image-multiarch/). 
+
+![alt text](./readmeimages/stk-agones-ci.png "Supertuxkart game devops pipeline")
+
+Note that this step pulls only the compiled code produced by the game developer pipeline and the assets from the game artist pipeline.
+
+```bash
+FROM stk_base AS stk_game
+COPY --from=1 /stk-assets /stk-assets
+COPY --from=2 /stk-code /stk-code
+```
+
+and add to oit the [STK Agones SDK implementation](./server/stk-game-server-image-multiarch/). Like in previous steps, it runs two separete `docker build` jobs (2360.44 MB for AMD64 and 2341.56 MB for ARM64) that are assembled into a docker index image, `stk-server-multiarch`. 
+
+![alt text](./readmeimages/stk-agones-ecr.png "Supertuxkart devops pipeline result in ECR")
+
+
+Note that each pipeline phase is optimized for storage to avoid long replication time to the cluster. 

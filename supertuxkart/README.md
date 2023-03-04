@@ -86,6 +86,13 @@ This is the game governance piece. It includes the scripts the controls the game
 cd ./server/stk-game-server-image-multiarch
 ./buildx.sh
 ```
+
+6/ Deploy EKS cluster 
+
+7/ Deploy Agones in EKS
+
+8/ Deploy the game
+
 ## Automated deploy steps
 The following will create a CodePipline that copy the build scripts in `server/` folder into a CodeCommit repository and run the steps above in a separate CodeBuild jobs.
 

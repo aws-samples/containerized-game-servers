@@ -1,0 +1,13 @@
+FROM $BASE_IMAGE AS stk_base
+
+FROM $GAME_ASSETS_IMAGE AS stk_assets
+FROM $GAME_CODE_IMAGE AS stk_code
+
+FROM stk_base AS stk_game
+COPY --from=1 /stk-assets /stk-assets
+COPY --from=2 /stk-code /stk-code
+COPY --from=2 /server_config.xml /
+COPY . .
+RUN chmod +x /*.sh
+RUN chmod +x /*.py
+RUN du / -cBM --max-depth=1 2>/dev/null | sort -n 

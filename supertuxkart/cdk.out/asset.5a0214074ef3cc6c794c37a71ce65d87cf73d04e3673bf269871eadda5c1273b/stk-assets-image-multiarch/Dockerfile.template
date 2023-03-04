@@ -1,0 +1,15 @@
+FROM $BASE_IMAGE
+#ARG SVN_STK
+#ENV SVN_STK=$SVN_STK
+#RUN svn co $SVN_STK stk-assets
+ARG S3_STK_ASSETS
+ENV S3_STK_ASSETS=$S3_STK_ASSETS
+RUN wget $S3_STK_ASSETS/stk-assets.part-aa
+RUN wget $S3_STK_ASSETS/stk-assets.part-ab
+RUN wget $S3_STK_ASSETS/stk-assets.part-ac
+RUN wget $S3_STK_ASSETS/stk-assets.part-ad
+RUN wget $S3_STK_ASSETS/stk-assets.part-ae
+RUN wget $S3_STK_ASSETS/stk-assets.part-af
+RUN cat stk-assets.part-a* > stk-assets.tar.gz
+RUN tar -xf stk-assets.tar.gz
+RUN ls /stk-assets/

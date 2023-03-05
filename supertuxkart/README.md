@@ -8,7 +8,7 @@ The game server image size doubles when adding support for more processor types 
 
 Furthermore, the game server components are owned by different teams which requires extra coordination during the game integration phase. For example, asset artists create graphics, 3D models, sound effects and music that might be required for the game binary compilation owned by the game developers. The game devops need the game binary to integrate it with an orchestration platform that matches players. 
 
-In this sample we show how to minimize game integration time and costly data transfer between the build and the hosting systems. We do this by building images that support Intel and Graviton instances. We consider three main personas: artists, developers and devops. 
+In this sample we show how to minimize game integration time and costly data transfer between the build and the hosting systems. This example shows how we reduce the images size by 75%, 9.2 GB for both processor types (4.6 GB each) to 2.3 GB needed to be pulled by Kubernetes in the game server initilazation time. We do this by building images that support Intel and Graviton instances. We consider three main personas: artists, developers and devops. 
 
 The artist manages the game assets and pushes them to the build system. The developer codes, tests the game and pushes their changes to the build system. Finally, devops implements SDK such as Agones on top of the game code and releases it the changes to the build system.
 

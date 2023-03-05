@@ -1,4 +1,0 @@
-FROM $GAME_CODE_IMAGE
-COPY . .
-RUN chmod +x /*.sh
-RUN chmod +x /*.py

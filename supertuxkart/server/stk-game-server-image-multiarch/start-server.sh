@@ -45,7 +45,11 @@ game_difficulty=`echo $(( RANDOM % 4 ))`
 
 game_theme_track=`psql -A -q -t -w -c "/*start-server.sh*/select theme from trackmap where track='$game_track';"|sed 's/ //g'`
 
-game_max_players=`awk -v min=36 -v max=64 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
+if [ -z "$MAX_PLAYERS" ]; then
+  game_max_players=`awk -v min=36 -v max=64 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
+else
+  game_max_players=$MAX_PLAYERS
+fi
 
 laps=`awk -v min=10 -v max=19 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
 

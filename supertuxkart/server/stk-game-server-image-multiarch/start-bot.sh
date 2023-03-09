@@ -21,7 +21,11 @@ echo export MAX_PLAYERS=$player_max_players >> /root/.bashrc
 player_theme_track=`psql -A -q -t -w -c "/*start-client.sh*/select theme from trackmap where track='$player_track';"|sed 's/ //g'`
 echo export TRACKTHEME=$player_theme_track >> /root/.bashrc
 
-laps=`awk -v min=10 -v max=19 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
+#if [ -z $LAPS ]; then
+#  laps=`awk -v min=10 -v max=19 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
+#else
+#  laps=$LAPS
+#fi
 
 if [[ $APP == 'stksrv-noml' ]]
 then
@@ -67,5 +71,6 @@ then
   fi
   echo export SERVER_SESSION_ID=$server_session_id >> /root/.bashrc
 fi
-/cmake_build/bin/supertuxkart --connect-now=$endpoint --network-ai=$NETWORK_AI $MISC_ARGS --laps=$laps &
-/pub-game-actions-cw.sh
+cd /stk-code
+./cmake_build/bin/supertuxkart --connect-now=$endpoint --network-ai=$NETWORK_AI $MISC_ARGS &
+/bot-game-actions-cw.sh

@@ -51,7 +51,11 @@ else
   game_max_players=$MAX_PLAYERS
 fi
 
-laps=`awk -v min=10 -v max=19 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
+if [ -z "$LAPS" ]; then
+  laps=`awk -v min=10 -v max=19 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
+else
+  laps=$LAPS
+fi
 
 id=`psql -A -q -t -w -c "/*start-server.sh*/insert into servers(created_at,updated_at,location,endpoint,mode,track,tracktheme,max_players,difficulty,is_ready,pod_name) values (NOW(),NOW(),'$game_location','"$endpoint"','$game_mode','$game_track','$game_theme_track','$game_max_players','$game_difficulty',1,'$POD_NAME') returning id;"`
 echo "psql exit code="$?

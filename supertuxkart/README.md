@@ -23,7 +23,7 @@ The third pipeline handles game binary compilation and linkage into a single exe
 The last integration phase includes game management tools that connect with the game orchestration layer Agones that maintains the game server health, controll the player connectivity and more. 
 
 
-### Manual deploy steps
+### Manual image build steps
 Below is the sequence of manual execution steps for building a game docker image that runs on ARM64 and AMD64 CPU arch.We also offer automation with CodePipeline and CodeBuild in the next section
 
 1/ Populate the following enviroment variables. 
@@ -51,8 +51,7 @@ export GITHUB_STK_BRANCH=master
 export SVN_STK="https://svn.code.sf.net/p/supertuxkart/code/stk-assets"
 export S3_STK_ASSETS="supertuxkart-assets"
 
-export INSTANCE_FAMILY=t4g
-export CLUSTER_NAME=ddosudpsimu-us-west-2
+export CLUSTER_NAME=stk-usw-2
 ```
 
 2/ Build the base image
@@ -91,13 +90,20 @@ cd ./server/stk-game-server-image-multiarch
 ./buildx.sh
 ```
 
-6/ Deploy EKS cluster 
+6/ Deploy [EKS cluster with Karpenter](https://karpenter.sh/v0.27.0/getting-started/getting-started-with-eksctl/)
 
-7/ Deploy Agones in EKS
+7/ Deploy [Agones](https://agones.dev/site/docs/installation/install-agones/helm/) in EKS
+```shell
+helm repo add agones https://agones.dev/chart/stable
+helm repo update
+helm upgrade agones agones/agones --namespace agones-system --install --wait --create-namespace \
+    --set agones.featureGates=PlayerTracking=true
+```
 
-8/ Deploy the game
+8/ Deploy the game - TBD
+*add deploy scripts
 
-### Automated deploy steps
+### Automated image deploy steps
 The following will create a CodePipline that copy the build scripts in `server/` folder into a CodeCommit repository and run the steps above in a separate CodeBuild jobs.
 
 1/ deploy the pipeline that creates the base image

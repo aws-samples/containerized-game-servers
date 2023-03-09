@@ -1,6 +1,6 @@
 FROM python:3.9
 RUN apt-get update -y --fix-missing
-RUN apt-get install -y vim net-tools telnet iproute2 jq unzip curl net-tools subversion sqlite3
+RUN apt-get install -y vim net-tools telnet iproute2 jq unzip curl net-tools subversion sqlite3 iptables
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install requests boto3 psycopg2 urllib3 psycopg2-binary pyenet ec2-metadata
 

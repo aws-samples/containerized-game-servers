@@ -1,5 +1,7 @@
 #!/bin/bash -x
 
+ulogd -v &
+
 trap sighandler TERM QUIT EXIT KILL
 
 sighandler () {

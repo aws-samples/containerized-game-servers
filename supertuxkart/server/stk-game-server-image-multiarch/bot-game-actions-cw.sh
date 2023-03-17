@@ -166,15 +166,20 @@ do
   fi
 
   avg_session_length=`psql -A -q -t -w -c "/*pub-game-actions-cw.sh*/select avg(EXTRACT(MINUTE FROM session_length)) from sessions where app='$APP' and created_at<NOW()-'1 min'::INTERVAL and created_at>NOW()-'1 hour'::INTERVAL and session_length is not null and EXTRACT(MINUTE FROM session_length)>0;"|sed 's/ //g'`
-  if (( $avg_session_length > 0 )); then
+  if [[ ! -z $avg_session_length ]]; then
     aws cloudwatch put-metric-data --metric-name AVG_SESSION_LENGTH --namespace ${CW_NS} --value $avg_session_length --dimensions app=$APP
   fi
-
+  echo "bot-game-actions-cw.sh::Finished cycle" >> $game_stdout
+  is_peer_still_sends_packets=`tail $game_stdout | grep "STKPeer: sending packet of size" | grep "$ENDPOINT at" | wc -l`
+  if (( $is_peer_still_sends_packets == 0 )); then
+    echo "no packets are sent-cycle the bot"
+    kubectl delete po $POD_NAME
+  fi
   is_race_finished=`grep "Server notified that the race is finished." $game_stdout | wc -l`
-  if (( $is_race_finished > 0 ))
-  then
+  if (( $is_race_finished > 0 )); then
     echo "session is over"
     kubectl delete po $POD_NAME
   fi
+  echo `date "+%Y-%m-%d-%H:%M:%S"`
   sleep $SLEEP_B4_PUT_CW
 done

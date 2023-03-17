@@ -29,8 +29,7 @@ echo export TRACKTHEME=$player_theme_track >> /root/.bashrc
 
 if [[ $APP == 'stksrv-noml' ]]
 then
-  #endpoint=`psql -A -q -t -w -c "/*start-client.sh*/select endpoint from servers where is_ready=1 and substr(location,1,7)=substr('"$player_location"',1,7) and max_players>num_active_session+"$NETWORK_AI" and tracktheme='$player_theme_track' order by created_at desc limit 1;"`
-  endpoint=`psql -A -q -t -w -c "/*start-client.sh*/select endpoint from servers where is_ready=1 and /* substr(location,1,7)=substr('"$player_location"',1,7) and */ max_players>num_active_session+"$NETWORK_AI" /* and tracktheme='$player_theme_track' */ order by created_at desc limit 1;"`
+  endpoint=`psql -A -q -t -w -c "/*start-client.sh*/select endpoint from servers where is_ready=1 and substr(location,1,7)=substr('"$player_location"',1,7) and max_players>num_active_session+"$NETWORK_AI" and tracktheme='$player_theme_track' order by created_at desc limit 1;"`
 fi
 
 if [[ $APP == 'stksrv-ml' ]]

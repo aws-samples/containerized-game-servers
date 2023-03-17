@@ -4,5 +4,5 @@ aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --
 #docker buildx use craftbuilder
 #docker buildx build --push --cache-to type=inline --cache-from type=registry,ref=$BASE_IMAGE  --platform linux/arm64,linux/amd64 -t $BASE_IMAGE .
 
-docker build -t $BASE_IMAGE
+docker build -t $BASE_IMAGE .
 docker push $BASE_IMAGE

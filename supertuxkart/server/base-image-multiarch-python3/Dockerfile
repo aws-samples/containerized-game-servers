@@ -1,8 +1,19 @@
-FROM python:3.9
+FROM public.ecr.aws/docker/library/python:slim
 RUN apt-get update -y --fix-missing
-RUN apt-get install -y vim net-tools telnet iproute2 jq unzip curl net-tools subversion sqlite3 iptables
+RUN apt-get install -y vim net-tools telnet iproute2 jq unzip curl net-tools subversion sqlite3 iptables kmod ulogd2
+RUN apt-get -y install gcc
+RUN apt-get -y install wget
 RUN /usr/local/bin/python -m pip install --upgrade pip
-RUN pip install requests boto3 psycopg2 urllib3 psycopg2-binary pyenet ec2-metadata
+RUN pip install requests
+RUN pip install boto3
+RUN apt-get install libpq-dev -y
+RUN pip install psycopg2-binary
+#RUN pip install psycopg2
+RUN pip install urllib3
+RUN pip install wheel
+RUN pip install Cmake
+RUN pip install pyenet
+RUN pip install ec2-metadata
 
 #Install game build tools
 RUN apt-get install build-essential cmake libbluetooth-dev libsdl2-dev \

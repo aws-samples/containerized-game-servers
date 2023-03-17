@@ -91,9 +91,11 @@ iptables -A limit-by-ip-chain --match limit --limit 30/sec -j NFLOG --nflog-pref
 iptables -A limit-by-ip-chain -j DROP 
 ```
 
-We use the hashlimit module to rate-limit groups of connections denoted by a hash. By using the `hashlimit-mode srcip`, incoming connections are grouped by the srcip IP header with a hashlimit set and ACCEPT `hashlimit-upto 10/sec` and DROP the rest. The `conntrack` allows you to create rules that observe incoming packets. We are interested in the connection state `ESTABLISHED`. Note that although UDP is a connection-less protocol and does not maintain a connection state, `iptabels` will maintain a pseudo-connection state and set the connection to ESTABLISHED.  Finally, we define NFLOG stage that logs the dropped packets
+We use the hashlimit module to rate-limit groups of connections denoted by a hash. By using the `hashlimit-mode srcip`, incoming connections are grouped by the `srcip` IP header with a hashlimit set and ACCEPT `hashlimit-upto 10/sec` and DROP the rest. The `conntrack` allows you to create rules that observe incoming packets. The `hashlimit-burst 20` allows newly created player connections (ingress connections with no credits) of the 7 players to join without dropping any packets. 
 
-Note that we used the amazon-vpc-cni to allocate dedicated eni for the game-server UDP socket server. We also applied the iptables rules in the init-container with NET_ADMIN capability to limit elevated permissions to the game server init only.  
+We are interested in the connection state `ESTABLISHED`. Note that although UDP is a connection-less protocol and does not maintain a connection state, `iptabels` will maintain a pseudo-connection state and set the connection to `ESTABLISHED`. Finally, we define an NFLOG stage that logs dropped packets.
+
+Note that we used the amazon-vpc-cni to allocate dedicated eni for the game-server UDP socket server. We also applied the iptables rules in the init-container with `NET_ADMIN` capability to limit elevated permissions to the game server init only.  
 
 
 ![alt text](./3-10min-sessions-7-players-attacked-ratelimit-rx-tx-bytes.png "ingress/egress of 3 game-sessions, 10 minutes each getting attacked")

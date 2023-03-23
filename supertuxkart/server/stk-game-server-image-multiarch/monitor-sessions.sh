@@ -25,17 +25,17 @@ do
     curl -s -d '{"playerID": "'$peer'"}' -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/alpha/player/connect
   done
   
-  #disconn_peer_list=`tail -40000 $STDOUT|grep  "STKHost:.* has just disconnected"| awk '{print $16"-"$9}'|sed 's/-/H/g'| sed 's/:/C/g' | sed 's/\./D/g'`
+  disconn_peer_list=`tail -40000 $STDOUT|grep  "STKHost:.* has just disconnected"| awk '{print $16"-"$9}'|sed 's/-/H/g'| sed 's/:/C/g' | sed 's/\./D/g'`
 
-  #for conn_peer in $conn_peer_list; do
-  #for disconn_peer in $disconn_peer_list; do
-  #  if [[ "$
-  #done
-  #done
+  for conn_peer in $conn_peer_list; do
+  for disconn_peer in $disconn_peer_list; do
+    curl -s -d '{"playerID": "'$peer'"}' -H "Content-Type: application/json" -X POST http://localhost:${AGONES_SDK_HTTP_PORT}/alpha/player/disconnect
+  done
+  done
 
-  #player_capacity=`curl -s -d '{}' -H "Content-Type: application/json" -X GET http://localhost:${AGONES_SDK_HTTP_PORT}/alpha/player/capacity`
-  #player_count=`curl -s -H "Content-Type: application/json" -X GET http://localhost:${AGONES_SDK_HTTP_PORT}/alpha/player/count`
-  #player_connected=`curl -s -H "Content-Type: application/json" -X GET http://localhost:${AGONES_SDK_HTTP_PORT}/alpha/player/connected`
+  player_capacity=`curl -s -d '{}' -H "Content-Type: application/json" -X GET http://localhost:${AGONES_SDK_HTTP_PORT}/alpha/player/capacity`
+  player_count=`curl -s -H "Content-Type: application/json" -X GET http://localhost:${AGONES_SDK_HTTP_PORT}/alpha/player/count`
+  player_connected=`curl -s -H "Content-Type: application/json" -X GET http://localhost:${AGONES_SDK_HTTP_PORT}/alpha/player/connected`
   echo `date "+%Y-%m-%d-%H:%M:%S"`
   sleep 10
 done

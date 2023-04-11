@@ -1,0 +1,11 @@
+FROM $BASE_IMAGE
+ARG S3_LYRA_ASSETS
+ARG GAME_SERVER_TAG
+ENV S3_LYRA_ASSETS=$S3_LYRA_ASSETS
+ENV GAME_SERVER_TAG=$GAME_SERVER_TAG
+RUN wget "https://"$S3_LYRA_ASSETS".s3.us-west-2.amazonaws.com/$GAME_ASSETS_TAG.taz" -O /usr/local/$GAME_ASSETS_TAG.taz
+RUN tar -xf /usr/local/$GAME_ASSETS_TAG.taz -C /usr/local/
+RUN mv /usr/local/$GAME_ASSETS_TAG /usr/local/lyra_starter_game
+RUN chmod +x /usr/local/lyra_starter_game/LyraServer.sh
+RUN chown -R 1000 /usr/local/lyra_starter_game/
+USER 1000

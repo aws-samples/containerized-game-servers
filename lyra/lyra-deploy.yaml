@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lyra
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: lyra
+  template:
+    metadata:
+      labels:
+        app: lyra
+    spec:
+      nodeSelector:
+        karpenter.sh/provisioner-name: tlvsummit23amd
+      serviceAccountName: appsimulator
+      securityContext:
+        runAsUser: 1000
+      containers:
+      - name: app
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_ACCOUNT.amazonaws.com/lyra:lyra_starter_game
+        imagePullPolicy: Always
+        command: ["/usr/local/lyra_starter_game/LyraServer.sh"]
+        resources:
+          requests:
+            cpu: 1000m
+          limits:
+            cpu: 4000m
+        ports:
+          - containerPort: 7777 

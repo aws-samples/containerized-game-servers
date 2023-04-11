@@ -5,7 +5,7 @@
 * Create an [EKS cluster with Karpenter](https://karpenter.sh/)
 * Deploy [Agones](https://agones.dev/site/docs/installation/install-agones/helm/) in EKS
 * Deploy [Container Insights](https://github.com/aws-samples/containerized-game-servers/tree/master/craft#deploy-container-insights)
-* TBD - Download the [game client](https://TBD/Download). Discover the game endpoint (`kubectl get gs`) and connect or spectate the bot playing. 
+* Download the [windows game client](https://lyra-starter-game.s3.us-west-2.amazonaws.com/WindowsClient.zip). Discover the game endpoint (`kubectl get gs`) and connect or spectate the bot playing. 
 
 ### Manual image build steps
 Use https://docs.unrealengine.com/5.0/en-US/setting-up-dedicated-servers-in-unreal-engine/ to build two sets of server binaries and content. We already built the server binaries and content. Follow the following for manual steps on your local development host. 
@@ -77,10 +77,7 @@ The following will create a CodePipline that copy the build scripts in `server/`
 
 The Source stage includes the [code and config](./server/base-image-multiarch-python3/). Note the [Dockerfile](./server/base-image-multiarch-python3/Dockerfile) includes no processor architecture specific so the libraries and packages linked dynamically via the packaged tools e.g., `apt` or `yum`
 
-![alt text](./readmeimages/baseimage-ci.png "Base-image pipeline")
-
 The resulted images of the base-image pipeline are two images: a 601.11 MB (AMD64) and 582.56 MB (ARM64) docker images. 
-![alt text](./readmeimages/baseimage-ecr.png "Base-image pipeline result in ECR")
 
 #### Game Artist Pipeline
 

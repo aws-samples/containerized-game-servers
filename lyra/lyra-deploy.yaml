@@ -13,12 +13,17 @@ spec:
         app: lyra
     spec:
       nodeSelector:
-        karpenter.sh/provisioner-name: tlvsummit23amd
+        karpenter.sh/provisioner-name: lyra
       serviceAccountName: appsimulator
       securityContext:
-        runAsUser: 1000
+        #runAsUser: 1000
+        runAsUser: 0
       containers:
-      - name: app
+      - name: lyra
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            add: ["NET_ADMIN"]
         env:
         - name: POD_IP
           valueFrom:
@@ -28,9 +33,16 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_ACCOUNT.amazonaws.com/lyra:lyra_starter_game
+        image: $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/lyra:lyra_starter_game
         imagePullPolicy: Always
         command: ["/usr/local/lyra_starter_game/LyraServer.sh"]
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/usr/local/lyra_starter_game/create_node_port_svc.sh"]
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","kubectl delete svc `kubectl get svc|grep $POD_NAME | awk '{print $1}'`"]
         resources:
           requests:
             cpu: 1000m
@@ -38,3 +50,4 @@ spec:
             cpu: 4000m
         ports:
           - containerPort: 7777 
+            protocol: UDP

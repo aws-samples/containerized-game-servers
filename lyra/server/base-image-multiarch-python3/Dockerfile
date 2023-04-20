@@ -3,6 +3,7 @@ RUN apt-get update -y --fix-missing
 RUN apt-get install -y vim net-tools telnet iproute2 jq unzip curl net-tools subversion sqlite3 iptables kmod ulogd2
 RUN apt-get -y install gcc
 RUN apt-get -y install wget
+RUN apt-get -y install gettext-base
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install requests
 RUN pip install boto3

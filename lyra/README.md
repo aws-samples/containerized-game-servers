@@ -1,9 +1,10 @@
 # A Unreal Engine 5 (UE5)-based game 
 
+Dedicated game server deployment method for Unreal engine-based games on EKS. It demonstrates (1) Dynamic port allocation with kubernetes-native networking (v1/Service); and (2) public IPv4 IP with Elastic IP or EC2 public IPv4. Dedicated servers that run in a pod like game servers, require public IPv4 access via EIP for predictable IPv4 address allocation. This is to mask public IPv4 addresses with customer DNS rather than .compute.amazonaws.com or mitigate network volumetric attacks (layer 3) with AWS Shield. 
+
 ### How to use this sample?
 * Build the game image ([manually](https://docs.unrealengine.com/5.0/en-US/setting-up-dedicated-servers-in-unreal-engine/) 
 * Create an [EKS cluster with Karpenter](https://karpenter.sh/)
-* Deploy [Agones](https://agones.dev/site/docs/installation/install-agones/helm/) in EKS
 * Deploy [Container Insights](https://github.com/aws-samples/containerized-game-servers/tree/master/craft#deploy-container-insights)
 * Download the [windows game client](https://lyra-starter-game.s3.us-west-2.amazonaws.com/WindowsClient.zip). Discover the game endpoint (`kubectl get gs`) and connect or spectate the bot playing. 
 
@@ -27,6 +28,9 @@ export GAME_ARM_ASSETS_TAG=lyra_starter_game_arm64
 export GAME_AMD_ASSETS_TAG=lyra_starter_game_amd64
 export GAME_ARM_SERVER_TAG=lyra_starter_game_arm64
 export GAME_AMD_SERVER_TAG=lyra_starter_game_amd64
+export GAME_ATTACKER_TAG=lyra_attacker
+export GAME_ATTACKER_ARM_IMAGE=lyra_attacker_arm64
+export GAME_ATTACKER_AMD_IMAGE=lyra_attacker_amd64
 export S3_LYRA_ASSETS=lyra-starter-game
 
 export CLUSTER_NAME=grv-usw-2
@@ -102,4 +106,53 @@ COPY --from=2 /lyra-code /lyra-code
 cat lyra-deploy.yaml | envsubst | kubectl apply -f -
 ```
 
-### TBD - implement Agones SDK. 
+### Dynamic port allocation with NodePort service per game server pod
+
+We create a service that exposes the Service on each Node's IP at a static port (the NodePort).
+We use a service definition template that is mutated by a postStart pod lifecycle hook. 
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: $SVC_NAME
+spec:
+  selector:
+    gamepod: $POD_NAME
+  ports:
+    - protocol: UDP
+      port: 7777
+      targetPort:  7777
+  type: NodePort
+```
+
+To make the node port available, Kubernetes sets up a cluster IP address, the same as if you had requested a Service of type: ClusterIP. 
+
+Next we create a pod-specific label that we use for the Service selector to assure 1:1 traffic routing between the service and the pod. 
+
+```bash
+kubectl label pod $POD_NAME gamepod=$POD_NAME
+```
+Finally, we pull the public IPv4 IP the game is exposed by:
+
+```bash
+service_name=$POD_NAME-svc-$(kubectl get no -o wide `kubectl  get po  $POD_NAME -o wide | awk '{print $7}'|grep -v NODE`| awk '{print $7}' | grep -v EXTERNAL-IP|sed "s/\./-/g")
+export SVC_NAME=$service_name
+```
+
+and create the service. 
+
+We delete the sevrvice upon the pod termination using the pod lifecycle preStop hook. 
+
+```yaml
+lifecycle:
+  postStart:
+   exec:
+    command: ["/usr/local/lyra_starter_game/create_node_port_svc.sh"]
+  preStop:
+   exec:
+    command: ["/bin/sh","-c","kubectl delete svc `kubectl get svc|grep $POD_NAME | awk '{print $1}'`"]
+```
+
+### Assigning public IPv4 address to the game server endpoint
+
+TBD

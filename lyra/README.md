@@ -127,7 +127,7 @@ spec:
 
 To make the node port available, Kubernetes sets up a cluster IP address, the same as if you had requested a Service of type: ClusterIP. 
 
-Next we create a pod-specific label that we use for the Service selector to assure 1:1 traffic routing between the service and the pod. 
+Next, we create a pod-specific label that we use for the Service selector to assure 1:1 traffic routing between the service and the pod. 
 
 ```bash
 kubectl label pod $POD_NAME gamepod=$POD_NAME
@@ -139,7 +139,7 @@ service_name=$POD_NAME-svc-$(kubectl get no -o wide `kubectl  get po  $POD_NAME 
 export SVC_NAME=$service_name
 ```
 
-and create the service. 
+and create the service in the pod `lifecycle.postStart` phase.
 
 We delete the sevrvice upon the pod termination using the pod lifecycle preStop hook. 
 

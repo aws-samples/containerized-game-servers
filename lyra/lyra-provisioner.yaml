@@ -42,6 +42,9 @@ spec:
 
     #!/bin/bash -x
     alloc_id=`aws ec2 describe-addresses --filters "Name=tag:game-name,Values=lyra" --query "Addresses[?AssociationId==null].AllocationId" --output text | awk '{print $1}'`
+    if [ -z "$alloc_id" ]; then
+      alloc_id=`aws ec2 allocate-address --tag-specifications 'ResourceType=elastic-ip,Tags=[{Key=game-name,Value=lyra},{Key=Name,Value=lyra}]' --query "AllocationId" --output text`
+    fi
     TOKEN=`curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
     instance_id=`curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id`
     interface_id=`aws ec2 describe-network-interfaces --filters Name=tag:Name,Values=karpenter.sh/provisioner-name/lyra --query "NetworkInterfaces[?Attachment.InstanceId == '$instance_id'].NetworkInterfaceId" --output text`

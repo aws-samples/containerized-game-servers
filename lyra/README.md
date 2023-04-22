@@ -33,7 +33,7 @@ export GAME_ATTACKER_ARM_IMAGE=lyra_attacker_arm64
 export GAME_ATTACKER_AMD_IMAGE=lyra_attacker_amd64
 export S3_LYRA_ASSETS=lyra-starter-game
 
-export CLUSTER_NAME=grv-usw-2
+export CLUSTER_NAME=lyra-usw-2
 ```
 
 2/ Build the base image

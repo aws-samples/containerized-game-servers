@@ -105,6 +105,11 @@ COPY --from=2 /lyra-code /lyra-code
 ```bash
 cat lyra-deploy.yaml | envsubst | kubectl apply -f -
 ```
+### Deploy the karpenter provisioner
+
+```bash
+cat lyra-provisioner | envsubst | kubectl apply -f -
+```
 
 ### Dynamic port allocation with NodePort service per game server pod
 

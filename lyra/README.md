@@ -154,5 +154,50 @@ lifecycle:
 ```
 
 ### Assigning public IPv4 address to the game server endpoint
+Two methods are reviewed for allocating public IPv4 addresses to game servers. (1) the public IPv4 address of the EC2 instance; and (2) EC2 elastic IP (EIP). 
 
-TBD
+The EC2 instance public IPv4 address requires the instance to be launched in a public subnet with an ingress route table to an internet gateway. We use Karpenter to provision an EC2 instance so we configure 
+
+```yaml
+
+  subnetSelector:
+
+    karpenter.sh/subnet/discovery: lyra-usw2-public
+
+```
+
+And decorate the public subnets with the tag `karpenter.sh/subnet/discovery: lyra-usw2-public`
+
+The elastic IP option is beneficial if you require public IPv4 for predictable IPv4 address allocation. This is to mask public IPv4 addresses with customer DNS rather than .compute.amazonaws.com or mitigate network volumetric attacks (layer 3) with AWS Shield.
+
+We use `karpenter.k8s.aws/v1alpha1` API to define a `AWSNodeTemplate` that provides elastic IP on demand upon EC2 instance launch. Elastic IP provisioning logic:
+
+* Get one of the available elastic IP
+
+```bash
+elastic_ip=`aws ec2 describe-addresses --filters "Name=tag:game-name,Values=lyra" --query "Addresses[?AssociationId==null].AllocationId"`
+```
+
+* Create one if none exists
+
+```bash
+elastic_ip=`aws ec2 allocate-address --tag-specifications 'ResourceType=elastic-ip,Tags=[{Key=game-name,Value=lyra},{Key=Name,Value=lyra}]' --query "AllocationId"`
+```
+
+* Discover the EC2 instance ID
+
+```bash
+instance_id=`curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id`
+```
+
+* Discover the elastic network interface to use for the elastic IP using the EC2 instacne ID
+
+```bash
+eni_id=`aws ec2 describe-network-interfaces --filters Name=tag:Name,Values=karpenter.sh/provisioner-name/lyra --query "NetworkInterfaces[?Attachment.InstanceId == '$instance_id'].NetworkInterfaceId"`
+```
+
+* Finally,  
+
+```bash
+aws ec2 associate-address --network-interface-id $eni_id --allocation-id $elastic_ip
+```

@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stkbot
+  name: stkbot
+  namespace: default
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  #replicas: 1
+  selector:
+    matchLabels:
+      app: stkbot
+  template:
+    metadata:
+      labels:
+        app: stkbot
+    spec:
+      nodeSelector:
+        karpenter.sh/provisioner-name: stkbot
+      serviceAccountName: gs-admin
+      containers:
+      - name: stk
+        securityContext:
+          privileged: true 
+          allowPrivilegeEscalation: true
+          runAsUser: 0
+        envFrom:
+          - secretRef:
+              name: db-creds
+        env:
+        - name: MISC_ARGS
+          value: "--connection-debug --auto-connect --owner-less"
+        - name: SIZE_OF_GAME_SAMPLE
+          value: "1000"
+        - name: APP
+          value: stksrv-noml
+        - name: CW_NS
+          value: "supertuxkart"
+        - name: CLIENT_STDOUT
+          value: "/root/.config/supertuxkart/config-0.10/stdout.log"
+        - name: MAXPLAYERS
+          value: "44"
+        - name: NETWORK_AI
+          value: "17"
+        - name: SLEEP_B4_PUT_CW
+          value: "10"
+        - name: GAME_VERSION
+          value: "20221121024947" 
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: 441218111557.dkr.ecr.us-west-2.amazonaws.com/stk-ci:stk-server-multiarch
+        lifecycle:
+          preStop:
+            exec:
+              #command: ["/bin/sh","-c","/cli-sigstop.sh"]
+              command: ["/bin/sh","-c","/cli-sigstop.sh > /proc/1/fd/1"]
+        imagePullPolicy: Always
+        command:
+        - /start-bot.sh
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi

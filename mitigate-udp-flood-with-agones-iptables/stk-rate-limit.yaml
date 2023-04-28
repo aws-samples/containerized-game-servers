@@ -10,14 +10,15 @@ spec:
       labels:
         game: Supertuxkart
     spec:
-      players:
-        inititalCapacity: 44
+#      players:
+#        inititalCapacity: 44
       ports:
       - name: default
         portPolicy: Dynamic
         containerPort: 4080
         protocol: UDP
       health:
+        #TODO - switch
         disabled: false
         initialDelaySeconds: 300
         periodSeconds: 15
@@ -32,8 +33,15 @@ spec:
           serviceAccountName: gs-admin
           initContainers:
           - name: rate-limit
-            image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_SERVER_TAG
-            command: ['bash','-cx','iptables -N limit-by-ip-chain && iptables -A limit-by-ip-chain -m hashlimit --hashlimit-upto 10/sec --hashlimit-burst 20 --hashlimit-mode srcip --hashlimit-name per_ip_conn_rate_limit -j ACCEPT && iptables -A limit-by-ip-chain --match limit --limit 30/sec -j NFLOG --nflog-prefix "SuperTuxKart-Protection-Rejected: " && iptables -A limit-by-ip-chain -j DROP && iptables -I INPUT -p udp  -m conntrack --ctstate ESTABLISHED -j limit-by-ip-chain']
+            image: 441218111557.dkr.ecr.us-west-2.amazonaws.com/stk-ci:stk-server-multiarch
+            env:
+            - name: HASHLIMIT_UPTO
+              value: "10"
+            - name: HASHLIMIT_BURST
+              value: "30"
+            - name: LOG_LIMIT
+              value: "30"
+            command: ["/rate-limit.sh"]
             securityContext:
               capabilities:
                 add: ["NET_ADMIN"]
@@ -45,8 +53,12 @@ spec:
             env:
             - name: IS_AGONES
               value: "True"
+            - name: CPUARCH
+              value: "aarch64"
             - name: GAME_SERVER_PORT
               value: "4080"
+            - name: CW_NS
+              value: "supertuxkart"
             - name: MODE
               value: "0"
             - name: LAPS
@@ -85,10 +97,10 @@ spec:
                 - /udp-health-probe.py
               initialDelaySeconds: 60
               periodSeconds: 5 
-            resources:
-              requests:
-                cpu: 1000m
-                memory: 512Mi
-              limits:
-                cpu: 1000m
-                memory: 512Mi
+            #resources:
+            #  requests:
+            #    cpu: 1000m
+              #  memory: 512Mi
+              #limits:
+              #  cpu: 1000m
+              #  memory: 512Mi

@@ -5,3 +5,5 @@
  #### [udp-nlb-sample](./udp-nlb-sample) demonstrate k8s deployment of UDP game servers backed by NLB  
  #### [craft](./craft) demonstrate game that stores game state in Aurora PostgreSQL of game servers backed by NLB
  #### [spot-sig-handler](./spot-sig-handler) demonstrate node termination handler for spot instance using IMDSv2
+ #### [mitigate-udp-flood-with-agones-iptables](./mitigate-udp-flood-with-agones-iptables) iptables-based ddos mitigation for udp game servers
+ #### [lyra](./lyra) Unreal Engine 5.1 Lyra Starter Game - demonstrate NodePort per pod service with EIP

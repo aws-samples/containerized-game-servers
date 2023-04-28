@@ -3,12 +3,12 @@
 Dedicated game server deployment method for Unreal engine-based games on EKS. It demonstrates (1) Dynamic port allocation with kubernetes-native networking (v1/Service); and (2) public IPv4 IP with Elastic IP or EC2 public IPv4. Dedicated servers that run in a pod like game servers, require public IPv4 access via EIP for predictable IPv4 address allocation. This is to mask public IPv4 addresses with customer DNS rather than .compute.amazonaws.com or mitigate network volumetric attacks (layer 3) with AWS Shield. 
 
 ### How to use this sample?
-* Build the game image ([manually](https://docs.unrealengine.com/5.0/en-US/setting-up-dedicated-servers-in-unreal-engine/) 
+* Build the game image [manually or with code-pipeline](https://docs.unrealengine.com/5.0/en-US/setting-up-dedicated-servers-in-unreal-engine/) 
 * Create an [EKS cluster with Karpenter](https://karpenter.sh/)
 * Deploy [Container Insights](https://github.com/aws-samples/containerized-game-servers/tree/master/craft#deploy-container-insights)
 * Download the [windows game client](https://lyra-starter-game.s3.us-west-2.amazonaws.com/WindowsClient.zip). Discover the game endpoint (`kubectl get gs`) and connect or spectate the bot playing. 
 
-### Manual image build steps
+### Build steps
 Use https://docs.unrealengine.com/5.0/en-US/setting-up-dedicated-servers-in-unreal-engine/ to build two sets of server binaries and content. We already built the server binaries and content. Follow the following for manual steps on your local development host. 
 
 1/ Populate the following enviroment variables. 
@@ -36,6 +36,8 @@ export S3_LYRA_ASSETS=lyra-starter-game
 export CLUSTER_NAME=lyra-usw-2
 ```
 
+#### Build on your local machine
+
 2/ Build the base image
 
 This is the image that includes the generic tools and libraries needed for the game. We used CPU architecture agnostic packages to allow dynamic compile and linkage to local architecture. The persona that most interested in this build is the IT/Devops that optimizes for stability and security
@@ -61,8 +63,7 @@ cd ./server/stk-game-server-image-multiarch
 ./buildx.sh
 ```
 
-
-### Automated image deploy steps
+#### Automated image deploy steps
 The following will create a CodePipline that copy the build scripts in `server/` folder into a CodeCommit repository and run the steps above in a separate CodeBuild jobs.
 
 1/ deploy the pipeline that creates the base image

@@ -18,7 +18,7 @@ Below is the sequence of manual execution steps for building a game docker image
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=us-west-2
 export BUILDX_VER=v0.10.3
-export BASE_REPO=baseimage-ci
+export BASE_REPO=baseimage
 export BASE_IMAGE_TAG=multiarch-py3
 export BASE_IMAGE_ARM_TAG=arm-py3
 export BASE_IMAGE_AMD_TAG=amd-py3
@@ -36,6 +36,9 @@ export GITHUB_STK="https://github.com/yahavb/stk-code"
 export GITHUB_STK_BRANCH=master
 export SVN_STK="https://svn.code.sf.net/p/supertuxkart/code/stk-assets"
 export S3_STK_ASSETS="supertuxkart-assets"
+export GITHUB_USER=yahavb
+export GITHUB_BRANCH=main
+export GITHUB_REPO=containerized-game-servers
 
 export CLUSTER_NAME=stk-usw-2
 ```

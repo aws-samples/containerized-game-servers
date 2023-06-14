@@ -43,6 +43,8 @@ export GITHUB_REPO=containerized-game-servers
 export CLUSTER_NAME=stk-usw-2
 ```
 
+Create a secret at the AWS Secrets Manager. Store New Secret -> Other type of secret -> Key to token and value to be the GitHub classic token - Settings->Developer settings -> Tokens (classic). The name of the secret should be `githubtoken`
+
 2/ Build the base image
 
 This is the image that includes the generic tools and libraries needed for the game. We used CPU architecture agnostic packages to allow dynamic compile and linkage to local architecture. The persona that most interested in this build is the IT/Devops that optimizes for stability and security

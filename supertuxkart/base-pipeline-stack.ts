@@ -6,7 +6,9 @@ import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as iam from "aws-cdk-lib/aws-iam";
-import console = require('console');
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as cdk from 'aws-cdk-lib/core';
+import * as cfn from 'aws-cdk-lib/aws-cloudformation';
 
 export class BasePipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -20,7 +22,7 @@ export class BasePipelineStack extends Stack {
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
-  /* 
+  /* uncomment when you test the stack and dont want to manually delete the ecr registry 
   const base_registry = new ecr.Repository(this,`base_repo`,{
     repositoryName:BASE_REPO.valueAsString,
     imageScanOnPush: true
@@ -38,6 +40,20 @@ export class BasePipelineStack extends Stack {
     resources: ['*'],
     actions: ['ssm:*'],
   }));
+
+  const githubSecret = new secretsmanager.Secret(this, 'githubSecret', {
+    secretObjectValue: {
+      token: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
+    },
+  });
+  const githubOAuthToken = SecretValue.secretsManager(githubSecret.secretArn,{jsonField:'token'});
+  new cdk.CfnOutput(this, 'githubOAuthTokenRuntimeOutput1', {
+      //value: SecretValue.secretsManager("githubtoken",{jsonField: "token"}).toString()
+      value: githubSecret.secretValueFromJson('token').toString()
+  });
+  new cdk.CfnOutput(this, 'githubOAuthTokenRuntimeOutput2', {
+      value: SecretValue.secretsManager(githubSecret.secretArn,{jsonField: "token"}).toString()
+  });
 
   const base_image_arm_build = new codebuild.Project(this, `BaseImageArmBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
@@ -151,7 +167,7 @@ export class BasePipelineStack extends Stack {
         repo: GITHUB_REPO.valueAsString,
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
-        oauthToken: SecretValue.secretsManager("ghtoken",{jsonField: "ghtoken"}),
+        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
         trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
         //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
       })

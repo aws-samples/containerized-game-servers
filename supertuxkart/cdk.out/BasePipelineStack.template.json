@@ -270,7 +270,11 @@
        "Action": [
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage"
+        "ecr:BatchGetImage",
+        "ecr:CompleteLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:InitiateLayerUpload",
+        "ecr:PutImage"
        ],
        "Effect": "Allow",
        "Resource": {
@@ -293,30 +297,6 @@
        "Action": "ecr:GetAuthorizationToken",
        "Effect": "Allow",
        "Resource": "*"
-      },
-      {
-       "Action": [
-        "ecr:PutImage",
-        "ecr:InitiateLayerUpload",
-        "ecr:UploadLayerPart",
-        "ecr:CompleteLayerUpload"
-       ],
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Ref": "AWS::Partition"
-          },
-          ":ecr:us-west-2:441218111557:repository/",
-          {
-           "Ref": "BASEREPO"
-          }
-         ]
-        ]
-       }
       },
       {
        "Action": [
@@ -388,6 +368,28 @@
    },
    "Metadata": {
     "aws:cdk:path": "BasePipelineStack/BaseCodeBuildDeployRole/DefaultPolicy/Resource"
+   }
+  },
+  "githubSecret7D37FCC7": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "SecretString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"token\":\"",
+       {
+        "Ref": "GITHUBOAUTHTOKEN"
+       },
+       "\"}"
+      ]
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BasePipelineStack/githubSecret/Resource"
    }
   },
   "BaseImageArmBuildFDA32ABF": {
@@ -849,7 +851,7 @@
          "Branch": {
           "Ref": "GITHUBBRANCH"
          },
-         "OAuthToken": "{{resolve:secretsmanager:ghtoken:SecretString:ghtoken::}}",
+         "OAuthToken": "{{resolve:secretsmanager:githubtoken:SecretString:token::}}",
          "PollForSourceChanges": false
         },
         "Name": "GitHub_Source",
@@ -976,7 +978,7 @@
    "Properties": {
     "Authentication": "GITHUB_HMAC",
     "AuthenticationConfiguration": {
-     "SecretToken": "{{resolve:secretsmanager:ghtoken:SecretString:ghtoken::}}"
+     "SecretToken": "{{resolve:secretsmanager:githubtoken:SecretString:token::}}"
     },
     "Filters": [
      {
@@ -1190,10 +1192,40 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PsW7DMAxEvyW7zDbJkrXpmMVwh46BLDMILdk0RDlBIOjfa0sGGnC4R9wRJA9wOsJ+p59Smc5WjlqIP0Ebq75vY629HjCgV4t/jWg8NDixUGD/OmtBRXqA2LDDNZ61ZkfmlaczJWW4w3Ym10GsPfdoQnYLFnuiCR2NuCQ2ypE3/sX2zmyTsoNAvGDesMqXIy1rkyEpOUI8z8Zi3rJRkf/T3vuUVIPCszfliY2TGpfDoJePx+ETltr1QlT5eQw0IDRF/wC17qQpPwEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OO0/EMBCEf8v1znK6o6DlKCmIQkGJHGeBTfyI/ACdLP93nHUQJxfzrXfGnhM83MPxIH9Cp6al0zRCfo1SLeLpw/bSS4MRvaj794zKw4CrCxSdv15kQEHSQB6cxs3O2jtN6spppiJCzWEMRlr5ib4+z/PmaFSEchOOifQEufduRsXbHdt6pRU1WayOndhyw284fjm3FLGYAPkZucMmj5pk2AaG2ucM+ZLU0jrs1OS//O1cihgwuOQVf/SS4po4+3dbhK0VYQ5336cj1HOYA1Hnk41kEIamvzI+iVhrAQAA"
    },
    "Metadata": {
     "aws:cdk:path": "BasePipelineStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "githubOAuthTokenRuntimeOutput1": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "{{resolve:secretsmanager:",
+      {
+       "Ref": "githubSecret7D37FCC7"
+      },
+      ":SecretString:token::}}"
+     ]
+    ]
+   }
+  },
+  "githubOAuthTokenRuntimeOutput2": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "{{resolve:secretsmanager:",
+      {
+       "Ref": "githubSecret7D37FCC7"
+      },
+      ":SecretString:token::}}"
+     ]
+    ]
    }
   }
  },

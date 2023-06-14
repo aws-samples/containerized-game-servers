@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::441218111557:role/cdk-hnb659fds-deploy-role-441218111557-us-west-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::441218111557:role/cdk-hnb659fds-cfn-exec-role-441218111557-us-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-441218111557-us-west-2/4353b97f2e3752797d64c23c2dcf66b03a683323b41a6939f0b3ae455f4435dc.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-441218111557-us-west-2/7b7bea9157a75d4f066e994349f7d1900212b0097b676f09a2a50fc8e249c58a.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -97,6 +97,24 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "BaseCodeBuildDeployRoleDefaultPolicy93D8F557"
+          }
+        ],
+        "/BasePipelineStack/githubSecret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "githubSecret7D37FCC7"
+          }
+        ],
+        "/BasePipelineStack/githubOAuthTokenRuntimeOutput1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "githubOAuthTokenRuntimeOutput1"
+          }
+        ],
+        "/BasePipelineStack/githubOAuthTokenRuntimeOutput2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "githubOAuthTokenRuntimeOutput2"
           }
         ],
         "/BasePipelineStack/BaseImageArmBuild/Resource": [

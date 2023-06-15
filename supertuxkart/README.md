@@ -12,6 +12,8 @@
 ### Manual image build steps
 Below is the sequence of manual execution steps for building a game docker image that runs on ARM64 and AMD64 CPU arch.We also offer automation with CodePipeline and CodeBuild in the next section
 
+0/ Fork this repo to use it as source with `codepipeline_actions.GitHubSourceAction`
+
 1/ Populate the following enviroment variables. 
 
 ```bash
@@ -36,14 +38,14 @@ export GITHUB_STK="https://github.com/yahavb/stk-code"
 export GITHUB_STK_BRANCH=master
 export SVN_STK="https://svn.code.sf.net/p/supertuxkart/code/stk-assets"
 export S3_STK_ASSETS="supertuxkart-assets"
-export GITHUB_USER=yahavb
-export GITHUB_BRANCH=main
+export GITHUB_USER=mygithubusername
+export GITHUB_BRANCH=master, main etc
 export GITHUB_REPO=containerized-game-servers
 
 export CLUSTER_NAME=stk-usw-2
 ```
 
-Create a secret at the AWS Secrets Manager. Store New Secret -> Other type of secret -> Key to token and value to be the GitHub classic token - Settings->Developer settings -> Tokens (classic). The name of the secret should be `githubtoken`
+Create a secret in the AWS Secrets Manager. Store New Secret -> Other type of secret -> Key to token and value to be the GitHub classic token - Settings->Developer settings -> Tokens (classic). The name of the secret should be `githubtoken`
 
 2/ Build the base image
 

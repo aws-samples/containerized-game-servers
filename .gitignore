@@ -1,8 +1,10 @@
 .DS_Store
 supertuxkart/ci/package-lock.json
-*cdk.out/*
+*cdk.out*
 */package-lock.json
 node_modules
 */package.json
 *.secrets
 *package-lock.json
+supertuxkart/cdk.out
+

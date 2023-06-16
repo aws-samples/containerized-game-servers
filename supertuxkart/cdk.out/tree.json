@@ -4,13 +4,13 @@
     "id": "App",
     "path": "",
     "children": {
-      "BasePipelineStack": {
-        "id": "BasePipelineStack",
-        "path": "BasePipelineStack",
+      "StkPipelineStack": {
+        "id": "StkPipelineStack",
+        "path": "StkPipelineStack",
         "children": {
-          "BUILDXVER": {
-            "id": "BUILDXVER",
-            "path": "BasePipelineStack/BUILDXVER",
+          "BUILDX_VER": {
+            "id": "BUILDX_VER",
+            "path": "StkPipelineStack/BUILDX_VER",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -18,7 +18,7 @@
           },
           "BASEREPO": {
             "id": "BASEREPO",
-            "path": "BasePipelineStack/BASEREPO",
+            "path": "StkPipelineStack/BASEREPO",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -26,23 +26,119 @@
           },
           "BASEIMAGETAG": {
             "id": "BASEIMAGETAG",
-            "path": "BasePipelineStack/BASEIMAGETAG",
+            "path": "StkPipelineStack/BASEIMAGETAG",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
             }
           },
-          "BASEIMAGEAMDTAG": {
-            "id": "BASEIMAGEAMDTAG",
-            "path": "BasePipelineStack/BASEIMAGEAMDTAG",
+          "GAMEREPO": {
+            "id": "GAMEREPO",
+            "path": "StkPipelineStack/GAMEREPO",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
             }
           },
-          "BASEIMAGEARMTAG": {
-            "id": "BASEIMAGEARMTAG",
-            "path": "BasePipelineStack/BASEIMAGEARMTAG",
+          "GAMEASSETSTAG": {
+            "id": "GAMEASSETSTAG",
+            "path": "StkPipelineStack/GAMEASSETSTAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GAMEARMASSETSTAG": {
+            "id": "GAMEARMASSETSTAG",
+            "path": "StkPipelineStack/GAMEARMASSETSTAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GAMEAMDASSETSTAG": {
+            "id": "GAMEAMDASSETSTAG",
+            "path": "StkPipelineStack/GAMEAMDASSETSTAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GAMECODETAG": {
+            "id": "GAMECODETAG",
+            "path": "StkPipelineStack/GAMECODETAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GAMEARMCODETAG": {
+            "id": "GAMEARMCODETAG",
+            "path": "StkPipelineStack/GAMEARMCODETAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GAMEAMDCODETAG": {
+            "id": "GAMEAMDCODETAG",
+            "path": "StkPipelineStack/GAMEAMDCODETAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GAMESERVERTAG": {
+            "id": "GAMESERVERTAG",
+            "path": "StkPipelineStack/GAMESERVERTAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GAMEARMSERVERTAG": {
+            "id": "GAMEARMSERVERTAG",
+            "path": "StkPipelineStack/GAMEARMSERVERTAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GAMEAMDSERVERTAG": {
+            "id": "GAMEAMDSERVERTAG",
+            "path": "StkPipelineStack/GAMEAMDSERVERTAG",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "SVNSTK": {
+            "id": "SVNSTK",
+            "path": "StkPipelineStack/SVNSTK",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GITHUBSTK": {
+            "id": "GITHUBSTK",
+            "path": "StkPipelineStack/GITHUBSTK",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "GITHUBSTKBRANCH": {
+            "id": "GITHUBSTKBRANCH",
+            "path": "StkPipelineStack/GITHUBSTKBRANCH",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.84.0"
+            }
+          },
+          "S3STKASSETS": {
+            "id": "S3STKASSETS",
+            "path": "StkPipelineStack/S3STKASSETS",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -50,7 +146,7 @@
           },
           "GITHUBOAUTHTOKEN": {
             "id": "GITHUBOAUTHTOKEN",
-            "path": "BasePipelineStack/GITHUBOAUTHTOKEN",
+            "path": "StkPipelineStack/GITHUBOAUTHTOKEN",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -58,7 +154,7 @@
           },
           "GITHUBUSER": {
             "id": "GITHUBUSER",
-            "path": "BasePipelineStack/GITHUBUSER",
+            "path": "StkPipelineStack/GITHUBUSER",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -66,7 +162,7 @@
           },
           "GITHUBREPO": {
             "id": "GITHUBREPO",
-            "path": "BasePipelineStack/GITHUBREPO",
+            "path": "StkPipelineStack/GITHUBREPO",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -74,7 +170,7 @@
           },
           "GITHUBBRANCH": {
             "id": "GITHUBBRANCH",
-            "path": "BasePipelineStack/GITHUBBRANCH",
+            "path": "StkPipelineStack/GITHUBBRANCH",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -82,19 +178,35 @@
           },
           "base_repo": {
             "id": "base_repo",
-            "path": "BasePipelineStack/base_repo",
+            "path": "StkPipelineStack/base_repo",
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_ecr.RepositoryBase",
               "version": "2.84.0"
             }
           },
-          "BaseCodeBuildDeployRole": {
-            "id": "BaseCodeBuildDeployRole",
-            "path": "BasePipelineStack/BaseCodeBuildDeployRole",
+          "game_assets_bucket": {
+            "id": "game_assets_bucket",
+            "path": "StkPipelineStack/game_assets_bucket",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+              "version": "2.84.0"
+            }
+          },
+          "game_repo": {
+            "id": "game_repo",
+            "path": "StkPipelineStack/game_repo",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ecr.RepositoryBase",
+              "version": "2.84.0"
+            }
+          },
+          "StkBuildDeployRole": {
+            "id": "StkBuildDeployRole",
+            "path": "StkPipelineStack/StkBuildDeployRole",
             "children": {
-              "ImportBaseCodeBuildDeployRole": {
-                "id": "ImportBaseCodeBuildDeployRole",
-                "path": "BasePipelineStack/BaseCodeBuildDeployRole/ImportBaseCodeBuildDeployRole",
+              "ImportStkBuildDeployRole": {
+                "id": "ImportStkBuildDeployRole",
+                "path": "StkPipelineStack/StkBuildDeployRole/ImportStkBuildDeployRole",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.Resource",
                   "version": "2.84.0"
@@ -102,7 +214,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "BasePipelineStack/BaseCodeBuildDeployRole/Resource",
+                "path": "StkPipelineStack/StkBuildDeployRole/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                   "aws:cdk:cloudformation:props": {
@@ -118,7 +230,7 @@
                       ],
                       "Version": "2012-10-17"
                     },
-                    "roleName": "BaseCodeBuildDeployRole"
+                    "roleName": "StkBuildDeployRole"
                   }
                 },
                 "constructInfo": {
@@ -128,11 +240,11 @@
               },
               "DefaultPolicy": {
                 "id": "DefaultPolicy",
-                "path": "BasePipelineStack/BaseCodeBuildDeployRole/DefaultPolicy",
+                "path": "StkPipelineStack/StkBuildDeployRole/DefaultPolicy",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "BasePipelineStack/BaseCodeBuildDeployRole/DefaultPolicy/Resource",
+                    "path": "StkPipelineStack/StkBuildDeployRole/DefaultPolicy/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                       "aws:cdk:cloudformation:props": {
@@ -161,7 +273,7 @@
                                       },
                                       ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
                                       {
-                                        "Ref": "BaseImageArmBuildFDA32ABF"
+                                        "Ref": "STKAssetsImageBuildX957C091D"
                                       }
                                     ]
                                   ]
@@ -176,7 +288,7 @@
                                       },
                                       ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
                                       {
-                                        "Ref": "BaseImageArmBuildFDA32ABF"
+                                        "Ref": "STKAssetsImageBuildX957C091D"
                                       },
                                       ":*"
                                     ]
@@ -203,7 +315,7 @@
                                     },
                                     ":codebuild:us-west-2:441218111557:report-group/",
                                     {
-                                      "Ref": "BaseImageArmBuildFDA32ABF"
+                                      "Ref": "STKAssetsImageBuildX957C091D"
                                     },
                                     "-*"
                                   ]
@@ -228,7 +340,7 @@
                                       },
                                       ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
                                       {
-                                        "Ref": "BaseImageAmdBuildCDD5A382"
+                                        "Ref": "STKCodeImageArmBuild7AA000C2"
                                       }
                                     ]
                                   ]
@@ -243,7 +355,7 @@
                                       },
                                       ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
                                       {
-                                        "Ref": "BaseImageAmdBuildCDD5A382"
+                                        "Ref": "STKCodeImageArmBuild7AA000C2"
                                       },
                                       ":*"
                                     ]
@@ -270,7 +382,7 @@
                                     },
                                     ":codebuild:us-west-2:441218111557:report-group/",
                                     {
-                                      "Ref": "BaseImageAmdBuildCDD5A382"
+                                      "Ref": "STKCodeImageArmBuild7AA000C2"
                                     },
                                     "-*"
                                   ]
@@ -295,7 +407,7 @@
                                       },
                                       ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
                                       {
-                                        "Ref": "BaseImageAmdBuildAssembly66D95784"
+                                        "Ref": "STKCodeImageArmBuildX9BBAA117"
                                       }
                                     ]
                                   ]
@@ -310,7 +422,7 @@
                                       },
                                       ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
                                       {
-                                        "Ref": "BaseImageAmdBuildAssembly66D95784"
+                                        "Ref": "STKCodeImageArmBuildX9BBAA117"
                                       },
                                       ":*"
                                     ]
@@ -337,7 +449,208 @@
                                     },
                                     ":codebuild:us-west-2:441218111557:report-group/",
                                     {
-                                      "Ref": "BaseImageAmdBuildAssembly66D95784"
+                                      "Ref": "STKCodeImageArmBuildX9BBAA117"
+                                    },
+                                    "-*"
+                                  ]
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "STKCodeImageAmdBuild4D466C6D"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "STKCodeImageAmdBuild4D466C6D"
+                                      },
+                                      ":*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases",
+                                "codebuild:BatchPutCodeCoverages"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":codebuild:us-west-2:441218111557:report-group/",
+                                    {
+                                      "Ref": "STKCodeImageAmdBuild4D466C6D"
+                                    },
+                                    "-*"
+                                  ]
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "STKCodeImageMultiarchAssembly2EAEE951"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "STKCodeImageMultiarchAssembly2EAEE951"
+                                      },
+                                      ":*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases",
+                                "codebuild:BatchPutCodeCoverages"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":codebuild:us-west-2:441218111557:report-group/",
+                                    {
+                                      "Ref": "STKCodeImageMultiarchAssembly2EAEE951"
+                                    },
+                                    "-*"
+                                  ]
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "STKGameImageBuildX66A1C3EE"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:us-west-2:441218111557:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "STKGameImageBuildX66A1C3EE"
+                                      },
+                                      ":*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases",
+                                "codebuild:BatchPutCodeCoverages"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":codebuild:us-west-2:441218111557:report-group/",
+                                    {
+                                      "Ref": "STKGameImageBuildX66A1C3EE"
                                     },
                                     "-*"
                                   ]
@@ -378,6 +691,33 @@
                             },
                             {
                               "Action": [
+                                "ecr:BatchCheckLayerAvailability",
+                                "ecr:GetDownloadUrlForLayer",
+                                "ecr:BatchGetImage",
+                                "ecr:CompleteLayerUpload",
+                                "ecr:UploadLayerPart",
+                                "ecr:InitiateLayerUpload",
+                                "ecr:PutImage"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":ecr:us-west-2:441218111557:repository/",
+                                    {
+                                      "Ref": "GAMEREPO"
+                                    }
+                                  ]
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
                                 "s3:GetObject*",
                                 "s3:GetBucket*",
                                 "s3:List*"
@@ -386,7 +726,7 @@
                               "Resource": [
                                 {
                                   "Fn::GetAtt": [
-                                    "BuildBasePipelineArtifactsBucket51786A86",
+                                    "STKCodeBuildXPipelineArtifactsBucket8C7588ED",
                                     "Arn"
                                   ]
                                 },
@@ -396,7 +736,7 @@
                                     [
                                       {
                                         "Fn::GetAtt": [
-                                          "BuildBasePipelineArtifactsBucket51786A86",
+                                          "STKCodeBuildXPipelineArtifactsBucket8C7588ED",
                                           "Arn"
                                         ]
                                       },
@@ -414,7 +754,7 @@
                               "Effect": "Allow",
                               "Resource": {
                                 "Fn::GetAtt": [
-                                  "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                                  "STKCodeBuildXPipelineArtifactsBucketEncryptionKey26A1E743",
                                   "Arn"
                                 ]
                               }
@@ -429,7 +769,181 @@
                               "Effect": "Allow",
                               "Resource": {
                                 "Fn::GetAtt": [
-                                  "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                                  "STKCodeBuildXPipelineArtifactsBucketEncryptionKey26A1E743",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "STKArtistBuildXPipelineArtifactsBucket12AAA89D",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "STKArtistBuildXPipelineArtifactsBucket12AAA89D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:DescribeKey"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "STKArtistBuildXPipelineArtifactsBucketEncryptionKey61775E58",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "STKArtistBuildXPipelineArtifactsBucketEncryptionKey61775E58",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "STKDeveloperPipelineArtifactsBucketD945CC0F",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "STKDeveloperPipelineArtifactsBucketD945CC0F",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:DescribeKey"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "STKDevOpsPipelineArtifactsBucketDD047DC2",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "STKDevOpsPipelineArtifactsBucketDD047DC2",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:DescribeKey"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "STKDevOpsPipelineArtifactsBucketEncryptionKey34CE4DED",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "STKDevOpsPipelineArtifactsBucketEncryptionKey34CE4DED",
                                   "Arn"
                                 ]
                               }
@@ -437,10 +951,10 @@
                           ],
                           "Version": "2012-10-17"
                         },
-                        "policyName": "BaseCodeBuildDeployRoleDefaultPolicy93D8F557",
+                        "policyName": "StkBuildDeployRoleDefaultPolicy86DFEAA1",
                         "roles": [
                           {
-                            "Ref": "BaseCodeBuildDeployRole2A53BD0D"
+                            "Ref": "StkBuildDeployRoleC72CA4FD"
                           }
                         ]
                       }
@@ -462,64 +976,13 @@
               "version": "2.84.0"
             }
           },
-          "githubSecret": {
-            "id": "githubSecret",
-            "path": "BasePipelineStack/githubSecret",
+          "STKAssetsImageBuildX": {
+            "id": "STKAssetsImageBuildX",
+            "path": "StkPipelineStack/STKAssetsImageBuildX",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "BasePipelineStack/githubSecret/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::SecretsManager::Secret",
-                  "aws:cdk:cloudformation:props": {
-                    "secretString": {
-                      "Fn::Join": [
-                        "",
-                        [
-                          "{\"token\":\"",
-                          {
-                            "Ref": "GITHUBOAUTHTOKEN"
-                          },
-                          "\"}"
-                        ]
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_secretsmanager.CfnSecret",
-                  "version": "2.84.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.aws_secretsmanager.Secret",
-              "version": "2.84.0"
-            }
-          },
-          "githubOAuthTokenRuntimeOutput1": {
-            "id": "githubOAuthTokenRuntimeOutput1",
-            "path": "BasePipelineStack/githubOAuthTokenRuntimeOutput1",
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.CfnOutput",
-              "version": "2.84.0"
-            }
-          },
-          "githubOAuthTokenRuntimeOutput2": {
-            "id": "githubOAuthTokenRuntimeOutput2",
-            "path": "BasePipelineStack/githubOAuthTokenRuntimeOutput2",
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.CfnOutput",
-              "version": "2.84.0"
-            }
-          },
-          "BaseImageArmBuild": {
-            "id": "BaseImageArmBuild",
-            "path": "BasePipelineStack/BaseImageArmBuild",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "BasePipelineStack/BaseImageArmBuild/Resource",
+                "path": "StkPipelineStack/STKAssetsImageBuildX/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
                   "aws:cdk:cloudformation:props": {
@@ -535,7 +998,7 @@
                     },
                     "serviceRole": {
                       "Fn::GetAtt": [
-                        "BaseCodeBuildDeployRole2A53BD0D",
+                        "StkBuildDeployRoleC72CA4FD",
                         "Arn"
                       ]
                     },
@@ -545,15 +1008,31 @@
                         "Fn::Join": [
                           "",
                           [
-                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_ARM_TAG\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export BASE_REPO=\\\"",
+                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_TAG\",\n      \"GAME_REPO\",\n      \"GAME_ASSETS_TAG\",\n      \"SVN_STK\",\n      \"BUILDX_VER\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"cd supertuxkart/server/stk-assets-image-multiarch\",\n        \"chmod +x ./enable-buildx.sh && ./enable-buildx.sh\",\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export BASE_REPO=\\\"",
                             {
                               "Ref": "BASEREPO"
                             },
                             "\\\"\",\n        \"export BASE_IMAGE_TAG=\\\"",
                             {
-                              "Ref": "BASEIMAGEARMTAG"
+                              "Ref": "BASEIMAGETAG"
                             },
-                            "\\\"\",\n        \"cd supertuxkart/server/base-image-multiarch-python3\",\n        \"chmod +x ./build.sh && ./build.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+                            "\\\"\",\n        \"export GAME_REPO=\\\"",
+                            {
+                              "Ref": "GAMEREPO"
+                            },
+                            "\\\"\",\n        \"export GAME_ASSETS_TAG=\\\"",
+                            {
+                              "Ref": "GAMEASSETSTAG"
+                            },
+                            "\\\"\",\n        \"export SVN_STK=\\\"",
+                            {
+                              "Ref": "SVNSTK"
+                            },
+                            "\\\"\",\n        \"export S3_STK_ASSETS=\\\"",
+                            {
+                              "Ref": "S3STKASSETS"
+                            },
+                            "\\\"\",\n        \"chmod +x ./buildx.sh && ./buildx.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
                           ]
                         ]
                       }
@@ -567,7 +1046,7 @@
                     },
                     "encryptionKey": {
                       "Fn::GetAtt": [
-                        "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                        "STKArtistBuildXPipelineArtifactsBucketEncryptionKey61775E58",
                         "Arn"
                       ]
                     }
@@ -584,13 +1063,195 @@
               "version": "2.84.0"
             }
           },
-          "BaseImageAmdBuild": {
-            "id": "BaseImageAmdBuild",
-            "path": "BasePipelineStack/BaseImageAmdBuild",
+          "STKCodeImageArmBuild": {
+            "id": "STKCodeImageArmBuild",
+            "path": "StkPipelineStack/STKCodeImageArmBuild",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "BasePipelineStack/BaseImageAmdBuild/Resource",
+                "path": "StkPipelineStack/STKCodeImageArmBuild/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                  "aws:cdk:cloudformation:props": {
+                    "artifacts": {
+                      "type": "NO_ARTIFACTS"
+                    },
+                    "environment": {
+                      "type": "ARM_CONTAINER",
+                      "image": "aws/codebuild/amazonlinux2-aarch64-standard:2.0",
+                      "imagePullCredentialsType": "CODEBUILD",
+                      "privilegedMode": true,
+                      "computeType": "BUILD_GENERAL1_LARGE"
+                    },
+                    "serviceRole": {
+                      "Fn::GetAtt": [
+                        "StkBuildDeployRoleC72CA4FD",
+                        "Arn"
+                      ]
+                    },
+                    "source": {
+                      "type": "NO_SOURCE",
+                      "buildSpec": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_TAG\",\n      \"GAME_REPO\",\n      \"GAME_ASSETS_TAG\",\n      \"GITHUB_STK\",\n      \"GITHUB_STK_BRANCH\",\n      \"GAME_ARM_CODE_TAG\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export BUILDX_VER=\\\"",
+                            {
+                              "Ref": "BUILDXVER"
+                            },
+                            "\\\"\",\n        \"export BASE_REPO=\\\"",
+                            {
+                              "Ref": "BASEREPO"
+                            },
+                            "\\\"\",\n        \"export BASE_IMAGE_TAG=\\\"",
+                            {
+                              "Ref": "BASEIMAGETAG"
+                            },
+                            "\\\"\",\n        \"export GAME_REPO=\\\"",
+                            {
+                              "Ref": "GAMEREPO"
+                            },
+                            "\\\"\",\n        \"export GAME_ASSETS_TAG=\\\"",
+                            {
+                              "Ref": "GAMEASSETSTAG"
+                            },
+                            "\\\"\",\n        \"export GAME_CODE_TAG=\\\"",
+                            {
+                              "Ref": "GAMEARMCODETAG"
+                            },
+                            "\\\"\",\n        \"export GITHUB_STK=\\\"",
+                            {
+                              "Ref": "GITHUBSTK"
+                            },
+                            "\\\"\",\n        \"export GITHUB_STK_BRANCH=\\\"",
+                            {
+                              "Ref": "GITHUBSTKBRANCH"
+                            },
+                            "\\\"\",\n        \"cd supertuxkart/server/stk-code-image-multiarch\",\n        \"chmod +x ./build.sh && ./build.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+                          ]
+                        ]
+                      }
+                    },
+                    "cache": {
+                      "type": "NO_CACHE"
+                    },
+                    "encryptionKey": {
+                      "Fn::GetAtt": [
+                        "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
+                  "version": "2.84.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codebuild.Project",
+              "version": "2.84.0"
+            }
+          },
+          "STKCodeImageArmBuildX": {
+            "id": "STKCodeImageArmBuildX",
+            "path": "StkPipelineStack/STKCodeImageArmBuildX",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "StkPipelineStack/STKCodeImageArmBuildX/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                  "aws:cdk:cloudformation:props": {
+                    "artifacts": {
+                      "type": "NO_ARTIFACTS"
+                    },
+                    "environment": {
+                      "type": "ARM_CONTAINER",
+                      "image": "aws/codebuild/amazonlinux2-aarch64-standard:2.0",
+                      "imagePullCredentialsType": "CODEBUILD",
+                      "privilegedMode": true,
+                      "computeType": "BUILD_GENERAL1_LARGE"
+                    },
+                    "serviceRole": {
+                      "Fn::GetAtt": [
+                        "StkBuildDeployRoleC72CA4FD",
+                        "Arn"
+                      ]
+                    },
+                    "source": {
+                      "type": "NO_SOURCE",
+                      "buildSpec": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_TAG\",\n      \"GAME_REPO\",\n      \"GAME_ASSETS_TAG\",\n      \"GITHUB_STK\",\n      \"GITHUB_STK_BRANCH\",\n      \"GAME_ARM_CODE_TAG\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"cd supertuxkart/server/stk-code-image-multiarch\",\n        \"chmod +x ./enable-buildx.sh && ./enable-buildx.sh\",\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export BUILDX_VER=\\\"",
+                            {
+                              "Ref": "BUILDXVER"
+                            },
+                            "\\\"\",\n        \"export BASE_REPO=\\\"",
+                            {
+                              "Ref": "BASEREPO"
+                            },
+                            "\\\"\",\n        \"export BASE_IMAGE_TAG=\\\"",
+                            {
+                              "Ref": "BASEIMAGETAG"
+                            },
+                            "\\\"\",\n        \"export GAME_REPO=\\\"",
+                            {
+                              "Ref": "GAMEREPO"
+                            },
+                            "\\\"\",\n        \"export GAME_ASSETS_TAG=\\\"",
+                            {
+                              "Ref": "GAMEASSETSTAG"
+                            },
+                            "\\\"\",\n        \"export GAME_CODE_TAG=\\\"",
+                            {
+                              "Ref": "GAMECODETAG"
+                            },
+                            "\\\"\",\n        \"export GITHUB_STK=\\\"",
+                            {
+                              "Ref": "GITHUBSTK"
+                            },
+                            "\\\"\",\n        \"export GITHUB_STK_BRANCH=\\\"",
+                            {
+                              "Ref": "GITHUBSTKBRANCH"
+                            },
+                            "\\\"\",\n        \"chmod +x ./buildx.sh && ./buildx.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+                          ]
+                        ]
+                      }
+                    },
+                    "cache": {
+                      "type": "NO_CACHE"
+                    },
+                    "encryptionKey": {
+                      "Fn::GetAtt": [
+                        "STKCodeBuildXPipelineArtifactsBucketEncryptionKey26A1E743",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
+                  "version": "2.84.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codebuild.Project",
+              "version": "2.84.0"
+            }
+          },
+          "STKCodeImageAmdBuild": {
+            "id": "STKCodeImageAmdBuild",
+            "path": "StkPipelineStack/STKCodeImageAmdBuild",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "StkPipelineStack/STKCodeImageAmdBuild/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
                   "aws:cdk:cloudformation:props": {
@@ -606,7 +1267,7 @@
                     },
                     "serviceRole": {
                       "Fn::GetAtt": [
-                        "BaseCodeBuildDeployRole2A53BD0D",
+                        "StkBuildDeployRoleC72CA4FD",
                         "Arn"
                       ]
                     },
@@ -616,29 +1277,49 @@
                         "Fn::Join": [
                           "",
                           [
-                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_AMD_TAG\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export BASE_REPO=\\\"",
+                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_TAG\",\n      \"GAME_REPO\",\n      \"GAME_ASSETS_TAG\",\n      \"GITHUB_STK\",\n      \"GITHUB_STK_BRANCH\",\n      \"GAME_AMD_CODE_TAG\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export BUILDX_VER=\\\"",
+                            {
+                              "Ref": "BUILDXVER"
+                            },
+                            "\\\"\",\n        \"export BASE_REPO=\\\"",
                             {
                               "Ref": "BASEREPO"
                             },
                             "\\\"\",\n        \"export BASE_IMAGE_TAG=\\\"",
                             {
-                              "Ref": "BASEIMAGEAMDTAG"
+                              "Ref": "BASEIMAGETAG"
                             },
-                            "\\\"\",\n        \"cd supertuxkart/server/base-image-multiarch-python3\",\n        \"chmod +x ./build.sh && ./build.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+                            "\\\"\",\n        \"export GAME_REPO=\\\"",
+                            {
+                              "Ref": "GAMEREPO"
+                            },
+                            "\\\"\",\n        \"export GAME_ASSETS_TAG=\\\"",
+                            {
+                              "Ref": "GAMEASSETSTAG"
+                            },
+                            "\\\"\",\n        \"export GAME_CODE_TAG=\\\"",
+                            {
+                              "Ref": "GAMEAMDCODETAG"
+                            },
+                            "\\\"\",\n        \"export GITHUB_STK=\\\"",
+                            {
+                              "Ref": "GITHUBSTK"
+                            },
+                            "\\\"\",\n        \"export GITHUB_STK_BRANCH=\\\"",
+                            {
+                              "Ref": "GITHUBSTKBRANCH"
+                            },
+                            "\\\"\",\n        \"cd supertuxkart/server/stk-code-image-multiarch\",\n        \"chmod +x ./build.sh && ./build.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
                           ]
                         ]
                       }
                     },
                     "cache": {
-                      "type": "LOCAL",
-                      "modes": [
-                        "LOCAL_DOCKER_LAYER_CACHE",
-                        "LOCAL_CUSTOM_CACHE"
-                      ]
+                      "type": "NO_CACHE"
                     },
                     "encryptionKey": {
                       "Fn::GetAtt": [
-                        "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                        "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
                         "Arn"
                       ]
                     }
@@ -655,13 +1336,13 @@
               "version": "2.84.0"
             }
           },
-          "BaseImageAmdBuildAssembly": {
-            "id": "BaseImageAmdBuildAssembly",
-            "path": "BasePipelineStack/BaseImageAmdBuildAssembly",
+          "STKCodeImageMultiarchAssembly": {
+            "id": "STKCodeImageMultiarchAssembly",
+            "path": "StkPipelineStack/STKCodeImageMultiarchAssembly",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "BasePipelineStack/BaseImageAmdBuildAssembly/Resource",
+                "path": "StkPipelineStack/STKCodeImageMultiarchAssembly/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
                   "aws:cdk:cloudformation:props": {
@@ -677,7 +1358,7 @@
                     },
                     "serviceRole": {
                       "Fn::GetAtt": [
-                        "BaseCodeBuildDeployRole2A53BD0D",
+                        "StkBuildDeployRoleC72CA4FD",
                         "Arn"
                       ]
                     },
@@ -687,23 +1368,43 @@
                         "Fn::Join": [
                           "",
                           [
-                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_AMD_TAG\",\n      \"BASE_IMAGE_ARM_TAG\",\n      \"BASE_IMAGE_TAG\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export BASE_REPO=\\\"",
+                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_TAG\",\n      \"GAME_REPO\",\n      \"GAME_ASSETS_TAG\",\n      \"GAME_AMD_CODE_TAG\",\n      \"GAME_ARM_CODE_TAG\",\n      \"GAME_CODE_TAG\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export BASE_REPO=\\\"",
                             {
                               "Ref": "BASEREPO"
-                            },
-                            "\\\"\",\n        \"export BASE_IMAGE_AMD_TAG=\\\"",
-                            {
-                              "Ref": "BASEIMAGEAMDTAG"
-                            },
-                            "\\\"\",\n        \"export BASE_IMAGE_ARM_TAG=\\\"",
-                            {
-                              "Ref": "BASEIMAGEARMTAG"
                             },
                             "\\\"\",\n        \"export BASE_IMAGE_TAG=\\\"",
                             {
                               "Ref": "BASEIMAGETAG"
                             },
-                            "\\\"\",\n        \"cd supertuxkart/server/base-image-multiarch-python3\",\n        \"chmod +x ./assemble_multiarch_image.sh && ./assemble_multiarch_image.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+                            "\\\"\",\n        \"export GAME_REPO=\\\"",
+                            {
+                              "Ref": "GAMEREPO"
+                            },
+                            "\\\"\",\n        \"export GAME_ASSETS_TAG=\\\"",
+                            {
+                              "Ref": "GAMEASSETSTAG"
+                            },
+                            "\\\"\",\n        \"export GAME_AMD_CODE_TAG=\\\"",
+                            {
+                              "Ref": "GAMEAMDCODETAG"
+                            },
+                            "\\\"\",\n        \"export GAME_ARM_CODE_TAG=\\\"",
+                            {
+                              "Ref": "GAMEARMCODETAG"
+                            },
+                            "\\\"\",\n        \"export GAME_CODE_TAG=\\\"",
+                            {
+                              "Ref": "GAMECODETAG"
+                            },
+                            "\\\"\",\n        \"export GITHUB_STK=\\\"",
+                            {
+                              "Ref": "GITHUBSTK"
+                            },
+                            "\\\"\",\n        \"export GITHUB_STK_BRANCH=\\\"",
+                            {
+                              "Ref": "GITHUBSTKBRANCH"
+                            },
+                            "\\\"\",\n        \"cd supertuxkart/server/stk-code-image-multiarch\",\n        \"chmod +x ./assemble_multiarch_image.sh && ./assemble_multiarch_image.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
                           ]
                         ]
                       }
@@ -717,7 +1418,7 @@
                     },
                     "encryptionKey": {
                       "Fn::GetAtt": [
-                        "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                        "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
                         "Arn"
                       ]
                     }
@@ -734,17 +1435,100 @@
               "version": "2.84.0"
             }
           },
-          "BuildBasePipeline": {
-            "id": "BuildBasePipeline",
-            "path": "BasePipelineStack/BuildBasePipeline",
+          "STKGameImageBuildX": {
+            "id": "STKGameImageBuildX",
+            "path": "StkPipelineStack/STKGameImageBuildX",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "StkPipelineStack/STKGameImageBuildX/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                  "aws:cdk:cloudformation:props": {
+                    "artifacts": {
+                      "type": "NO_ARTIFACTS"
+                    },
+                    "environment": {
+                      "type": "ARM_CONTAINER",
+                      "image": "aws/codebuild/amazonlinux2-aarch64-standard:2.0",
+                      "imagePullCredentialsType": "CODEBUILD",
+                      "privilegedMode": true,
+                      "computeType": "BUILD_GENERAL1_LARGE"
+                    },
+                    "serviceRole": {
+                      "Fn::GetAtt": [
+                        "StkBuildDeployRoleC72CA4FD",
+                        "Arn"
+                      ]
+                    },
+                    "source": {
+                      "type": "NO_SOURCE",
+                      "buildSpec": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"AWS_ACCOUNT_ID\",\n      \"AWS_REGION\",\n      \"GAME_REPO\",\n      \"GAME_AMD_SERVER_TAG\",\n      \"GAME_ASSETS_TAG\",\n      \"GAME_CODE_TAG\",\n      \"BASE_REPO\",\n      \"BASE_IMAGE_TAG\",\n      \"BUILDX_VER\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"cd supertuxkart/server/stk-game-server-image-multiarch\",\n        \"chmod +x ./enable-buildx.sh && ./enable-buildx.sh\",\n        \"export AWS_ACCOUNT_ID=\\\"441218111557\\\"\",\n        \"export AWS_REGION=\\\"us-west-2\\\"\",\n        \"export GAME_REPO=\\\"",
+                            {
+                              "Ref": "GAMEREPO"
+                            },
+                            "\\\"\",\n        \"export GAME_SERVER_TAG=\\\"",
+                            {
+                              "Ref": "GAMEAMDSERVERTAG"
+                            },
+                            "\\\"\",\n        \"export GAME_ASSETS_TAG=\\\"",
+                            {
+                              "Ref": "GAMEASSETSTAG"
+                            },
+                            "\\\"\",\n        \"export GAME_CODE_TAG=\\\"",
+                            {
+                              "Ref": "GAMECODETAG"
+                            },
+                            "\\\"\",\n        \"export BASE_REPO=\\\"",
+                            {
+                              "Ref": "BASEREPO"
+                            },
+                            "\\\"\",\n        \"export BASE_IMAGE_TAG=\\\"",
+                            {
+                              "Ref": "BASEIMAGETAG"
+                            },
+                            "\\\"\",\n        \"chmod +x ./buildx.sh && ./buildx.sh\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"imageDetail.json\"\n    ]\n  }\n}"
+                          ]
+                        ]
+                      }
+                    },
+                    "cache": {
+                      "type": "NO_CACHE"
+                    },
+                    "encryptionKey": {
+                      "Fn::GetAtt": [
+                        "STKDevOpsPipelineArtifactsBucketEncryptionKey34CE4DED",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
+                  "version": "2.84.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codebuild.Project",
+              "version": "2.84.0"
+            }
+          },
+          "STKCodeBuildXPipeline": {
+            "id": "STKCodeBuildXPipeline",
+            "path": "StkPipelineStack/STKCodeBuildXPipeline",
             "children": {
               "ArtifactsBucketEncryptionKey": {
                 "id": "ArtifactsBucketEncryptionKey",
-                "path": "BasePipelineStack/BuildBasePipeline/ArtifactsBucketEncryptionKey",
+                "path": "StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucketEncryptionKey",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "BasePipelineStack/BuildBasePipeline/ArtifactsBucketEncryptionKey/Resource",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucketEncryptionKey/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::KMS::Key",
                       "aws:cdk:cloudformation:props": {
@@ -787,18 +1571,18 @@
               },
               "ArtifactsBucketEncryptionKeyAlias": {
                 "id": "ArtifactsBucketEncryptionKeyAlias",
-                "path": "BasePipelineStack/BuildBasePipeline/ArtifactsBucketEncryptionKeyAlias",
+                "path": "StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucketEncryptionKeyAlias",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "BasePipelineStack/BuildBasePipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
                       "aws:cdk:cloudformation:props": {
-                        "aliasName": "alias/codepipeline-basepipelinestackbuildbasepipeline117bc62c",
+                        "aliasName": "alias/codepipeline-stkpipelinestackstkcodebuildxpipeline4cc6a04c",
                         "targetKeyId": {
                           "Fn::GetAtt": [
-                            "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                            "STKCodeBuildXPipelineArtifactsBucketEncryptionKey26A1E743",
                             "Arn"
                           ]
                         }
@@ -817,11 +1601,11 @@
               },
               "ArtifactsBucket": {
                 "id": "ArtifactsBucket",
-                "path": "BasePipelineStack/BuildBasePipeline/ArtifactsBucket",
+                "path": "StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucket",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "BasePipelineStack/BuildBasePipeline/ArtifactsBucket/Resource",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucket/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                       "aws:cdk:cloudformation:props": {
@@ -832,7 +1616,7 @@
                                 "sseAlgorithm": "aws:kms",
                                 "kmsMasterKeyId": {
                                   "Fn::GetAtt": [
-                                    "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                                    "STKCodeBuildXPipelineArtifactsBucketEncryptionKey26A1E743",
                                     "Arn"
                                   ]
                                 }
@@ -855,16 +1639,16 @@
                   },
                   "Policy": {
                     "id": "Policy",
-                    "path": "BasePipelineStack/BuildBasePipeline/ArtifactsBucket/Policy",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucket/Policy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "BasePipelineStack/BuildBasePipeline/ArtifactsBucket/Policy/Resource",
+                        "path": "StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucket/Policy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
                           "aws:cdk:cloudformation:props": {
                             "bucket": {
-                              "Ref": "BuildBasePipelineArtifactsBucket51786A86"
+                              "Ref": "STKCodeBuildXPipelineArtifactsBucket8C7588ED"
                             },
                             "policyDocument": {
                               "Statement": [
@@ -882,7 +1666,7 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "BuildBasePipelineArtifactsBucket51786A86",
+                                        "STKCodeBuildXPipelineArtifactsBucket8C7588ED",
                                         "Arn"
                                       ]
                                     },
@@ -892,7 +1676,7 @@
                                         [
                                           {
                                             "Fn::GetAtt": [
-                                              "BuildBasePipelineArtifactsBucket51786A86",
+                                              "STKCodeBuildXPipelineArtifactsBucket8C7588ED",
                                               "Arn"
                                             ]
                                           },
@@ -926,11 +1710,11 @@
               },
               "Role": {
                 "id": "Role",
-                "path": "BasePipelineStack/BuildBasePipeline/Role",
+                "path": "StkPipelineStack/STKCodeBuildXPipeline/Role",
                 "children": {
                   "ImportRole": {
                     "id": "ImportRole",
-                    "path": "BasePipelineStack/BuildBasePipeline/Role/ImportRole",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/Role/ImportRole",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.84.0"
@@ -938,7 +1722,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "BasePipelineStack/BuildBasePipeline/Role/Resource",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/Role/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -963,11 +1747,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "BasePipelineStack/BuildBasePipeline/Role/DefaultPolicy",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/Role/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "BasePipelineStack/BuildBasePipeline/Role/DefaultPolicy/Resource",
+                        "path": "StkPipelineStack/STKCodeBuildXPipeline/Role/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -990,7 +1774,7 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "BuildBasePipelineArtifactsBucket51786A86",
+                                        "STKCodeBuildXPipelineArtifactsBucket8C7588ED",
                                         "Arn"
                                       ]
                                     },
@@ -1000,7 +1784,7 @@
                                         [
                                           {
                                             "Fn::GetAtt": [
-                                              "BuildBasePipelineArtifactsBucket51786A86",
+                                              "STKCodeBuildXPipelineArtifactsBucket8C7588ED",
                                               "Arn"
                                             ]
                                           },
@@ -1021,7 +1805,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                                      "STKCodeBuildXPipelineArtifactsBucketEncryptionKey26A1E743",
                                       "Arn"
                                     ]
                                   }
@@ -1031,27 +1815,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "BuildBasePipelineBaseImageBuildBaseImageArmBuildXCodePipelineActionRole36A980FB",
-                                      "Arn"
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Action": "sts:AssumeRole",
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "BuildBasePipelineBaseImageBuildBaseImageAmdBuildXCodePipelineActionRole2F25F334",
-                                      "Arn"
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Action": "sts:AssumeRole",
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "BuildBasePipelineBaseImageBuildAssembleBaseBuildsCodePipelineActionRole9BB326EC",
+                                      "STKCodeBuildXPipelineBuildAssetsCodePipelineActionRoleB2FBE6E2",
                                       "Arn"
                                     ]
                                   }
@@ -1059,10 +1823,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "BuildBasePipelineRoleDefaultPolicy7CA9EFF0",
+                            "policyName": "STKCodeBuildXPipelineRoleDefaultPolicy95BEB837",
                             "roles": [
                               {
-                                "Ref": "BuildBasePipelineRole8C8F77AD"
+                                "Ref": "STKCodeBuildXPipelineRole8108D247"
                               }
                             ]
                           }
@@ -1086,13 +1850,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "BasePipelineStack/BuildBasePipeline/Resource",
+                "path": "StkPipelineStack/STKCodeBuildXPipeline/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
                   "aws:cdk:cloudformation:props": {
                     "roleArn": {
                       "Fn::GetAtt": [
-                        "BuildBasePipelineRole8C8F77AD",
+                        "STKCodeBuildXPipelineRole8108D247",
                         "Arn"
                       ]
                     },
@@ -1131,10 +1895,10 @@
                         ]
                       },
                       {
-                        "name": "BaseImageBuild",
+                        "name": "BuildAssets",
                         "actions": [
                           {
-                            "name": "BaseImageArmBuildX",
+                            "name": "BuildAssets",
                             "inputArtifacts": [
                               {
                                 "name": "Artifact_Source_GitHub_Source"
@@ -1148,65 +1912,13 @@
                             },
                             "configuration": {
                               "ProjectName": {
-                                "Ref": "BaseImageArmBuildFDA32ABF"
+                                "Ref": "STKCodeImageArmBuildX9BBAA117"
                               }
                             },
                             "runOrder": 1,
                             "roleArn": {
                               "Fn::GetAtt": [
-                                "BuildBasePipelineBaseImageBuildBaseImageArmBuildXCodePipelineActionRole36A980FB",
-                                "Arn"
-                              ]
-                            }
-                          },
-                          {
-                            "name": "BaseImageAmdBuildX",
-                            "inputArtifacts": [
-                              {
-                                "name": "Artifact_Source_GitHub_Source"
-                              }
-                            ],
-                            "actionTypeId": {
-                              "category": "Build",
-                              "version": "1",
-                              "owner": "AWS",
-                              "provider": "CodeBuild"
-                            },
-                            "configuration": {
-                              "ProjectName": {
-                                "Ref": "BaseImageAmdBuildCDD5A382"
-                              }
-                            },
-                            "runOrder": 1,
-                            "roleArn": {
-                              "Fn::GetAtt": [
-                                "BuildBasePipelineBaseImageBuildBaseImageAmdBuildXCodePipelineActionRole2F25F334",
-                                "Arn"
-                              ]
-                            }
-                          },
-                          {
-                            "name": "AssembleBaseBuilds",
-                            "inputArtifacts": [
-                              {
-                                "name": "Artifact_Source_GitHub_Source"
-                              }
-                            ],
-                            "actionTypeId": {
-                              "category": "Build",
-                              "version": "1",
-                              "owner": "AWS",
-                              "provider": "CodeBuild"
-                            },
-                            "configuration": {
-                              "ProjectName": {
-                                "Ref": "BaseImageAmdBuildAssembly66D95784"
-                              }
-                            },
-                            "runOrder": 2,
-                            "roleArn": {
-                              "Fn::GetAtt": [
-                                "BuildBasePipelineBaseImageBuildAssembleBaseBuildsCodePipelineActionRole9BB326EC",
+                                "STKCodeBuildXPipelineBuildAssetsCodePipelineActionRoleB2FBE6E2",
                                 "Arn"
                               ]
                             }
@@ -1217,13 +1929,13 @@
                     "artifactStore": {
                       "type": "S3",
                       "location": {
-                        "Ref": "BuildBasePipelineArtifactsBucket51786A86"
+                        "Ref": "STKCodeBuildXPipelineArtifactsBucket8C7588ED"
                       },
                       "encryptionKey": {
                         "type": "KMS",
                         "id": {
                           "Fn::GetAtt": [
-                            "BuildBasePipelineArtifactsBucketEncryptionKey04467E09",
+                            "STKCodeBuildXPipelineArtifactsBucketEncryptionKey26A1E743",
                             "Arn"
                           ]
                         }
@@ -1238,15 +1950,15 @@
               },
               "Source": {
                 "id": "Source",
-                "path": "BasePipelineStack/BuildBasePipeline/Source",
+                "path": "StkPipelineStack/STKCodeBuildXPipeline/Source",
                 "children": {
                   "GitHub_Source": {
                     "id": "GitHub_Source",
-                    "path": "BasePipelineStack/BuildBasePipeline/Source/GitHub_Source",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/Source/GitHub_Source",
                     "children": {
                       "WebhookResource": {
                         "id": "WebhookResource",
-                        "path": "BasePipelineStack/BuildBasePipeline/Source/GitHub_Source/WebhookResource",
+                        "path": "StkPipelineStack/STKCodeBuildXPipeline/Source/GitHub_Source/WebhookResource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
                           "aws:cdk:cloudformation:props": {
@@ -1262,7 +1974,7 @@
                             ],
                             "targetAction": "GitHub_Source",
                             "targetPipeline": {
-                              "Ref": "BuildBasePipelineE93F0563"
+                              "Ref": "STKCodeBuildXPipeline8932D869"
                             },
                             "targetPipelineVersion": 1,
                             "registerWithThirdParty": true
@@ -1285,21 +1997,21 @@
                   "version": "10.2.52"
                 }
               },
-              "BaseImageBuild": {
-                "id": "BaseImageBuild",
-                "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild",
+              "BuildAssets": {
+                "id": "BuildAssets",
+                "path": "StkPipelineStack/STKCodeBuildXPipeline/BuildAssets",
                 "children": {
-                  "BaseImageArmBuildX": {
-                    "id": "BaseImageArmBuildX",
-                    "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageArmBuildX",
+                  "BuildAssets": {
+                    "id": "BuildAssets",
+                    "path": "StkPipelineStack/STKCodeBuildXPipeline/BuildAssets/BuildAssets",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageArmBuildX/CodePipelineActionRole",
+                        "path": "StkPipelineStack/STKCodeBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole",
                         "children": {
                           "ImportCodePipelineActionRole": {
                             "id": "ImportCodePipelineActionRole",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageArmBuildX/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "path": "StkPipelineStack/STKCodeBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/ImportCodePipelineActionRole",
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.Resource",
                               "version": "2.84.0"
@@ -1307,7 +2019,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageArmBuildX/CodePipelineActionRole/Resource",
+                            "path": "StkPipelineStack/STKCodeBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -1343,11 +2055,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageArmBuildX/CodePipelineActionRole/DefaultPolicy",
+                            "path": "StkPipelineStack/STKCodeBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageArmBuildX/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "StkPipelineStack/STKCodeBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -1362,7 +2074,7 @@
                                           "Effect": "Allow",
                                           "Resource": {
                                             "Fn::GetAtt": [
-                                              "BaseImageArmBuildFDA32ABF",
+                                              "STKCodeImageArmBuildX9BBAA117",
                                               "Arn"
                                             ]
                                           }
@@ -1370,10 +2082,1296 @@
                                       ],
                                       "Version": "2012-10-17"
                                     },
-                                    "policyName": "BuildBasePipelineBaseImageBuildBaseImageArmBuildXCodePipelineActionRoleDefaultPolicy0D732095",
+                                    "policyName": "STKCodeBuildXPipelineBuildAssetsCodePipelineActionRoleDefaultPolicy4A8ED97D",
                                     "roles": [
                                       {
-                                        "Ref": "BuildBasePipelineBaseImageBuildBaseImageArmBuildXCodePipelineActionRole36A980FB"
+                                        "Ref": "STKCodeBuildXPipelineBuildAssetsCodePipelineActionRoleB2FBE6E2"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.84.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.84.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.52"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.52"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codepipeline.Pipeline",
+              "version": "2.84.0"
+            }
+          },
+          "STKArtistBuildXPipeline": {
+            "id": "STKArtistBuildXPipeline",
+            "path": "StkPipelineStack/STKArtistBuildXPipeline",
+            "children": {
+              "ArtifactsBucketEncryptionKey": {
+                "id": "ArtifactsBucketEncryptionKey",
+                "path": "StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucketEncryptionKey",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucketEncryptionKey/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Key",
+                      "aws:cdk:cloudformation:props": {
+                        "keyPolicy": {
+                          "Statement": [
+                            {
+                              "Action": "kms:*",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::441218111557:root"
+                                    ]
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnKey",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Key",
+                  "version": "2.84.0"
+                }
+              },
+              "ArtifactsBucketEncryptionKeyAlias": {
+                "id": "ArtifactsBucketEncryptionKeyAlias",
+                "path": "StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucketEncryptionKeyAlias",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
+                      "aws:cdk:cloudformation:props": {
+                        "aliasName": "alias/codepipeline-stkpipelinestackstkartistbuildxpipeline0dc1570c",
+                        "targetKeyId": {
+                          "Fn::GetAtt": [
+                            "STKArtistBuildXPipelineArtifactsBucketEncryptionKey61775E58",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnAlias",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Alias",
+                  "version": "2.84.0"
+                }
+              },
+              "ArtifactsBucket": {
+                "id": "ArtifactsBucket",
+                "path": "StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucket",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucket/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                      "aws:cdk:cloudformation:props": {
+                        "bucketEncryption": {
+                          "serverSideEncryptionConfiguration": [
+                            {
+                              "serverSideEncryptionByDefault": {
+                                "sseAlgorithm": "aws:kms",
+                                "kmsMasterKeyId": {
+                                  "Fn::GetAtt": [
+                                    "STKArtistBuildXPipelineArtifactsBucketEncryptionKey61775E58",
+                                    "Arn"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "publicAccessBlockConfiguration": {
+                          "blockPublicAcls": true,
+                          "blockPublicPolicy": true,
+                          "ignorePublicAcls": true,
+                          "restrictPublicBuckets": true
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "Policy": {
+                    "id": "Policy",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucket/Policy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucket/Policy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "bucket": {
+                              "Ref": "STKArtistBuildXPipelineArtifactsBucket12AAA89D"
+                            },
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "s3:*",
+                                  "Condition": {
+                                    "Bool": {
+                                      "aws:SecureTransport": "false"
+                                    }
+                                  },
+                                  "Effect": "Deny",
+                                  "Principal": {
+                                    "AWS": "*"
+                                  },
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "STKArtistBuildXPipelineArtifactsBucket12AAA89D",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "STKArtistBuildXPipelineArtifactsBucket12AAA89D",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                  "version": "2.84.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "StkPipelineStack/STKArtistBuildXPipeline/Role",
+                "children": {
+                  "ImportRole": {
+                    "id": "ImportRole",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/Role/ImportRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codepipeline.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "StkPipelineStack/STKArtistBuildXPipeline/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "STKArtistBuildXPipelineArtifactsBucket12AAA89D",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "STKArtistBuildXPipelineArtifactsBucket12AAA89D",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "STKArtistBuildXPipelineArtifactsBucketEncryptionKey61775E58",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "STKArtistBuildXPipelineBuildAssetsCodePipelineActionRole88ACED14",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "STKArtistBuildXPipelineRoleDefaultPolicy5BFC7C94",
+                            "roles": [
+                              {
+                                "Ref": "STKArtistBuildXPipelineRole8B0D9A67"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.84.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "StkPipelineStack/STKArtistBuildXPipeline/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
+                  "aws:cdk:cloudformation:props": {
+                    "roleArn": {
+                      "Fn::GetAtt": [
+                        "STKArtistBuildXPipelineRole8B0D9A67",
+                        "Arn"
+                      ]
+                    },
+                    "stages": [
+                      {
+                        "name": "Source",
+                        "actions": [
+                          {
+                            "name": "GitHub_Source",
+                            "outputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Source",
+                              "version": "1",
+                              "owner": "ThirdParty",
+                              "provider": "GitHub"
+                            },
+                            "configuration": {
+                              "Owner": {
+                                "Ref": "GITHUBUSER"
+                              },
+                              "Repo": {
+                                "Ref": "GITHUBREPO"
+                              },
+                              "Branch": {
+                                "Ref": "GITHUBBRANCH"
+                              },
+                              "OAuthToken": "{{resolve:secretsmanager:githubtoken:SecretString:token::}}",
+                              "PollForSourceChanges": false
+                            },
+                            "runOrder": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "BuildAssets",
+                        "actions": [
+                          {
+                            "name": "BuildAssets",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "STKAssetsImageBuildX957C091D"
+                              }
+                            },
+                            "runOrder": 1,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "STKArtistBuildXPipelineBuildAssetsCodePipelineActionRole88ACED14",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "artifactStore": {
+                      "type": "S3",
+                      "location": {
+                        "Ref": "STKArtistBuildXPipelineArtifactsBucket12AAA89D"
+                      },
+                      "encryptionKey": {
+                        "type": "KMS",
+                        "id": {
+                          "Fn::GetAtt": [
+                            "STKArtistBuildXPipelineArtifactsBucketEncryptionKey61775E58",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codepipeline.CfnPipeline",
+                  "version": "2.84.0"
+                }
+              },
+              "Source": {
+                "id": "Source",
+                "path": "StkPipelineStack/STKArtistBuildXPipeline/Source",
+                "children": {
+                  "GitHub_Source": {
+                    "id": "GitHub_Source",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/Source/GitHub_Source",
+                    "children": {
+                      "WebhookResource": {
+                        "id": "WebhookResource",
+                        "path": "StkPipelineStack/STKArtistBuildXPipeline/Source/GitHub_Source/WebhookResource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
+                          "aws:cdk:cloudformation:props": {
+                            "authentication": "GITHUB_HMAC",
+                            "authenticationConfiguration": {
+                              "secretToken": "{{resolve:secretsmanager:githubtoken:SecretString:token::}}"
+                            },
+                            "filters": [
+                              {
+                                "jsonPath": "$.ref",
+                                "matchEquals": "refs/heads/{Branch}"
+                              }
+                            ],
+                            "targetAction": "GitHub_Source",
+                            "targetPipeline": {
+                              "Ref": "STKArtistBuildXPipeline128D4E2E"
+                            },
+                            "targetPipelineVersion": 1,
+                            "registerWithThirdParty": true
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_codepipeline.CfnWebhook",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.52"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.52"
+                }
+              },
+              "BuildAssets": {
+                "id": "BuildAssets",
+                "path": "StkPipelineStack/STKArtistBuildXPipeline/BuildAssets",
+                "children": {
+                  "BuildAssets": {
+                    "id": "BuildAssets",
+                    "path": "StkPipelineStack/STKArtistBuildXPipeline/BuildAssets/BuildAssets",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "StkPipelineStack/STKArtistBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole",
+                        "children": {
+                          "ImportCodePipelineActionRole": {
+                            "id": "ImportCodePipelineActionRole",
+                            "path": "StkPipelineStack/STKArtistBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.84.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "StkPipelineStack/STKArtistBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::441218111557:root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.84.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "StkPipelineStack/STKArtistBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "StkPipelineStack/STKArtistBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchGetBuilds",
+                                            "codebuild:StartBuild",
+                                            "codebuild:StopBuild"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "STKAssetsImageBuildX957C091D",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "STKArtistBuildXPipelineBuildAssetsCodePipelineActionRoleDefaultPolicyF04C6E10",
+                                    "roles": [
+                                      {
+                                        "Ref": "STKArtistBuildXPipelineBuildAssetsCodePipelineActionRole88ACED14"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.84.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.84.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.52"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.52"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codepipeline.Pipeline",
+              "version": "2.84.0"
+            }
+          },
+          "STKDeveloperPipeline": {
+            "id": "STKDeveloperPipeline",
+            "path": "StkPipelineStack/STKDeveloperPipeline",
+            "children": {
+              "ArtifactsBucketEncryptionKey": {
+                "id": "ArtifactsBucketEncryptionKey",
+                "path": "StkPipelineStack/STKDeveloperPipeline/ArtifactsBucketEncryptionKey",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/ArtifactsBucketEncryptionKey/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Key",
+                      "aws:cdk:cloudformation:props": {
+                        "keyPolicy": {
+                          "Statement": [
+                            {
+                              "Action": "kms:*",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::441218111557:root"
+                                    ]
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnKey",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Key",
+                  "version": "2.84.0"
+                }
+              },
+              "ArtifactsBucketEncryptionKeyAlias": {
+                "id": "ArtifactsBucketEncryptionKeyAlias",
+                "path": "StkPipelineStack/STKDeveloperPipeline/ArtifactsBucketEncryptionKeyAlias",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
+                      "aws:cdk:cloudformation:props": {
+                        "aliasName": "alias/codepipeline-stkpipelinestackstkdeveloperpipelinec4657575",
+                        "targetKeyId": {
+                          "Fn::GetAtt": [
+                            "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnAlias",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Alias",
+                  "version": "2.84.0"
+                }
+              },
+              "ArtifactsBucket": {
+                "id": "ArtifactsBucket",
+                "path": "StkPipelineStack/STKDeveloperPipeline/ArtifactsBucket",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/ArtifactsBucket/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                      "aws:cdk:cloudformation:props": {
+                        "bucketEncryption": {
+                          "serverSideEncryptionConfiguration": [
+                            {
+                              "serverSideEncryptionByDefault": {
+                                "sseAlgorithm": "aws:kms",
+                                "kmsMasterKeyId": {
+                                  "Fn::GetAtt": [
+                                    "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
+                                    "Arn"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "publicAccessBlockConfiguration": {
+                          "blockPublicAcls": true,
+                          "blockPublicPolicy": true,
+                          "ignorePublicAcls": true,
+                          "restrictPublicBuckets": true
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "Policy": {
+                    "id": "Policy",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/ArtifactsBucket/Policy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "StkPipelineStack/STKDeveloperPipeline/ArtifactsBucket/Policy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "bucket": {
+                              "Ref": "STKDeveloperPipelineArtifactsBucketD945CC0F"
+                            },
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "s3:*",
+                                  "Condition": {
+                                    "Bool": {
+                                      "aws:SecureTransport": "false"
+                                    }
+                                  },
+                                  "Effect": "Deny",
+                                  "Principal": {
+                                    "AWS": "*"
+                                  },
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "STKDeveloperPipelineArtifactsBucketD945CC0F",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "STKDeveloperPipelineArtifactsBucketD945CC0F",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                  "version": "2.84.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "StkPipelineStack/STKDeveloperPipeline/Role",
+                "children": {
+                  "ImportRole": {
+                    "id": "ImportRole",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/Role/ImportRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codepipeline.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "StkPipelineStack/STKDeveloperPipeline/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "STKDeveloperPipelineArtifactsBucketD945CC0F",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "STKDeveloperPipelineArtifactsBucketD945CC0F",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "STKDeveloperPipelineSTKCodeBuildImageBuildARMCodeCodePipelineActionRoleC5769C37",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "STKDeveloperPipelineSTKCodeBuildImageBuildAMDCodeCodePipelineActionRoleB51EE53A",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "STKDeveloperPipelineSTKCodeBuildImageAssembleCodeBuildsCodePipelineActionRole5570B5EA",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "STKDeveloperPipelineRoleDefaultPolicy02284DEA",
+                            "roles": [
+                              {
+                                "Ref": "STKDeveloperPipelineRoleD9BD27F3"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.84.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "StkPipelineStack/STKDeveloperPipeline/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
+                  "aws:cdk:cloudformation:props": {
+                    "roleArn": {
+                      "Fn::GetAtt": [
+                        "STKDeveloperPipelineRoleD9BD27F3",
+                        "Arn"
+                      ]
+                    },
+                    "stages": [
+                      {
+                        "name": "Source",
+                        "actions": [
+                          {
+                            "name": "GitHub_Source",
+                            "outputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Source",
+                              "version": "1",
+                              "owner": "ThirdParty",
+                              "provider": "GitHub"
+                            },
+                            "configuration": {
+                              "Owner": {
+                                "Ref": "GITHUBUSER"
+                              },
+                              "Repo": {
+                                "Ref": "GITHUBREPO"
+                              },
+                              "Branch": {
+                                "Ref": "GITHUBBRANCH"
+                              },
+                              "OAuthToken": "{{resolve:secretsmanager:githubtoken:SecretString:token::}}",
+                              "PollForSourceChanges": false
+                            },
+                            "runOrder": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "STKCodeBuildImage",
+                        "actions": [
+                          {
+                            "name": "BuildARMCode",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "STKCodeImageArmBuild7AA000C2"
+                              }
+                            },
+                            "runOrder": 1,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "STKDeveloperPipelineSTKCodeBuildImageBuildARMCodeCodePipelineActionRoleC5769C37",
+                                "Arn"
+                              ]
+                            }
+                          },
+                          {
+                            "name": "BuildAMDCode",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "STKCodeImageAmdBuild4D466C6D"
+                              }
+                            },
+                            "runOrder": 1,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "STKDeveloperPipelineSTKCodeBuildImageBuildAMDCodeCodePipelineActionRoleB51EE53A",
+                                "Arn"
+                              ]
+                            }
+                          },
+                          {
+                            "name": "AssembleCodeBuilds",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "STKCodeImageMultiarchAssembly2EAEE951"
+                              }
+                            },
+                            "runOrder": 2,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "STKDeveloperPipelineSTKCodeBuildImageAssembleCodeBuildsCodePipelineActionRole5570B5EA",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "artifactStore": {
+                      "type": "S3",
+                      "location": {
+                        "Ref": "STKDeveloperPipelineArtifactsBucketD945CC0F"
+                      },
+                      "encryptionKey": {
+                        "type": "KMS",
+                        "id": {
+                          "Fn::GetAtt": [
+                            "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codepipeline.CfnPipeline",
+                  "version": "2.84.0"
+                }
+              },
+              "Source": {
+                "id": "Source",
+                "path": "StkPipelineStack/STKDeveloperPipeline/Source",
+                "children": {
+                  "GitHub_Source": {
+                    "id": "GitHub_Source",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/Source/GitHub_Source",
+                    "children": {
+                      "WebhookResource": {
+                        "id": "WebhookResource",
+                        "path": "StkPipelineStack/STKDeveloperPipeline/Source/GitHub_Source/WebhookResource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
+                          "aws:cdk:cloudformation:props": {
+                            "authentication": "GITHUB_HMAC",
+                            "authenticationConfiguration": {
+                              "secretToken": "{{resolve:secretsmanager:githubtoken:SecretString:token::}}"
+                            },
+                            "filters": [
+                              {
+                                "jsonPath": "$.ref",
+                                "matchEquals": "refs/heads/{Branch}"
+                              }
+                            ],
+                            "targetAction": "GitHub_Source",
+                            "targetPipeline": {
+                              "Ref": "STKDeveloperPipeline2E7DE788"
+                            },
+                            "targetPipelineVersion": 1,
+                            "registerWithThirdParty": true
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_codepipeline.CfnWebhook",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.52"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.52"
+                }
+              },
+              "STKCodeBuildImage": {
+                "id": "STKCodeBuildImage",
+                "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage",
+                "children": {
+                  "BuildARMCode": {
+                    "id": "BuildARMCode",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildARMCode",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildARMCode/CodePipelineActionRole",
+                        "children": {
+                          "ImportCodePipelineActionRole": {
+                            "id": "ImportCodePipelineActionRole",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildARMCode/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.84.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildARMCode/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::441218111557:root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.84.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildARMCode/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildARMCode/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchGetBuilds",
+                                            "codebuild:StartBuild",
+                                            "codebuild:StopBuild"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "STKCodeImageArmBuild7AA000C2",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "STKDeveloperPipelineSTKCodeBuildImageBuildARMCodeCodePipelineActionRoleDefaultPolicyD83EFCA5",
+                                    "roles": [
+                                      {
+                                        "Ref": "STKDeveloperPipelineSTKCodeBuildImageBuildARMCodeCodePipelineActionRoleC5769C37"
                                       }
                                     ]
                                   }
@@ -1401,17 +3399,17 @@
                       "version": "10.2.52"
                     }
                   },
-                  "BaseImageAmdBuildX": {
-                    "id": "BaseImageAmdBuildX",
-                    "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageAmdBuildX",
+                  "BuildAMDCode": {
+                    "id": "BuildAMDCode",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildAMDCode",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageAmdBuildX/CodePipelineActionRole",
+                        "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildAMDCode/CodePipelineActionRole",
                         "children": {
                           "ImportCodePipelineActionRole": {
                             "id": "ImportCodePipelineActionRole",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageAmdBuildX/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildAMDCode/CodePipelineActionRole/ImportCodePipelineActionRole",
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.Resource",
                               "version": "2.84.0"
@@ -1419,7 +3417,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageAmdBuildX/CodePipelineActionRole/Resource",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildAMDCode/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -1455,11 +3453,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageAmdBuildX/CodePipelineActionRole/DefaultPolicy",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildAMDCode/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageAmdBuildX/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildAMDCode/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -1474,7 +3472,7 @@
                                           "Effect": "Allow",
                                           "Resource": {
                                             "Fn::GetAtt": [
-                                              "BaseImageAmdBuildCDD5A382",
+                                              "STKCodeImageAmdBuild4D466C6D",
                                               "Arn"
                                             ]
                                           }
@@ -1482,10 +3480,10 @@
                                       ],
                                       "Version": "2012-10-17"
                                     },
-                                    "policyName": "BuildBasePipelineBaseImageBuildBaseImageAmdBuildXCodePipelineActionRoleDefaultPolicy716C5676",
+                                    "policyName": "STKDeveloperPipelineSTKCodeBuildImageBuildAMDCodeCodePipelineActionRoleDefaultPolicy0ABA22E0",
                                     "roles": [
                                       {
-                                        "Ref": "BuildBasePipelineBaseImageBuildBaseImageAmdBuildXCodePipelineActionRole2F25F334"
+                                        "Ref": "STKDeveloperPipelineSTKCodeBuildImageBuildAMDCodeCodePipelineActionRoleB51EE53A"
                                       }
                                     ]
                                   }
@@ -1513,17 +3511,17 @@
                       "version": "10.2.52"
                     }
                   },
-                  "AssembleBaseBuilds": {
-                    "id": "AssembleBaseBuilds",
-                    "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/AssembleBaseBuilds",
+                  "AssembleCodeBuilds": {
+                    "id": "AssembleCodeBuilds",
+                    "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/AssembleCodeBuilds",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/AssembleBaseBuilds/CodePipelineActionRole",
+                        "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/AssembleCodeBuilds/CodePipelineActionRole",
                         "children": {
                           "ImportCodePipelineActionRole": {
                             "id": "ImportCodePipelineActionRole",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/AssembleBaseBuilds/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/AssembleCodeBuilds/CodePipelineActionRole/ImportCodePipelineActionRole",
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.Resource",
                               "version": "2.84.0"
@@ -1531,7 +3529,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/AssembleBaseBuilds/CodePipelineActionRole/Resource",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/AssembleCodeBuilds/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -1567,11 +3565,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/AssembleBaseBuilds/CodePipelineActionRole/DefaultPolicy",
+                            "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/AssembleCodeBuilds/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "BasePipelineStack/BuildBasePipeline/BaseImageBuild/AssembleBaseBuilds/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/AssembleCodeBuilds/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -1586,7 +3584,7 @@
                                           "Effect": "Allow",
                                           "Resource": {
                                             "Fn::GetAtt": [
-                                              "BaseImageAmdBuildAssembly66D95784",
+                                              "STKCodeImageMultiarchAssembly2EAEE951",
                                               "Arn"
                                             ]
                                           }
@@ -1594,10 +3592,617 @@
                                       ],
                                       "Version": "2012-10-17"
                                     },
-                                    "policyName": "BuildBasePipelineBaseImageBuildAssembleBaseBuildsCodePipelineActionRoleDefaultPolicy782C16E4",
+                                    "policyName": "STKDeveloperPipelineSTKCodeBuildImageAssembleCodeBuildsCodePipelineActionRoleDefaultPolicyB3A61737",
                                     "roles": [
                                       {
-                                        "Ref": "BuildBasePipelineBaseImageBuildAssembleBaseBuildsCodePipelineActionRole9BB326EC"
+                                        "Ref": "STKDeveloperPipelineSTKCodeBuildImageAssembleCodeBuildsCodePipelineActionRole5570B5EA"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.84.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.84.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.52"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.52"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codepipeline.Pipeline",
+              "version": "2.84.0"
+            }
+          },
+          "STKDevOpsPipeline": {
+            "id": "STKDevOpsPipeline",
+            "path": "StkPipelineStack/STKDevOpsPipeline",
+            "children": {
+              "ArtifactsBucketEncryptionKey": {
+                "id": "ArtifactsBucketEncryptionKey",
+                "path": "StkPipelineStack/STKDevOpsPipeline/ArtifactsBucketEncryptionKey",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/ArtifactsBucketEncryptionKey/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Key",
+                      "aws:cdk:cloudformation:props": {
+                        "keyPolicy": {
+                          "Statement": [
+                            {
+                              "Action": "kms:*",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::441218111557:root"
+                                    ]
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnKey",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Key",
+                  "version": "2.84.0"
+                }
+              },
+              "ArtifactsBucketEncryptionKeyAlias": {
+                "id": "ArtifactsBucketEncryptionKeyAlias",
+                "path": "StkPipelineStack/STKDevOpsPipeline/ArtifactsBucketEncryptionKeyAlias",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
+                      "aws:cdk:cloudformation:props": {
+                        "aliasName": "alias/codepipeline-stkpipelinestackstkdevopspipeline5d8470a7",
+                        "targetKeyId": {
+                          "Fn::GetAtt": [
+                            "STKDevOpsPipelineArtifactsBucketEncryptionKey34CE4DED",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnAlias",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Alias",
+                  "version": "2.84.0"
+                }
+              },
+              "ArtifactsBucket": {
+                "id": "ArtifactsBucket",
+                "path": "StkPipelineStack/STKDevOpsPipeline/ArtifactsBucket",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/ArtifactsBucket/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                      "aws:cdk:cloudformation:props": {
+                        "bucketEncryption": {
+                          "serverSideEncryptionConfiguration": [
+                            {
+                              "serverSideEncryptionByDefault": {
+                                "sseAlgorithm": "aws:kms",
+                                "kmsMasterKeyId": {
+                                  "Fn::GetAtt": [
+                                    "STKDevOpsPipelineArtifactsBucketEncryptionKey34CE4DED",
+                                    "Arn"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "publicAccessBlockConfiguration": {
+                          "blockPublicAcls": true,
+                          "blockPublicPolicy": true,
+                          "ignorePublicAcls": true,
+                          "restrictPublicBuckets": true
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "Policy": {
+                    "id": "Policy",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/ArtifactsBucket/Policy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "StkPipelineStack/STKDevOpsPipeline/ArtifactsBucket/Policy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "bucket": {
+                              "Ref": "STKDevOpsPipelineArtifactsBucketDD047DC2"
+                            },
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "s3:*",
+                                  "Condition": {
+                                    "Bool": {
+                                      "aws:SecureTransport": "false"
+                                    }
+                                  },
+                                  "Effect": "Deny",
+                                  "Principal": {
+                                    "AWS": "*"
+                                  },
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "STKDevOpsPipelineArtifactsBucketDD047DC2",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "STKDevOpsPipelineArtifactsBucketDD047DC2",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                  "version": "2.84.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "StkPipelineStack/STKDevOpsPipeline/Role",
+                "children": {
+                  "ImportRole": {
+                    "id": "ImportRole",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/Role/ImportRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codepipeline.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "StkPipelineStack/STKDevOpsPipeline/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "STKDevOpsPipelineArtifactsBucketDD047DC2",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "STKDevOpsPipelineArtifactsBucketDD047DC2",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "STKDevOpsPipelineArtifactsBucketEncryptionKey34CE4DED",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "STKDevOpsPipelineSTKGameBuildXImageBuildxAgonesGameCodePipelineActionRoleBD26CEAA",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "STKDevOpsPipelineRoleDefaultPolicy41D6CE5D",
+                            "roles": [
+                              {
+                                "Ref": "STKDevOpsPipelineRoleA2344378"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.84.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "StkPipelineStack/STKDevOpsPipeline/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
+                  "aws:cdk:cloudformation:props": {
+                    "roleArn": {
+                      "Fn::GetAtt": [
+                        "STKDevOpsPipelineRoleA2344378",
+                        "Arn"
+                      ]
+                    },
+                    "stages": [
+                      {
+                        "name": "Source",
+                        "actions": [
+                          {
+                            "name": "GitHub_Source",
+                            "outputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Source",
+                              "version": "1",
+                              "owner": "ThirdParty",
+                              "provider": "GitHub"
+                            },
+                            "configuration": {
+                              "Owner": {
+                                "Ref": "GITHUBUSER"
+                              },
+                              "Repo": {
+                                "Ref": "GITHUBREPO"
+                              },
+                              "Branch": {
+                                "Ref": "GITHUBBRANCH"
+                              },
+                              "OAuthToken": "{{resolve:secretsmanager:githubtoken:SecretString:token::}}",
+                              "PollForSourceChanges": false
+                            },
+                            "runOrder": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "STKGameBuildXImage",
+                        "actions": [
+                          {
+                            "name": "BuildxAgonesGame",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "STKGameImageBuildX66A1C3EE"
+                              }
+                            },
+                            "runOrder": 1,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "STKDevOpsPipelineSTKGameBuildXImageBuildxAgonesGameCodePipelineActionRoleBD26CEAA",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "artifactStore": {
+                      "type": "S3",
+                      "location": {
+                        "Ref": "STKDevOpsPipelineArtifactsBucketDD047DC2"
+                      },
+                      "encryptionKey": {
+                        "type": "KMS",
+                        "id": {
+                          "Fn::GetAtt": [
+                            "STKDevOpsPipelineArtifactsBucketEncryptionKey34CE4DED",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codepipeline.CfnPipeline",
+                  "version": "2.84.0"
+                }
+              },
+              "Source": {
+                "id": "Source",
+                "path": "StkPipelineStack/STKDevOpsPipeline/Source",
+                "children": {
+                  "GitHub_Source": {
+                    "id": "GitHub_Source",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/Source/GitHub_Source",
+                    "children": {
+                      "WebhookResource": {
+                        "id": "WebhookResource",
+                        "path": "StkPipelineStack/STKDevOpsPipeline/Source/GitHub_Source/WebhookResource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
+                          "aws:cdk:cloudformation:props": {
+                            "authentication": "GITHUB_HMAC",
+                            "authenticationConfiguration": {
+                              "secretToken": "{{resolve:secretsmanager:githubtoken:SecretString:token::}}"
+                            },
+                            "filters": [
+                              {
+                                "jsonPath": "$.ref",
+                                "matchEquals": "refs/heads/{Branch}"
+                              }
+                            ],
+                            "targetAction": "GitHub_Source",
+                            "targetPipeline": {
+                              "Ref": "STKDevOpsPipelineEA27206A"
+                            },
+                            "targetPipelineVersion": 1,
+                            "registerWithThirdParty": true
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_codepipeline.CfnWebhook",
+                          "version": "2.84.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.52"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.52"
+                }
+              },
+              "STKGameBuildXImage": {
+                "id": "STKGameBuildXImage",
+                "path": "StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage",
+                "children": {
+                  "BuildxAgonesGame": {
+                    "id": "BuildxAgonesGame",
+                    "path": "StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage/BuildxAgonesGame",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage/BuildxAgonesGame/CodePipelineActionRole",
+                        "children": {
+                          "ImportCodePipelineActionRole": {
+                            "id": "ImportCodePipelineActionRole",
+                            "path": "StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage/BuildxAgonesGame/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.84.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage/BuildxAgonesGame/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::441218111557:root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.84.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage/BuildxAgonesGame/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage/BuildxAgonesGame/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchGetBuilds",
+                                            "codebuild:StartBuild",
+                                            "codebuild:StopBuild"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "STKGameImageBuildX66A1C3EE",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "STKDevOpsPipelineSTKGameBuildXImageBuildxAgonesGameCodePipelineActionRoleDefaultPolicy2FCF1E19",
+                                    "roles": [
+                                      {
+                                        "Ref": "STKDevOpsPipelineSTKGameBuildXImageBuildxAgonesGameCodePipelineActionRoleBD26CEAA"
                                       }
                                     ]
                                   }
@@ -1639,11 +4244,11 @@
           },
           "CDKMetadata": {
             "id": "CDKMetadata",
-            "path": "BasePipelineStack/CDKMetadata",
+            "path": "StkPipelineStack/CDKMetadata",
             "children": {
               "Default": {
                 "id": "Default",
-                "path": "BasePipelineStack/CDKMetadata/Default",
+                "path": "StkPipelineStack/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
                   "version": "2.84.0"
@@ -1657,7 +4262,7 @@
           },
           "BootstrapVersion": {
             "id": "BootstrapVersion",
-            "path": "BasePipelineStack/BootstrapVersion",
+            "path": "StkPipelineStack/BootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -1665,7 +4270,7 @@
           },
           "CheckBootstrapVersion": {
             "id": "CheckBootstrapVersion",
-            "path": "BasePipelineStack/CheckBootstrapVersion",
+            "path": "StkPipelineStack/CheckBootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnRule",
               "version": "2.84.0"

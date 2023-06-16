@@ -140,6 +140,8 @@ export class StkPipelineStack extends Stack {
         phases: {
           build: {
             commands: [
+              `cd supertuxkart/server/stk-code-image-multiarch`,
+              `chmod +x ./enable-buildx.sh && ./enable-buildx.sh`,
               `export AWS_ACCOUNT_ID="${this.account}"`,
               `export AWS_REGION="${this.region}"`,
               `export BUILDX_VER="${BUILDX_VER.valueAsString}"`,
@@ -147,10 +149,9 @@ export class StkPipelineStack extends Stack {
               `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
               `export GAME_REPO="${GAME_REPO.valueAsString}"`,
               `export GAME_ASSETS_TAG="${GAME_ASSETS_TAG.valueAsString}"`,
-              `export GAME_CODE_TAG="${GAME_ARM_CODE_TAG.valueAsString}"`,
+              `export GAME_CODE_TAG="${GAME_CODE_TAG.valueAsString}"`,
               `export GITHUB_STK="${GITHUB_STK.valueAsString}"`,
               `export GITHUB_STK_BRANCH="${GITHUB_STK_BRANCH.valueAsString}"`,
-              `cd supertuxkart/server/stk-code-image-multiarch`,
               `chmod +x ./buildx.sh && ./buildx.sh`
             ],
           }
@@ -276,6 +277,9 @@ export class StkPipelineStack extends Stack {
   base_registry.grantPullPush(stk_assets_image_buildx.grantPrincipal);
   stk_registry.grantPullPush(stk_assets_image_buildx.grantPrincipal);
 
+
+  stk_registry.grantPullPush(stk_code_image_arm_buildx.grantPrincipal);
+
   stk_registry.grantPullPush(stk_code_image_arm_build.grantPrincipal);
   stk_registry.grantPullPush(stk_code_image_amd_build.grantPrincipal);
   stk_registry.grantPullPush(stk_code_image_assembly.grantPrincipal);
@@ -283,6 +287,35 @@ export class StkPipelineStack extends Stack {
   stk_registry.grantPullPush(stk_game_image_buildx.grantPrincipal);
 
   const sourceOutput = new codepipeline.Artifact();
+
+
+  const buildxcodearmpipeline = new codepipeline.Pipeline(this,`STKCodeBuildXPipeline`);
+  buildxcodearmpipeline.addStage({
+    stageName: 'Source',
+    actions: [
+      new codepipeline_actions.GitHubSourceAction({
+        actionName: 'GitHub_Source',
+        owner: GITHUB_USER.valueAsString,
+        repo: GITHUB_REPO.valueAsString,
+        branch: GITHUB_BRANCH.valueAsString,
+        output: sourceOutput,
+        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
+        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
+      })
+      ]
+  });
+  
+  buildxcodearmpipeline.addStage({
+      stageName: 'BuildAssets',
+      actions: [
+      new codepipeline_actions.CodeBuildAction({
+        actionName: 'BuildAssets',
+        input: sourceOutput,
+        project: stk_code_image_arm_buildx
+      })
+      ]
+  });
 
   const artistpipeline = new codepipeline.Pipeline(this,`STKArtistBuildXPipeline`);
   artistpipeline.addStage({

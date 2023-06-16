@@ -8,6 +8,4 @@ cat Dockerfile.template | envsubst > Dockerfile
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $GAME_CODE_IMAGE
 
 docker buildx use craftbuilder
-docker buildx build --push --platform $buildx_arch --build-arg GITHUB_STK=$GITHUB_STK --build-arg GITHUB_STK_BRANCH=$GITHUB_STK_BRANCH -t $GAME_CODE_IMAGE . 
-#docker build --build-arg GITHUB_STK=$GITHUB_STK --build-arg GITHUB_STK_BRANCH=$GITHUB_STK_BRANCH -t $GAME_CODE_IMAGE . 
-#docker push $GAME_CODE_IMAGE
+docker buildx build --push --platform --platform linux/arm64,linux/amd64 --build-arg GITHUB_STK=$GITHUB_STK --build-arg GITHUB_STK_BRANCH=$GITHUB_STK_BRANCH -t $GAME_CODE_IMAGE . 

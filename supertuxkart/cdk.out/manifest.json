@@ -1,27 +1,27 @@
 {
   "version": "32.0.0",
   "artifacts": {
-    "BasePipelineStack.assets": {
+    "StkPipelineStack.assets": {
       "type": "cdk:asset-manifest",
       "properties": {
-        "file": "BasePipelineStack.assets.json",
+        "file": "StkPipelineStack.assets.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
       }
     },
-    "BasePipelineStack": {
+    "StkPipelineStack": {
       "type": "aws:cloudformation:stack",
       "environment": "aws://441218111557/us-west-2",
       "properties": {
-        "templateFile": "BasePipelineStack.template.json",
+        "templateFile": "StkPipelineStack.template.json",
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::441218111557:role/cdk-hnb659fds-deploy-role-441218111557-us-west-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::441218111557:role/cdk-hnb659fds-cfn-exec-role-441218111557-us-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-441218111557-us-west-2/7b7bea9157a75d4f066e994349f7d1900212b0097b676f09a2a50fc8e249c58a.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-441218111557-us-west-2/14797cf182783e0680bc1f1d416ef0f7b0884757145f6f304469b2e5ceef7888.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
-          "BasePipelineStack.assets"
+          "StkPipelineStack.assets"
         ],
         "lookupRole": {
           "arn": "arn:${AWS::Partition}:iam::441218111557:role/cdk-hnb659fds-lookup-role-441218111557-us-west-2",
@@ -30,215 +30,467 @@
         }
       },
       "dependencies": [
-        "BasePipelineStack.assets"
+        "StkPipelineStack.assets"
       ],
       "metadata": {
-        "/BasePipelineStack/BUILDXVER": [
+        "/StkPipelineStack/BUILDX_VER": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BUILDXVER"
           }
         ],
-        "/BasePipelineStack/BASEREPO": [
+        "/StkPipelineStack/BASEREPO": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BASEREPO"
           }
         ],
-        "/BasePipelineStack/BASEIMAGETAG": [
+        "/StkPipelineStack/BASEIMAGETAG": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BASEIMAGETAG"
           }
         ],
-        "/BasePipelineStack/BASEIMAGEAMDTAG": [
+        "/StkPipelineStack/GAMEREPO": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BASEIMAGEAMDTAG"
+            "data": "GAMEREPO"
           }
         ],
-        "/BasePipelineStack/BASEIMAGEARMTAG": [
+        "/StkPipelineStack/GAMEASSETSTAG": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BASEIMAGEARMTAG"
+            "data": "GAMEASSETSTAG"
           }
         ],
-        "/BasePipelineStack/GITHUBOAUTHTOKEN": [
+        "/StkPipelineStack/GAMEARMASSETSTAG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GAMEARMASSETSTAG"
+          }
+        ],
+        "/StkPipelineStack/GAMEAMDASSETSTAG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GAMEAMDASSETSTAG"
+          }
+        ],
+        "/StkPipelineStack/GAMECODETAG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GAMECODETAG"
+          }
+        ],
+        "/StkPipelineStack/GAMEARMCODETAG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GAMEARMCODETAG"
+          }
+        ],
+        "/StkPipelineStack/GAMEAMDCODETAG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GAMEAMDCODETAG"
+          }
+        ],
+        "/StkPipelineStack/GAMESERVERTAG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GAMESERVERTAG"
+          }
+        ],
+        "/StkPipelineStack/GAMEARMSERVERTAG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GAMEARMSERVERTAG"
+          }
+        ],
+        "/StkPipelineStack/GAMEAMDSERVERTAG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GAMEAMDSERVERTAG"
+          }
+        ],
+        "/StkPipelineStack/SVNSTK": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SVNSTK"
+          }
+        ],
+        "/StkPipelineStack/GITHUBSTK": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GITHUBSTK"
+          }
+        ],
+        "/StkPipelineStack/GITHUBSTKBRANCH": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GITHUBSTKBRANCH"
+          }
+        ],
+        "/StkPipelineStack/S3STKASSETS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3STKASSETS"
+          }
+        ],
+        "/StkPipelineStack/GITHUBOAUTHTOKEN": [
           {
             "type": "aws:cdk:logicalId",
             "data": "GITHUBOAUTHTOKEN"
           }
         ],
-        "/BasePipelineStack/GITHUBUSER": [
+        "/StkPipelineStack/GITHUBUSER": [
           {
             "type": "aws:cdk:logicalId",
             "data": "GITHUBUSER"
           }
         ],
-        "/BasePipelineStack/GITHUBREPO": [
+        "/StkPipelineStack/GITHUBREPO": [
           {
             "type": "aws:cdk:logicalId",
             "data": "GITHUBREPO"
           }
         ],
-        "/BasePipelineStack/GITHUBBRANCH": [
+        "/StkPipelineStack/GITHUBBRANCH": [
           {
             "type": "aws:cdk:logicalId",
             "data": "GITHUBBRANCH"
           }
         ],
-        "/BasePipelineStack/BaseCodeBuildDeployRole/Resource": [
+        "/StkPipelineStack/StkBuildDeployRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BaseCodeBuildDeployRole2A53BD0D"
+            "data": "StkBuildDeployRoleC72CA4FD"
           }
         ],
-        "/BasePipelineStack/BaseCodeBuildDeployRole/DefaultPolicy/Resource": [
+        "/StkPipelineStack/StkBuildDeployRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BaseCodeBuildDeployRoleDefaultPolicy93D8F557"
+            "data": "StkBuildDeployRoleDefaultPolicy86DFEAA1"
           }
         ],
-        "/BasePipelineStack/githubSecret/Resource": [
+        "/StkPipelineStack/STKAssetsImageBuildX/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "githubSecret7D37FCC7"
+            "data": "STKAssetsImageBuildX957C091D"
           }
         ],
-        "/BasePipelineStack/githubOAuthTokenRuntimeOutput1": [
+        "/StkPipelineStack/STKCodeImageArmBuild/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "githubOAuthTokenRuntimeOutput1"
+            "data": "STKCodeImageArmBuild7AA000C2"
           }
         ],
-        "/BasePipelineStack/githubOAuthTokenRuntimeOutput2": [
+        "/StkPipelineStack/STKCodeImageArmBuildX/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "githubOAuthTokenRuntimeOutput2"
+            "data": "STKCodeImageArmBuildX9BBAA117"
           }
         ],
-        "/BasePipelineStack/BaseImageArmBuild/Resource": [
+        "/StkPipelineStack/STKCodeImageAmdBuild/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BaseImageArmBuildFDA32ABF"
+            "data": "STKCodeImageAmdBuild4D466C6D"
           }
         ],
-        "/BasePipelineStack/BaseImageAmdBuild/Resource": [
+        "/StkPipelineStack/STKCodeImageMultiarchAssembly/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BaseImageAmdBuildCDD5A382"
+            "data": "STKCodeImageMultiarchAssembly2EAEE951"
           }
         ],
-        "/BasePipelineStack/BaseImageAmdBuildAssembly/Resource": [
+        "/StkPipelineStack/STKGameImageBuildX/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BaseImageAmdBuildAssembly66D95784"
+            "data": "STKGameImageBuildX66A1C3EE"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/ArtifactsBucketEncryptionKey/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucketEncryptionKey/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineArtifactsBucketEncryptionKey04467E09"
+            "data": "STKCodeBuildXPipelineArtifactsBucketEncryptionKey26A1E743"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineArtifactsBucketEncryptionKeyAlias8A8421DF"
+            "data": "STKCodeBuildXPipelineArtifactsBucketEncryptionKeyAlias654A6015"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/ArtifactsBucket/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucket/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineArtifactsBucket51786A86"
+            "data": "STKCodeBuildXPipelineArtifactsBucket8C7588ED"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/ArtifactsBucket/Policy/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/ArtifactsBucket/Policy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineArtifactsBucketPolicy6568CEBB"
+            "data": "STKCodeBuildXPipelineArtifactsBucketPolicyB0518CC8"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/Role/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineRole8C8F77AD"
+            "data": "STKCodeBuildXPipelineRole8108D247"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/Role/DefaultPolicy/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/Role/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineRoleDefaultPolicy7CA9EFF0"
+            "data": "STKCodeBuildXPipelineRoleDefaultPolicy95BEB837"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineE93F0563"
+            "data": "STKCodeBuildXPipeline8932D869"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/Source/GitHub_Source/WebhookResource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/Source/GitHub_Source/WebhookResource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineSourceGitHubSourceWebhookResource72F821C3"
+            "data": "STKCodeBuildXPipelineSourceGitHubSourceWebhookResource3F6247A5"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageArmBuildX/CodePipelineActionRole/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineBaseImageBuildBaseImageArmBuildXCodePipelineActionRole36A980FB"
+            "data": "STKCodeBuildXPipelineBuildAssetsCodePipelineActionRoleB2FBE6E2"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageArmBuildX/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/StkPipelineStack/STKCodeBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineBaseImageBuildBaseImageArmBuildXCodePipelineActionRoleDefaultPolicy0D732095"
+            "data": "STKCodeBuildXPipelineBuildAssetsCodePipelineActionRoleDefaultPolicy4A8ED97D"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageAmdBuildX/CodePipelineActionRole/Resource": [
+        "/StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucketEncryptionKey/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineBaseImageBuildBaseImageAmdBuildXCodePipelineActionRole2F25F334"
+            "data": "STKArtistBuildXPipelineArtifactsBucketEncryptionKey61775E58"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/BaseImageBuild/BaseImageAmdBuildX/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineBaseImageBuildBaseImageAmdBuildXCodePipelineActionRoleDefaultPolicy716C5676"
+            "data": "STKArtistBuildXPipelineArtifactsBucketEncryptionKeyAlias0846A1EA"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/BaseImageBuild/AssembleBaseBuilds/CodePipelineActionRole/Resource": [
+        "/StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucket/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineBaseImageBuildAssembleBaseBuildsCodePipelineActionRole9BB326EC"
+            "data": "STKArtistBuildXPipelineArtifactsBucket12AAA89D"
           }
         ],
-        "/BasePipelineStack/BuildBasePipeline/BaseImageBuild/AssembleBaseBuilds/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/StkPipelineStack/STKArtistBuildXPipeline/ArtifactsBucket/Policy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "BuildBasePipelineBaseImageBuildAssembleBaseBuildsCodePipelineActionRoleDefaultPolicy782C16E4"
+            "data": "STKArtistBuildXPipelineArtifactsBucketPolicy1A3C92F9"
           }
         ],
-        "/BasePipelineStack/CDKMetadata/Default": [
+        "/StkPipelineStack/STKArtistBuildXPipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKArtistBuildXPipelineRole8B0D9A67"
+          }
+        ],
+        "/StkPipelineStack/STKArtistBuildXPipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKArtistBuildXPipelineRoleDefaultPolicy5BFC7C94"
+          }
+        ],
+        "/StkPipelineStack/STKArtistBuildXPipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKArtistBuildXPipeline128D4E2E"
+          }
+        ],
+        "/StkPipelineStack/STKArtistBuildXPipeline/Source/GitHub_Source/WebhookResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKArtistBuildXPipelineSourceGitHubSourceWebhookResource961B683F"
+          }
+        ],
+        "/StkPipelineStack/STKArtistBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKArtistBuildXPipelineBuildAssetsCodePipelineActionRole88ACED14"
+          }
+        ],
+        "/StkPipelineStack/STKArtistBuildXPipeline/BuildAssets/BuildAssets/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKArtistBuildXPipelineBuildAssetsCodePipelineActionRoleDefaultPolicyF04C6E10"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/ArtifactsBucketEncryptionKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineArtifactsBucketEncryptionKey3147F3B5"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineArtifactsBucketEncryptionKeyAlias320D1501"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineArtifactsBucketD945CC0F"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineArtifactsBucketPolicyCEA79CFF"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineRoleD9BD27F3"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineRoleDefaultPolicy02284DEA"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipeline2E7DE788"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/Source/GitHub_Source/WebhookResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineSourceGitHubSourceWebhookResource6BC7B80D"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildARMCode/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineSTKCodeBuildImageBuildARMCodeCodePipelineActionRoleC5769C37"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildARMCode/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineSTKCodeBuildImageBuildARMCodeCodePipelineActionRoleDefaultPolicyD83EFCA5"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildAMDCode/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineSTKCodeBuildImageBuildAMDCodeCodePipelineActionRoleB51EE53A"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/BuildAMDCode/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineSTKCodeBuildImageBuildAMDCodeCodePipelineActionRoleDefaultPolicy0ABA22E0"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/AssembleCodeBuilds/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineSTKCodeBuildImageAssembleCodeBuildsCodePipelineActionRole5570B5EA"
+          }
+        ],
+        "/StkPipelineStack/STKDeveloperPipeline/STKCodeBuildImage/AssembleCodeBuilds/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDeveloperPipelineSTKCodeBuildImageAssembleCodeBuildsCodePipelineActionRoleDefaultPolicyB3A61737"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/ArtifactsBucketEncryptionKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineArtifactsBucketEncryptionKey34CE4DED"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineArtifactsBucketEncryptionKeyAliasEB709BFA"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineArtifactsBucketDD047DC2"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineArtifactsBucketPolicyFA8D7DC2"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineRoleA2344378"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineRoleDefaultPolicy41D6CE5D"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineEA27206A"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/Source/GitHub_Source/WebhookResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineSourceGitHubSourceWebhookResourceC4913BB1"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage/BuildxAgonesGame/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineSTKGameBuildXImageBuildxAgonesGameCodePipelineActionRoleBD26CEAA"
+          }
+        ],
+        "/StkPipelineStack/STKDevOpsPipeline/STKGameBuildXImage/BuildxAgonesGame/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "STKDevOpsPipelineSTKGameBuildXImageBuildxAgonesGameCodePipelineActionRoleDefaultPolicy2FCF1E19"
+          }
+        ],
+        "/StkPipelineStack/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadata"
           }
         ],
-        "/BasePipelineStack/BootstrapVersion": [
+        "/StkPipelineStack/BootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BootstrapVersion"
           }
         ],
-        "/BasePipelineStack/CheckBootstrapVersion": [
+        "/StkPipelineStack/CheckBootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CheckBootstrapVersion"
           }
         ]
       },
-      "displayName": "BasePipelineStack"
+      "displayName": "StkPipelineStack"
     },
     "Tree": {
       "type": "cdk:tree",

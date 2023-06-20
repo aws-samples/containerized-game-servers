@@ -126,6 +126,44 @@ export class StkPipelineStack extends Stack {
     ),
   });
 
+  const stk_code_image_arm_buildx = new codebuild.Project(this, `STKCodeImageArmBuildX`, {
+    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
+    role: buildRole,
+    buildSpec: codebuild.BuildSpec.fromObject(
+      {
+        version: "0.2",
+        env: {
+          'exported-variables': [
+            'AWS_ACCOUNT_ID','AWS_REGION','BASE_REPO','BASE_IMAGE_TAG','GAME_REPO','GAME_ASSETS_TAG','GITHUB_STK','GITHUB_STK_BRANCH','GAME_ARM_CODE_TAG'
+          ],
+        },
+        phases: {
+          build: {
+            commands: [
+              `cd supertuxkart/server/stk-code-image-multiarch`,
+              `chmod +x ./enable-buildx.sh && ./enable-buildx.sh`,
+              `export AWS_ACCOUNT_ID="${this.account}"`,
+              `export AWS_REGION="${this.region}"`,
+              `export BUILDX_VER="${BUILDX_VER.valueAsString}"`,
+              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
+              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
+              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
+              `export GAME_ASSETS_TAG="${GAME_ASSETS_TAG.valueAsString}"`,
+              `export GAME_CODE_TAG="${GAME_CODE_TAG.valueAsString}"`,
+              `export GITHUB_STK="${GITHUB_STK.valueAsString}"`,
+              `export GITHUB_STK_BRANCH="${GITHUB_STK_BRANCH.valueAsString}"`,
+              `chmod +x ./buildx.sh && ./buildx.sh`
+            ],
+          }
+        },
+        artifacts: {
+          files: ['imageDetail.json']
+        },
+      }
+    ),
+  });
+
+
   const stk_code_image_amd_build = new codebuild.Project(this, `STKCodeImageAmdBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3},
  //   cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
@@ -239,6 +277,9 @@ export class StkPipelineStack extends Stack {
   base_registry.grantPullPush(stk_assets_image_buildx.grantPrincipal);
   stk_registry.grantPullPush(stk_assets_image_buildx.grantPrincipal);
 
+
+  stk_registry.grantPullPush(stk_code_image_arm_buildx.grantPrincipal);
+
   stk_registry.grantPullPush(stk_code_image_arm_build.grantPrincipal);
   stk_registry.grantPullPush(stk_code_image_amd_build.grantPrincipal);
   stk_registry.grantPullPush(stk_code_image_assembly.grantPrincipal);
@@ -246,6 +287,35 @@ export class StkPipelineStack extends Stack {
   stk_registry.grantPullPush(stk_game_image_buildx.grantPrincipal);
 
   const sourceOutput = new codepipeline.Artifact();
+
+
+  const buildxcodearmpipeline = new codepipeline.Pipeline(this,`STKCodeBuildXPipeline`);
+  buildxcodearmpipeline.addStage({
+    stageName: 'Source',
+    actions: [
+      new codepipeline_actions.GitHubSourceAction({
+        actionName: 'GitHub_Source',
+        owner: GITHUB_USER.valueAsString,
+        repo: GITHUB_REPO.valueAsString,
+        branch: GITHUB_BRANCH.valueAsString,
+        output: sourceOutput,
+        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
+        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
+      })
+      ]
+  });
+  
+  buildxcodearmpipeline.addStage({
+      stageName: 'BuildAssets',
+      actions: [
+      new codepipeline_actions.CodeBuildAction({
+        actionName: 'BuildAssets',
+        input: sourceOutput,
+        project: stk_code_image_arm_buildx
+      })
+      ]
+  });
 
   const artistpipeline = new codepipeline.Pipeline(this,`STKArtistBuildXPipeline`);
   artistpipeline.addStage({

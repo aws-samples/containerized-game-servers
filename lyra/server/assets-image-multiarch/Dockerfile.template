@@ -3,6 +3,7 @@ ARG S3_LYRA_ASSETS
 ARG GAME_SERVER_TAG
 ENV S3_LYRA_ASSETS=$S3_LYRA_ASSETS
 ENV GAME_SERVER_TAG=$GAME_SERVER_TAG
+RUN apt install -y gettext
 RUN wget "https://"$S3_LYRA_ASSETS".s3.us-west-2.amazonaws.com/$GAME_ASSETS_TAG.zip" -O /usr/local/$GAME_ASSETS_TAG.zip
 RUN unzip /usr/local/$GAME_ASSETS_TAG.zip -d /usr/local/
 RUN mv /usr/local/$GAME_ASSETS_TAG /usr/local/lyra_starter_game

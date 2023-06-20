@@ -7,7 +7,7 @@ RUN wget "https://"$S3_LYRA_ASSETS".s3.us-west-2.amazonaws.com/$GAME_ASSETS_TAG.
 RUN unzip /usr/local/$GAME_ASSETS_TAG.zip -d /usr/local/
 RUN mv /usr/local/$GAME_ASSETS_TAG /usr/local/lyra_starter_game
 RUN chmod +x /usr/local/lyra_starter_game/LyraServer*.sh
-RUN mv /usr/local/lyra_starter_game/LyraServer*.sh /usr/local/lyra_starter_game/LyraServer.sh
+RUN mv -f /usr/local/lyra_starter_game/LyraServer*.sh /usr/local/lyra_starter_game/LyraServer.sh
 COPY create_node_port_svc.sh /usr/local/lyra_starter_game/
 COPY lyra_node_port_svc_template.yaml /usr/local/lyra_starter_game/
 RUN chmod +x /usr/local/lyra_starter_game/create_node_port_svc.sh

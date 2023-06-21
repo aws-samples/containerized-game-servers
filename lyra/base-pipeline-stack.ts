@@ -1,4 +1,4 @@
-import { Stack, StackProps, CfnParameter  } from 'aws-cdk-lib';
+import { Stack, StackProps, CfnParameter,SecretValue  } from 'aws-cdk-lib';
 import { Construct } from 'constructs'
 import * as codecommit from 'aws-cdk-lib/aws-codecommit';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
@@ -19,17 +19,17 @@ export class BasePipelineStack extends Stack {
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
+  const GITHUB_OAUTH_TOKEN = new CfnParameter(this,"GITHUBOAUTHTOKEN",{type:"String"});
 
     
   /* uncomment when you test the stack and dont want to manually delete the ecr registry 
   const base_registry = new ecr.Repository(this,`base_repo`,{
     repositoryName:BASE_REPO.valueAsString,
     imageScanOnPush: true
-  });
-  */
+  });*/
+  
   const base_registry = ecr.Repository.fromRepositoryName(this,`base_repo`,BASE_REPO.valueAsString)
 
-  //create a roleARN for codebuild 
   const buildRole = new iam.Role(this, 'BaseCodeBuildDeployRole',{
     roleName: "BaseCodeBuildDeployRole",
     assumedBy: new iam.ServicePrincipal('codebuild.amazonaws.com'),
@@ -42,7 +42,7 @@ export class BasePipelineStack extends Stack {
     
   const base_image_arm_build = new codebuild.Project(this, `BaseImageArmBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    //cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
       {
@@ -73,7 +73,7 @@ export class BasePipelineStack extends Stack {
 
   const base_image_amd_build = new codebuild.Project(this, `BaseImageAmdBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    //cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
       {
@@ -104,7 +104,7 @@ export class BasePipelineStack extends Stack {
 
   const base_image_assembly = new codebuild.Project(this, `BaseImageAmdBuildAssembly`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    //cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
       {
@@ -134,17 +134,14 @@ export class BasePipelineStack extends Stack {
       }
     ),
   });
-    
-  //we allow the buildProject principal to push images to ecr
-  base_registry.grantPullPush(base_image_buildx.grantPrincipal);
+
   base_registry.grantPullPush(base_image_arm_build.grantPrincipal);
   base_registry.grantPullPush(base_image_amd_build.grantPrincipal);
   base_registry.grantPullPush(base_image_assembly.grantPrincipal);
 
   // here we define our pipeline and put together the assembly line
-  const sourceOuput = new codepipeline.Artifact();
+  const sourceOutput = new codepipeline.Artifact();
 
-  const basebuildpipeline = new codepipeline.Pipeline(this,`BuildBasePipeline`);
   const basebuildpipeline = new codepipeline.Pipeline(this,`BuildBasePipeline`);
   basebuildpipeline.addStage({
     stageName: 'Source',
@@ -156,8 +153,7 @@ export class BasePipelineStack extends Stack {
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
         oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
-        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
-        //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
+        //trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
       })
       ]
   });
@@ -167,19 +163,19 @@ export class BasePipelineStack extends Stack {
     actions: [
       new codepipeline_actions.CodeBuildAction({
         actionName: 'BaseImageArmBuildX',
-        input: sourceOuput,
+        input: sourceOutput,
         runOrder: 1,
         project: base_image_arm_build
       }),
       new codepipeline_actions.CodeBuildAction({
         actionName: 'BaseImageAmdBuildX',
-        input: sourceOuput,
+        input: sourceOutput,
         runOrder: 1,
         project: base_image_amd_build
       }),
       new codepipeline_actions.CodeBuildAction({
           actionName: 'AssembleBaseBuilds',
-          input: sourceOuput,
+          input: sourceOutput,
           runOrder: 2,
           project: base_image_assembly
         })

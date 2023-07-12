@@ -1,4 +1,5 @@
 import { Construct } from 'constructs'
+import { Stack, StackProps, CfnParameter,SecretValue  } from 'aws-cdk-lib';
 import * as codecommit from 'aws-cdk-lib/aws-codecommit';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -6,6 +7,7 @@ import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as iam from "aws-cdk-lib/aws-iam";
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 
 export class LyraPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -21,33 +23,21 @@ export class LyraPipelineStack extends Stack {
   const GAME_ARM_SERVER_TAG = new CfnParameter(this,"GAMEARMSERVERTAG",{type:"String"});
   const GAME_AMD_SERVER_TAG = new CfnParameter(this,"GAMEAMDSERVERTAG",{type:"String"});
   const S3_LYRA_ASSETS = new CfnParameter(this,"S3LYRAASSETS",{type:"String"});
-  
-  //codecommit repository that will contain the containerized app to build
-  const buildxrepo = new codecommit.Repository(this, `buildxrepo`, {
-    repositoryName:"buildx-lyra",
-    description: "Lyra repository for the pipeline, includes all build phases",
-    code: codecommit.Code.fromDirectory('./server/','main'),
-  });
-  const assetsgitrepo = new codecommit.Repository(this, `assets`, {
-    repositoryName:"lyra-game-assets",
-    description: "Lyra repository for the pipeline, includes game assets build",
-    code: codecommit.Code.fromDirectory('./server/assets-image-multiarch','main'),
-  });
-/*
-  const devopsgitrepo = new codecommit.Repository(this, `devops`, {
-    repositoryName:"lyra-game-devops",
-    description: "Lyra repository for the pipeline, includes agones sdk phase",
-    code: codecommit.Code.fromDirectory('./server/game-server-image-multiarch','main'),
-  });
-  //const gitrepo = codecommit.Repository.fromRepositoryName(this,`gitrepo`,CODE_COMMIT_REPO.valueAsString)
- */   
+  const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
+  const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
+  const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
+  const GITHUB_OAUTH_TOKEN = new CfnParameter(this,"GITHUBOAUTHTOKEN",{type:"String"});
+
+
   const base_registry = ecr.Repository.fromRepositoryName(this,`base_repo`,BASE_REPO.valueAsString)
   const stk_assets_bucket = s3.Bucket.fromBucketName(this,`game_assets_bucket`,S3_LYRA_ASSETS.valueAsString)
 
-  const lyra_registry = new ecr.Repository(this,`game_repo`,{
+  /*const lyra_registry = new ecr.Repository(this,`game_repo`,{
     repositoryName:GAME_REPO.valueAsString,
     imageScanOnPush: true
-  });
+  });*/
+  const lyra_registry = ecr.Repository.fromRepositoryName(this,`game_repo`,GAME_REPO.valueAsString)
+  
 
   //create a roleARN for codebuild 
   const buildRole = new iam.Role(this, 'LyraBuildDeployRole',{
@@ -60,9 +50,9 @@ export class LyraPipelineStack extends Stack {
     actions: ['ssm:*'],
   }));
   
-  const lyra_assets_image_amd_build = new codebuild.Project(this, `LyraAssetsImageAmdBuild`, {
+  const lyra_image_amd_build = new codebuild.Project(this, `LyraAssetsImageAmdBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    //cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
       {
@@ -82,6 +72,7 @@ export class LyraPipelineStack extends Stack {
               `export GAME_REPO="${GAME_REPO.valueAsString}"`,
               `export GAME_ASSETS_TAG="${GAME_AMD_ASSETS_TAG.valueAsString}"`,
               `export S3_LYRA_ASSETS="${S3_LYRA_ASSETS.valueAsString}"`,
+              `cd lyra/server/assets-image-multiarch`,
               `chmod +x ./build.sh && ./build.sh`
             ],
           }
@@ -92,9 +83,9 @@ export class LyraPipelineStack extends Stack {
       }
     ),
   });
-  const lyra_assets_image_arm_build = new codebuild.Project(this, `LyraAssetsImageArmBuild`, {
+  const lyra_image_arm_build = new codebuild.Project(this, `LyraAssetsImageArmBuild`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    //cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
       {
@@ -114,6 +105,7 @@ export class LyraPipelineStack extends Stack {
               `export GAME_REPO="${GAME_REPO.valueAsString}"`,
               `export GAME_ASSETS_TAG="${GAME_ARM_ASSETS_TAG.valueAsString}"`,
               `export S3_LYRA_ASSETS="${S3_LYRA_ASSETS.valueAsString}"`,
+              `cd lyra/server/assets-image-multiarch`,
               `chmod +x ./build.sh && ./build.sh`
             ],
           }
@@ -124,9 +116,9 @@ export class LyraPipelineStack extends Stack {
       }
     ),
   });  
-  const lyra_assets_image_assembly = new codebuild.Project(this, `LyraAssetsImageMultiarchAssembly`, {
+  const lyra_image_assembly = new codebuild.Project(this, `LyraAssetsImageMultiarchAssembly`, {
     environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
+    //cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
     role: buildRole,
     buildSpec: codebuild.BuildSpec.fromObject(
       {
@@ -145,6 +137,7 @@ export class LyraPipelineStack extends Stack {
               `export GAME_ASSETS_TAG="${GAME_ASSETS_TAG.valueAsString}"`,
               `export GAME_AMD_ASSETS_TAG="${GAME_AMD_ASSETS_TAG.valueAsString}"`,
               `export GAME_ARM_ASSETS_TAG="${GAME_ARM_ASSETS_TAG.valueAsString}"`,
+              `cd lyra/server/assets-image-multiarch`,
               `chmod +x ./assemble_multiarch_image.sh && ./assemble_multiarch_image.sh`
             ],
           }
@@ -155,192 +148,52 @@ export class LyraPipelineStack extends Stack {
       }
     ),
   });
-/*
-  const lyra_game_image_amd_build = new codebuild.Project(this, `LyraGameImageAmdBuild`, {
-    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3},
-    role: buildRole,
-    buildSpec: codebuild.BuildSpec.fromObject(
-      {
-        version: "0.2",
-        env: {
-          'exported-variables': [
-            'AWS_ACCOUNT_ID','AWS_REGION','GAME_REPO','GAME_AMD_SERVER_TAG','GAME_ASSETS_TAG','GAME_SERVER_TAG','BASE_REPO','BASE_IMAGE_TAG'
-          ],
-        },
-        phases: {
-          build: {
-            commands: [
-              `export AWS_ACCOUNT_ID="${this.account}"`,
-              `export AWS_REGION="${this.region}"`,
-              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
-              `export GAME_SERVER_TAG="${GAME_AMD_SERVER_TAG.valueAsString}"`,
-              `export GAME_ASSETS_TAG="${GAME_ASSETS_TAG.valueAsString}"`,
-              `export GAME_CODE_TAG="${GAME_CODE_TAG.valueAsString}"`,
-              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
-              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
-              `chmod +x ./build.sh && ./build.sh`
-            ],
-          }
-        },
-        artifacts: {
-          files: ['imageDetail.json']
-        },
-      }
-    ),
-  });
- */ 
-/*
-  const lyra_game_image_arm_build = new codebuild.Project(this, `LyraGameImageArmBuild`, {
-    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
-    role: buildRole,
-    buildSpec: codebuild.BuildSpec.fromObject(
-      {
-        version: "0.2",
-        env: {
-          'exported-variables': [
-            'AWS_ACCOUNT_ID','AWS_REGION','GAME_REPO','GAME_ARM_SERVER_TAG','GAME_ASSETS_TAG','GAME_CODE_TAG','BASE_REPO','BASE_IMAGE_TAG'
-          ],
-        },
-        phases: {
-          build: {
-            commands: [
-              `export AWS_ACCOUNT_ID="${this.account}"`,
-              `export AWS_REGION="${this.region}"`,
-              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
-              `export GAME_SERVER_TAG="${GAME_ARM_SERVER_TAG.valueAsString}"`,
-              `export GAME_ASSETS_TAG="${GAME_ASSETS_TAG.valueAsString}"`,
-              `export GAME_CODE_TAG="${GAME_CODE_TAG.valueAsString}"`,
-              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
-              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
-              `chmod +x ./build.sh && ./build.sh`
-            ],
-          }
-        },
-        artifacts: {
-          files: ['imageDetail.json']
-        },
-      }
-    ),
-  });
- */ 
-/*
-  const lyra_game_image_assembly = new codebuild.Project(this, `LyraGameImageMultiarchAssembly`, {
-    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
-    role: buildRole,
-    buildSpec: codebuild.BuildSpec.fromObject(
-      {
-        version: "0.2",
-        env: {
-          'exported-variables': [
-            'AWS_ACCOUNT_ID','AWS_REGION','GAME_REPO','GAME_AMD_SERVER_TAG','GAME_ARM_SERVER_TAG','GAME_SERVER_TAG'
-          ],
-        },
-        phases: {
-          build: {
-            commands: [
-              `export AWS_ACCOUNT_ID="${this.account}"`,
-              `export AWS_REGION="${this.region}"`,
-              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
-              `export GAME_AMD_SERVER_TAG="${GAME_AMD_SERVER_TAG.valueAsString}"`,
-              `export GAME_ARM_SERVER_TAG="${GAME_ARM_SERVER_TAG.valueAsString}"`,
-              `export GAME_SERVER_TAG="${GAME_SERVER_TAG.valueAsString}"`,
-              `chmod +x ./assemble_multiarch_image.sh && ./assemble_multiarch_image.sh`
-            ],
-          }
-        },
-        artifacts: {
-          files: ['imageDetail.json']
-        },
-      }
-    ),
-  });
- */ 
 
-  base_registry.grantPullPush(lyra_assets_image_amd_build.grantPrincipal);
-  base_registry.grantPullPush(lyra_assets_image_arm_build.grantPrincipal);
-  lyra_registry.grantPullPush(lyra_assets_image_amd_build.grantPrincipal);
-  lyra_registry.grantPullPush(lyra_assets_image_arm_build.grantPrincipal);
-  lyra_registry.grantPullPush(lyra_assets_image_assembly.grantPrincipal);
-  /*lyra_registry.grantPullPush(lyra_game_image_arm_build.grantPrincipal);
-  lyra_registry.grantPullPush(lyra_game_image_amd_build.grantPrincipal);
-  lyra_registry.grantPullPush(lyra_game_image_assembly.grantPrincipal);*/
+  base_registry.grantPullPush(lyra_image_amd_build.grantPrincipal);
+  base_registry.grantPullPush(lyra_image_arm_build.grantPrincipal);
+  lyra_registry.grantPullPush(lyra_image_amd_build.grantPrincipal);
+  lyra_registry.grantPullPush(lyra_image_arm_build.grantPrincipal);
+  lyra_registry.grantPullPush(lyra_image_assembly.grantPrincipal);
 
-  const sourceOuput = new codepipeline.Artifact();
+  const sourceOutput = new codepipeline.Artifact();
 
-  const artistpipeline = new codepipeline.Pipeline(this,`LyraArtistPipeline`);
-  artistpipeline.addStage({
-      stageName: 'Source',
-      actions: [
-      new codepipeline_actions.CodeCommitSourceAction({
-        actionName: 'CodeCommit_Source',
-        repository: assetsgitrepo,
-        //runOrder: 1,
-        output: sourceOuput,
-        branch: 'main'
-      }),
-      ]
-  });
-  artistpipeline.addStage({
-      stageName: 'LyraAssetsBuildImage',
-      actions: [
-        new codepipeline_actions.CodeBuildAction({
-          actionName: 'BuildARMAssets',
-          input: sourceOuput,
-          runOrder: 1,
-          project: lyra_assets_image_arm_build
-        }),
-        new codepipeline_actions.CodeBuildAction({
-          actionName: 'BuildAMDAssets',
-          input: sourceOuput,
-          runOrder: 1,
-          project: lyra_assets_image_amd_build
-        }),
-        new codepipeline_actions.CodeBuildAction({
-          actionName: 'AssembleAssetsBuilds',
-          input: sourceOuput,
-          runOrder: 2,
-          project: lyra_assets_image_assembly
-        })
-      ]
-  });
-/*
-  const devopspipeline = new codepipeline.Pipeline(this,`LyraDevOpsPipeline`);
-  devopspipeline.addStage({
-      stageName: 'Source',
-      actions: [
-      new codepipeline_actions.CodeCommitSourceAction({
-        actionName: 'CodeCommit_Source',
-        repository: devopsgitrepo,
-        //runOrder: 1,
-        output: sourceOuput,
-        branch: 'main'
+  const lyrapipeline = new codepipeline.Pipeline(this,`LyraPipeline`);
+  lyrapipeline.addStage({
+    stageName: 'Source',
+    actions: [
+      new codepipeline_actions.GitHubSourceAction({
+        actionName: 'GitHub_Source',
+        owner: GITHUB_USER.valueAsString,
+        repo: GITHUB_REPO.valueAsString,
+        branch: GITHUB_BRANCH.valueAsString,
+        output: sourceOutput,
+        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
+        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
       })
       ]
   });
-  devopspipeline.addStage({
-      stageName: 'LyraGameBuildImage',
+  lyrapipeline.addStage({
+      stageName: 'LyraBuildImage',
       actions: [
         new codepipeline_actions.CodeBuildAction({
-          actionName: 'BuildAgonesARMGame',
-          input: sourceOuput,
+          actionName: 'BuildARMAssets',
+          input: sourceOutput,
           runOrder: 1,
-          project: lyra_game_image_arm_build
+          project: lyra_image_arm_build
         }),
         new codepipeline_actions.CodeBuildAction({
-          actionName: 'BuildAgonesAMDGame',
-          input: sourceOuput,
+          actionName: 'BuildAMDAssets',
+          input: sourceOutput,
           runOrder: 1,
-          project: lyra_game_image_amd_build
+          project: lyra_image_amd_build
         }),
         new codepipeline_actions.CodeBuildAction({
-          actionName: 'AssembleAgonesGame',
-          input: sourceOuput,
+          actionName: 'AssembleAssetsBuilds',
+          input: sourceOutput,
           runOrder: 2,
-          project: lyra_game_image_assembly
+          project: lyra_image_assembly
         })
       ]
   });
-*/
   }
 }

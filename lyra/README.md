@@ -32,6 +32,9 @@ export GAME_ATTACKER_TAG=lyra_attacker
 export GAME_ATTACKER_ARM_IMAGE=lyra_attacker_arm64
 export GAME_ATTACKER_AMD_IMAGE=lyra_attacker_amd64
 export S3_LYRA_ASSETS=lyra-starter-game
+export GITHUB_USER=mygithubusername
+export GITHUB_BRANCH=master, main etc
+export GITHUB_REPO=containerized-game-servers
 
 export CLUSTER_NAME=lyra-usw-2
 ```

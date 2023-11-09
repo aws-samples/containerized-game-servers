@@ -1,0 +1,114 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gs-admin
+  namespace: default
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - "*"
+  verbs:
+  - "*"
+- apiGroups:
+  - rbac.authorization.k8s.io
+  - extensions
+  - apps
+  resources:
+  - "*"
+  verbs:
+  - "*"
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  - pods
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gs-admin
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gs-admin
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: gs-admin
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: gs-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stk
+  name: stk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stk
+  template:
+    metadata:
+      labels:
+        app: stk
+    spec:
+      shareProcessNamespace: true
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: stk-event-aggr-us-west-2-ng
+      hostNetwork: true
+      serviceAccountName: gs-admin
+      containers:
+      - name: stk
+        envFrom:
+          - secretRef:
+              name: db-creds
+        env:
+        - name: MODE
+          value: "0"
+        - name: MISC_ARGS
+          value: "--owner-less --auto-connect --log=0"
+        - name: MAX_PLAYERS
+          value: "24"
+        - name: REGISTER_Q
+          value: "https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/register"
+        - name: DEREGISTER_Q
+          value: "https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/deregister"
+        - name: UDP_SOCKET_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:20220509054555
+        imagePullPolicy: Always
+        command: ["/start-server.sh"]
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","/srv-sigstop.sh > /proc/1/fd/1"]
+        livenessProbe:
+          exec:
+            command:
+            - /udp-health-probe.py
+          initialDelaySeconds: 300
+          periodSeconds: 1000
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
+        resources:
+          requests:
+            cpu: 512m
+            memory: 512Mi

@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stkcli
+  name: stkcli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stkcli
+  template:
+    metadata:
+      labels:
+        app: stkcli
+    spec:
+      nodeSelector:
+        karpenter.sh/provisioner-name: default
+      serviceAccountName: gs-admin
+      containers:
+      - name: stk
+        env:
+        - name: GAMESERVER_ENDPOINT
+          value: "None"
+        - name: NETWORK_AI
+          value: "6"
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:latest
+        imagePullPolicy: Always
+        command: ["/start-client.sh"]
+        resources:
+          requests:
+            cpu: 7500m
+            memory: 7500Mi

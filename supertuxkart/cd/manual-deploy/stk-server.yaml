@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stk-nlb-svc
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "80"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: TCP    
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+spec:
+  selector:
+    app: stknlb
+  ports:
+    - protocol: UDP
+      port: 8081
+      targetPort: 8081
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stknlb
+  name: stknlb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stknlb
+  template:
+    metadata:
+      labels:
+        app: stknlb
+    spec:
+      shareProcessNamespace: true
+      nodeSelector:
+        karpenter.sh/provisioner-name: default
+      containers:
+      - name: nginx
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/nginx:latest
+        imagePullPolicy: Always
+        #command: ["service","nginx","start"]
+        command: ["nginx","-g","daemon off;"]
+        ports:
+          - name: tcp
+            containerPort: 80
+            protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      - name: stk
+        env:
+        - name: UDP_SOCKET_PORT
+          value: "8081"
+        - name: UDP_SOCKET_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:latest
+        #image: public.ecr.aws/p9d8y1e7/supertuxkart
+        imagePullPolicy: Always
+        command: ["/stk-code/start-server.sh"]
+        ports:
+          - name: udp
+            containerPort: 8081
+            protocol: UDP
+        livenessProbe:
+          exec:
+            command:
+            - /udp-health-probe.py
+          initialDelaySeconds: 30
+          periodSeconds: 100
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
+        resources:
+          requests:
+            cpu: 1024m
+            memory: 1024Mi

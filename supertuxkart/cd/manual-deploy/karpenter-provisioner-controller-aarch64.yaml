@@ -1,0 +1,32 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  limits:
+    resources:
+      cpu: 20k
+  provider:
+    securityGroupSelector:
+      karpenter.sh/discovery: vivox-arm-us-west-2
+    subnetSelector:
+      karpenter.sh/discovery: vivox-arm-us-west-2
+  requirements:
+  - key: node.kubernetes.io/instance-type
+    operator: In
+    values:
+    - c6g.xlarge
+    - c6g.2xlarge
+    - c6g.4xlarge
+    - c6g.8xlarge
+    - c6g.12xlarge
+    - c6g.16xlarge
+  - key: kubernetes.io/arch
+    operator: In
+    values:
+    - arm64
+  - key: karpenter.sh/capacity-type
+    operator: In
+    values:
+    - on-demand
+  ttlSecondsAfterEmpty: 30

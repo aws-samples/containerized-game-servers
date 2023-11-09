@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stkcli
+  name: stkcli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stkcli
+  template:
+    metadata:
+      labels:
+        app: stkcli
+    spec:
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: stk-event-aggr-us-west-2-ng
+      serviceAccountName: gs-admin
+      containers:
+      - name: stkcli
+        envFrom:
+          - secretRef:
+              name: db-creds
+        env:
+        - name: MISC_ARGS
+          value: "--connection-debug --auto-connect --owner-less"
+        - name: SIZE_OF_GAME_SAMPLE
+          value: "1000"
+        - name: CW_NS
+          value: "supertuxkart"
+        - name: CLIENT_STDOUT
+          value: "/root/.config/supertuxkart/config-0.10/stdout.log"
+        - name: MAXPLAYERS
+          value: "24"
+        - name: NETWORK_AI
+          value: "6"
+        - name: SLEEP_B4_PUT_CW
+          value: "60"
+        - name: GAME_VERSION
+          value: "20220509020503" 
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:20220509054555
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","/cli-sigstop.sh > /proc/1/fd/1"]
+        imagePullPolicy: Always
+        command:
+        - /start-client.sh
+        resources:
+          requests:
+            cpu: 512m
+            memory: 512Mi

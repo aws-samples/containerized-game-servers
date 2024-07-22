@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ddosbot
+  name: ddosbot
+  namespace: default
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ddosbot
+  template:
+    metadata:
+      labels:
+        app: ddosbot
+    spec:
+      nodeSelector:
+        karpenter.sh/provisioner-name: ddosbot
+      serviceAccountName: gs-admin
+      containers:
+      - name: stk
+        securityContext:
+          privileged: true 
+          allowPrivilegeEscalation: true
+          runAsUser: 0
+        envFrom:
+          - secretRef:
+              name: db-creds
+        env:
+        - name: MISC_ARGS
+          value: "--connection-debug --auto-connect --owner-less"
+        - name: SIZE_OF_GAME_SAMPLE
+          value: "1000"
+        - name: APP
+          value: stksrv-noml
+        - name: CW_NS
+          value: "supertuxkart"
+        - name: CLIENT_STDOUT
+          value: "/root/.config/supertuxkart/config-0.10/stdout.log"
+        - name: MAXPLAYERS
+          value: "44"
+        - name: NETWORK_AI
+          value: "35"
+        - name: SLEEP_B4_PUT_CW
+          value: "10"
+        - name: GAME_VERSION
+          value: "20221121024947" 
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_SERVER_TAG
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","/cli-sigstop.sh > /proc/1/fd/1"]
+        imagePullPolicy: Always
+        command:
+        - /start-bot.sh
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi

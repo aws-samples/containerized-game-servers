@@ -1,0 +1,16 @@
+FROM $BASE_IMAGE
+ARG S3_LYRA_ASSETS
+ARG GAME_SERVER_TAG
+ENV S3_LYRA_ASSETS=$S3_LYRA_ASSETS
+ENV GAME_SERVER_TAG=$GAME_SERVER_TAG
+RUN apt install -y gettext
+RUN wget "https://"$S3_LYRA_ASSETS".s3.us-west-2.amazonaws.com/$GAME_ASSETS_TAG.zip" -O /usr/local/$GAME_ASSETS_TAG.zip
+RUN unzip /usr/local/$GAME_ASSETS_TAG.zip -d /usr/local/
+RUN mv /usr/local/$GAME_ASSETS_TAG /usr/local/lyra_starter_game
+RUN chmod +x /usr/local/lyra_starter_game/LyraServer*.sh
+RUN if [ ! -e /usr/local/lyra_starter_game/LyraServer.sh ]; then  mv -f /usr/local/lyra_starter_game/LyraServer*.sh /usr/local/lyra_starter_game/LyraServer.sh; fi
+COPY create_node_port_svc.sh /usr/local/lyra_starter_game/
+COPY lyra_node_port_svc_template.yaml /usr/local/lyra_starter_game/
+RUN chmod +x /usr/local/lyra_starter_game/create_node_port_svc.sh
+RUN chown -R 1000 /usr/local/lyra_starter_game/
+USER 1000

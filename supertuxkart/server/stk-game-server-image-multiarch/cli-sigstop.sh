@@ -27,3 +27,10 @@ then
   echo "ERR-DB update sessions set num_active_session"
   exit 0
 fi
+psql -A -e -t -U postgres -w -c "update servers set session_length=updated_at-created_at where id='$SERVER_SESSION_ID';"
+echo "psql exit code="$?
+if (( $?>0 ))
+then
+  echo "ERR-DB update sessions set num_active_session"
+  exit 0
+fi

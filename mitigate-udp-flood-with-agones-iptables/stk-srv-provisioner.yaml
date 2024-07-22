@@ -1,0 +1,68 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: stksrv
+spec:
+  requirements:
+  - key: karpenter.k8s.aws/instance-cpu
+    operator: In 
+    values:
+    - "2"
+  - key: kubernetes.io/arch
+    operator: In
+    values:
+    - arm64
+    - amd64
+  - key: karpenter.k8s.aws/instance-generation
+    operator: In
+    values:
+    - "6"
+    - "7"
+  - key: karpenter.k8s.aws/instance-category
+    operator: In
+    values:
+    - c
+  - key: karpenter.sh/capacity-type
+    operator: In
+    values:
+#    - spot
+    - on-demand
+  limits:
+    resources:
+      cpu: 20k
+  providerRef:
+    name: stksrv
+  ttlSecondsAfterEmpty: 30
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: stksrv
+spec:
+  amiFamily: AL2
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 200Gi
+        volumeType: gp3
+        iops: 10000
+        deleteOnTermination: true
+        throughput: 125
+  securityGroupSelector:
+    karpenter.sh/discovery: kts-usw2
+  subnetSelector:
+    karpenter.sh/discovery: kts-usw2
+#  userData: |
+#    MIME-Version: 1.0
+#    Content-Type: multipart/mixed; boundary="BOUNDARY"
+#    
+#    --BOUNDARY
+#    Content-Type: text/x-shellscript; charset="us-ascii"
+#
+#    #!/bin/bash
+#    iptables -N limit-by-ip-chain 
+#    iptables -A limit-by-ip-chain -m hashlimit --hashlimit-upto 5/sec --hashlimit-mode srcip --hashlimit-name per_ip_conn_rate_limit -j ACCEPT
+#    iptables -A limit-by-ip-chain --match limit --limit 1/min -j LOG --log-prefix "IPTables-Rejected: " 
+#    iptables -A limit-by-ip-chain -j DROP 
+#    iptables -I INPUT -p udp  -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j limit-by-ip-chain
+#    --BOUNDARY

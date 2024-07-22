@@ -7,10 +7,13 @@ We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. A simp
 ```bash
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=us-west-2
-export BASE_IMAGE=baseimage
+export BUILDX_VER=v0.10.3
+export BASE_REPO=baseimage-ci
 export BASE_IMAGE_TAG=multiarch-py3
-export GAME_IMAGE=craft
-export GAME_IMAGE_TAG=multiarch-py3
+export GAME_REPO=craft-ci
+export GAME_ARM_CODE_TAG=craft-arm64
+export GAME_AMD_CODE_TAG=craft-amd64
+export GAME_CODE_TAG=craft-multiarch
 export GITHUB_CRAFT="https://github.com/yahavb/Craft.git"
 export GITHUB_CRAFT_BRANCH=master
 export INSTANCE_FAMILY=t4g
@@ -34,6 +37,19 @@ cd ./base-image-multiarch-python3/src
 cd ../../craft-image/src/
 ./create-ecr.sh
 ./build.sh
+```
+
+#### automated pipeline for base image and the craft image
+Create a multi-arch base image pipeline. It will create a gitcommit repo that triggers the pipeline upone code changes. 
+
+```bash
+./deploy-base-pipeline.sh
+```
+
+Create a multi-arch image.
+
+```bash
+./deploy-craft-server-pipeline.sh
 ```
 
 ### Create EKS cluster
@@ -68,6 +84,8 @@ eksctl create cluster -f eks-cluster-spec.yml
 
 ### Deploy Agones - Optional 
 ```bash
+helm repo add agones https://agones.dev/chart/stable
+helm repo update
 helm upgrade agones agones/agones --namespace agones-system --install --wait --create-namespace \
     --set agones.featureGates=PlayerTracking=true
 ```

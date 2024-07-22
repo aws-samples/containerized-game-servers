@@ -1,0 +1,67 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: stkbot
+spec:
+  requirements:
+#  - key: karpenter.k8s.aws/instance-cpu
+#    operator: Lt
+#    values:
+#    - "3"
+#  - key: karpenter.k8s.aws/instance-category
+#    operator: In
+#    values:
+#    - a
+#    - c
+#    - d
+#    - m
+#    - r
+#    - t
+  - key: kubernetes.io/arch
+    operator: In
+    values:
+    - arm64
+    - amd64
+  - key: karpenter.sh/capacity-type
+    operator: In
+    values:
+    - spot
+    - on-demand
+  limits:
+    resources:
+      cpu: 20k
+  providerRef:
+    name: stkbot
+  ttlSecondsAfterEmpty: 30
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: stkbot
+spec:
+  amiFamily: AL2
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 200Gi
+        volumeType: gp3
+        iops: 10000
+        deleteOnTermination: true
+        throughput: 125
+  securityGroupSelector:
+    karpenter.sh/discovery: kts-usw2
+  subnetSelector:
+    karpenter.sh/discovery: kts-usw2
+#  userData: |
+#    MIME-Version: 1.0
+#    Content-Type: multipart/mixed; boundary="BOUNDARY"
+#    
+#    --BOUNDARY
+#    Content-Type: text/x-shellscript; charset="us-ascii"
+#
+#    #!/bin/bash
+#    sudo iptables --new-chain RATE-LIMIT
+#    sudo iptables --append RATE-LIMIT --match hashlimit --hashlimit-mode srcip --hashlimit-upto 5/sec --hashlimit-burst 5 --hashlimit-name conn_rate_limit --jump ACCEPT
+#    sudo iptables --append RATE-LIMIT --jump DROP
+#
+#    --BOUNDARY

@@ -1,0 +1,52 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: lyra
+spec:
+  requirements:
+  - key: karpenter.k8s.aws/instance-cpu
+    operator: In
+    values:
+    - "2"
+  - key: karpenter.sh/capacity-type
+    operator: In
+    values: 
+    - on-demand
+  - key: kubernetes.io/arch
+    operator: In
+    values:
+    - arm64
+    - amd64
+  limits:
+    resources:
+      cpu: 1000
+  providerRef:
+    name: default
+  ttlSecondsAfterEmpty: 30
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: default
+spec:
+  subnetSelector:
+    karpenter.sh/subnet/discovery: lyra-usw2-public
+  securityGroupSelector:
+    karpenter.sh/discovery: lyra-usw2
+  userData: |
+    MIME-Version: 1.0
+    Content-Type: multipart/mixed; boundary="BOUNDARY"
+    
+    --BOUNDARY
+    Content-Type: text/x-shellscript; charset="us-ascii"
+
+    #!/bin/bash -x
+    alloc_id=`aws ec2 describe-addresses --filters "Name=tag:game-name,Values=lyra" --query "Addresses[?AssociationId==null].AllocationId" --output text | awk '{print $1}'`
+    if [ -z "$alloc_id" ]; then
+      alloc_id=`aws ec2 allocate-address --tag-specifications 'ResourceType=elastic-ip,Tags=[{Key=game-name,Value=lyra},{Key=Name,Value=lyra}]' --query "AllocationId" --output text`
+    fi
+    TOKEN=`curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
+    instance_id=`curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id`
+    interface_id=`aws ec2 describe-network-interfaces --filters Name=tag:Name,Values=karpenter.sh/provisioner-name/lyra --query "NetworkInterfaces[?Attachment.InstanceId == '$instance_id'].NetworkInterfaceId" --output text`
+    aws ec2 associate-address --network-interface-id $interface_id --allocation-id $alloc_id 
+    --BOUNDARY

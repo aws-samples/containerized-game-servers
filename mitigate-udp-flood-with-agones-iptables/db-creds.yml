@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  PGHOST: c20xNWdzYnhvb2I1NDFkLmNsdXN0ZXItY3RzdnBkaGsxM3JpLnVzLXdlc3QtMi5yZHMuYW1hem9uYXdzLmNvbQ==
+  PGPASSWORD: dVViR3VDOTJFNjk=
+  PGUSER: cG9zdGdyZXM=
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: db-creds
+  namespace: default

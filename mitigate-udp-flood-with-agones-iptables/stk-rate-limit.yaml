@@ -1,0 +1,106 @@
+apiVersion: "agones.dev/v1"
+kind: Fleet
+metadata:
+  name: stkratelimit
+spec:
+  replicas: 1
+  scheduling: Packed
+  template:
+    metadata:
+      labels:
+        game: Supertuxkart
+    spec:
+#      players:
+#        inititalCapacity: 44
+      ports:
+      - name: default
+        portPolicy: Dynamic
+        containerPort: 4080
+        protocol: UDP
+      health:
+        #TODO - switch
+        disabled: false
+        initialDelaySeconds: 300
+        periodSeconds: 15
+        failureThreshold: 3
+      template:
+        metadata:
+          labels:
+            game: stk
+        spec:
+          nodeSelector:
+            karpenter.sh/provisioner-name: stksrv
+          serviceAccountName: gs-admin
+          initContainers:
+          - name: rate-limit
+            image: 441218111557.dkr.ecr.us-west-2.amazonaws.com/stk-ci:stk-server-multiarch
+            env:
+            - name: HASHLIMIT_UPTO
+              value: "10"
+            - name: HASHLIMIT_BURST
+              value: "30"
+            - name: LOG_LIMIT
+              value: "30"
+            command: ["/rate-limit.sh"]
+            securityContext:
+              capabilities:
+                add: ["NET_ADMIN"]
+          containers:
+          - name: stk
+            envFrom:
+              - secretRef:
+                  name: db-creds
+            env:
+            - name: IS_AGONES
+              value: "True"
+            - name: CPUARCH
+              value: "aarch64"
+            - name: GAME_SERVER_PORT
+              value: "4080"
+            - name: CW_NS
+              value: "supertuxkart"
+            - name: MODE
+              value: "0"
+            - name: LAPS
+              value: "10"
+            - name: MISC_ARGS
+              value: "--owner-less --auto-connect --log=0 --connection-debug"
+            - name: MAX_PLAYERS
+              value: "50"
+            - name: APP
+              value: stksrv
+            - name: UDP_SOCKET_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            image: 441218111557.dkr.ecr.us-west-2.amazonaws.com/stk-ci:stk-server-multiarch
+            imagePullPolicy: Always
+            command: ["/start-server.sh"]
+            securityContext:
+              #privileged: true
+              #allowPrivilegeEscalation: true
+              capabilities:
+                add: ["NET_ADMIN"]
+              runAsUser: 0 
+            lifecycle:
+              preStop:
+                exec:
+                  command: ["/bin/sh","-c","/srv-sigstop.sh > /proc/1/fd/1 && sleep 20"]
+                  #command: ["/bin/sh","-c","/srv-sigstop.sh && sleep 20"]
+            livenessProbe:
+              exec:
+                command:
+                - /udp-health-probe.py
+              initialDelaySeconds: 60
+              periodSeconds: 5 
+            #resources:
+            #  requests:
+            #    cpu: 1000m
+              #  memory: 512Mi
+              #limits:
+              #  cpu: 1000m
+              #  memory: 512Mi

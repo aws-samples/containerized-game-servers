@@ -1,8 +1,8 @@
 # Containerized game servers
  This repo provides examples for running containerized game-servers on EKS.
 
-[!CAUTION]
-This project is in maintenance mode due to the decomission of Code Commit. Each of the patterns described in the examples will be migrated to individual repositories with refactored versions of the code. 
+> [!CAUTION]
+> This project is in maintenance mode due to the decomission of AWS CodeCommit. The patterns described in these examples will migrate to individual repositories that include a refactored version of the code based on GitHub. 
 
  #### [supertuxkart](./supertuxkart) demonstrates dedicated UDP game server that implements the agones SDK
  #### [udp-nlb-sample](./udp-nlb-sample) demonstrate k8s deployment of UDP game servers backed by NLB  

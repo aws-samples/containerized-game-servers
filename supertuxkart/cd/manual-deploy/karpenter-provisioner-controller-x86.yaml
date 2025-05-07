@@ -1,0 +1,47 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  limits:
+    resources:
+      cpu: 20k
+  provider:
+    securityGroupSelector:
+      karpenter.sh/discovery: vivox-amd64-us-west-2
+    subnetSelector:
+      karpenter.sh/discovery: vivox-amd64-us-west-2
+  requirements:
+  - key: node.kubernetes.io/instance-type
+    operator: In
+    values:
+    - c5.xlarge
+    - c5.2xlarge
+    - c5.4xlarge
+    - c5.9xlarge
+    - c5.12xlarge
+    - c5.18xlarge
+    - c5.24xlarge
+    - c5a.xlarge
+    - c5a.2xlarge
+    - c5a.4xlarge
+    - c5a.8xlarge
+    - c5a.12xlarge
+    - c5a.16xlarge
+    - c5a.24xlarge
+    - c5ad.xlarge
+    - c5ad.2xlarge
+    - c5ad.4xlarge
+    - c5ad.8xlarge
+    - c5ad.12xlarge
+    - c5ad.16xlarge
+    - c5ad.24xlarge
+  - key: kubernetes.io/arch
+    operator: In
+    values:
+    - amd64
+  - key: karpenter.sh/capacity-type
+    operator: In
+    values:
+    - on-demand
+  ttlSecondsAfterEmpty: 30

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stk
+  name: stk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stk
+  template:
+    metadata:
+      labels:
+        app: stk
+    spec:
+      shareProcessNamespace: true
+      nodeSelector:
+        alpha.eksctl.io/nodegroup-name: vivox-arm-us-west-2-ng
+      hostNetwork: true
+      containers:
+      - name: stk
+        env:
+        - name: UDP_SOCKET_PORT
+          value: "8081"
+        - name: UDP_SOCKET_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        image: 259994957756.dkr.ecr.us-west-2.amazonaws.com/supertuxkart:latest
+        imagePullPolicy: Always
+        command: ["/stk-code/start-server.sh"]
+        resources:
+          requests:
+            cpu: 1024m
+            memory: 1024Mi

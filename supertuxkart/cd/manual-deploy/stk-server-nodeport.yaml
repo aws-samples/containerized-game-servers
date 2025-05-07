@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stk-svc
+spec:
+  selector:
+    app: stk
+  ports:
+    - protocol: UDP
+      port: 8081
+      targetPort: 8081
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stk
+  name: stk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stk
+  template:
+    metadata:
+      labels:
+        app: stk
+    spec:
+      shareProcessNamespace: true
+      containers:
+#      - name: nginx
+#        image: public.ecr.aws/nginx/nginx:latest
+#        imagePullPolicy: Always
+#        command: ["nginx","-g","daemon off;"]
+#        ports:
+#          - name: tcp
+#            containerPort: 80
+#            protocol: TCP
+#        readinessProbe:
+#          tcpSocket:
+#            port: 80
+#          initialDelaySeconds: 10
+#          periodSeconds: 10
+      - name: stk
+        env:
+        - name: UDP_SOCKET_PORT
+          value: "8081"
+        - name: UDP_SOCKET_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/stk:${IMAGE_TAG}
+        imagePullPolicy: Always
+        command: ["/stk-code/start-server.sh"]
+        ports:
+          - name: udp
+            containerPort: 8081
+            protocol: UDP
+#        livenessProbe:
+#          exec:
+#            command:
+#            - /udp-health-probe.py
+#          initialDelaySeconds: 30
+#          periodSeconds: 100
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
+        resources:
+          requests:
+            cpu: 1024m
+            memory: 1024Mi

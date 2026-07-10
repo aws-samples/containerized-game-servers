@@ -1,5 +1,9 @@
-django
-psycopg2
-pytz
-django-postgres-extra
-django-sslserver
+# Pinned to bounded ranges for reproducible builds. Django 4.2 is an LTS release.
+Django>=4.2,<5.0
+psycopg2>=2.9,<3.0
+pytz>=2024.1
+django-postgres-extra>=2.0,<3.0
+# NOTE: django-sslserver is unmaintained and only used by the optional
+# `runsslserver` dev path (commented out in start.sh). Prefer terminating TLS
+# at the load balancer/ingress instead.
+django-sslserver==0.9

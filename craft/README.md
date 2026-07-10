@@ -25,22 +25,21 @@ docker buildx create --name craftbuilder
 ```
 
 ### Create and deploy the ECR docker registry and images for base image and game image
-* create image registry for the base image
+* build and push the multi-arch base image (create the `$BASE_REPO` ECR repository first if it does not exist)
 ```bash
-cd ./base-image-multiarch-python3/src
-./create-ecr.sh
+cd server/base-image-multiarch-python3
 ./build.sh
 ```
 
-* create the registry for game image
+* create the registry for the game image and build it
 ```bash
-cd ../../craft-image/src/
+cd ../craft-image-multiarch
 ./create-ecr.sh
 ./build.sh
 ```
 
 #### automated pipeline for base image and the craft image
-Create a multi-arch base image pipeline. It will create a gitcommit repo that triggers the pipeline upone code changes. 
+Create a multi-arch base image pipeline. It will create a source repository that triggers the pipeline upon code changes. 
 
 ```bash
 ./deploy-base-pipeline.sh
@@ -61,12 +60,12 @@ kind: ClusterConfig
 metadata:
   name: ${CLUSTER_NAME}
   region: ${AWS_REGION}
-  version: "1.23"
+  version: "1.33"
   tags:
     karpenter.sh/discovery: ${CLUSTER_NAME}
 managedNodeGroups:
   - instanceType: ${INSTANCE_FAMILY}.large
-    amiFamily: AmazonLinux2
+    amiFamily: AmazonLinux2023
     name: ${CLUSTER_NAME}-ng
     desiredCapacity: 2
     minSize: 1
@@ -91,7 +90,7 @@ helm upgrade agones agones/agones --namespace agones-system --install --wait --c
 ```
 
 ### Deploy Karpenter
-Follow [karpenter install steps](https://karpenter.sh/v0.20.0/getting-started/getting-started-with-eksctl/)
+Follow [karpenter install steps](https://karpenter.sh/docs/getting-started/getting-started-with-karpenter/)
 
 ### Deploy container insights
 Follow [container insights deploy steps](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-EKS-quickstart.html)
@@ -123,7 +122,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set serviceAccount.name=aws-load-balancer-controller
 ```
 
-### Create Aurora Serverless PostrgeSQL 
+### Create Aurora Serverless PostgreSQL 
 Use https://github.com/aws-samples/amazon-aurora-call-to-amazon-sagemaker-sample/tree/master/multiplayer-matchmaker/aurora-pg-cdk
 * Obtain the Aurora cluster endpoint
 
@@ -151,7 +150,7 @@ kubectl apply -f craft-role-sa.yaml
 ```
 
 ### Create a k8s database secret 
-Deploy the databse secrets. The CDK script that deployed the db also creates secrets in AWS Secrets Manager. We will deploy these secrets from Secrets Manager into the application pods.
+Deploy the database secrets. The CDK script that deployed the db also creates secrets in AWS Secrets Manager. We will deploy these secrets from Secrets Manager into the application pods.
 
 Install the secrets store CSI driver and AWS Secrets and Configuration Provider (ASCP):
 
@@ -195,14 +194,18 @@ Follow [auth](../auth)
 ### Play the game
 Download the client binaries or compile it from https://github.com/yahavb/Craft
 
+> **Note:** `craft.auth.example.com` below is a placeholder. Replace it with the
+> DNS name or load balancer address of your deployed Craft auth service, and
+> prefer HTTPS so tokens are not sent in clear text.
+
 Create a player user 
 ```bash
-curl http://craft.auth.yahav.sa.aws.dev/auth/adduser/?username=yahavb
+curl https://craft.auth.example.com/auth/adduser/?username=yahavb
 ```
 
 Generate token for the user
 ```bash
-curl http://craft.auth.yahav.sa.aws.dev/auth/getoken/?username=yahavb
+curl https://craft.auth.example.com/auth/getoken/?username=yahavb
 ```
 
 Use the token in the Craft game client 

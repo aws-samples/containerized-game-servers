@@ -50,8 +50,9 @@ export class StkPipelineStack extends Stack {
   });
   
   buildRole.addToPolicy(new iam.PolicyStatement({
-    resources: ['*'],
-    actions: ['ssm:*'],
+    // Scoped from ssm:* to the read-only parameter actions the build needs.
+    actions: ['ssm:GetParameter', 'ssm:GetParameters', 'ssm:GetParametersByPath'],
+    resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/*`],
   }));
   
   const stk_assets_image_buildx = new codebuild.Project(this, `STKAssetsImageBuildX`, {

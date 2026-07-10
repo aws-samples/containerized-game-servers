@@ -18,7 +18,7 @@ export class BasePipelineStack extends Stack {
   const BASE_IMAGE_TAG = new CfnParameter(this,"BASEIMAGETAG",{type:"String"});
   const BASE_IMAGE_AMD_TAG = new CfnParameter(this,"BASEIMAGEAMDTAG",{type:"String"});
   const BASE_IMAGE_ARM_TAG = new CfnParameter(this,"BASEIMAGEARMTAG",{type:"String"});
-  const GITHUB_OAUTH_TOKEN = new CfnParameter(this,"GITHUBOAUTHTOKEN",{type:"String"});
+  const GITHUB_OAUTH_TOKEN = new CfnParameter(this,"GITHUBOAUTHTOKEN",{type:"String",noEcho:true});
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
@@ -37,22 +37,18 @@ export class BasePipelineStack extends Stack {
   });
   
   buildRole.addToPolicy(new iam.PolicyStatement({
-    resources: ['*'],
-    actions: ['ssm:*'],
+    // Scoped from ssm:* to the read-only parameter actions the build needs.
+    actions: ['ssm:GetParameter', 'ssm:GetParameters', 'ssm:GetParametersByPath'],
+    resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/*`],
   }));
 
-  const githubSecret = new secretsmanager.Secret(this, 'githubSecret', {
+  // Store the GitHub OAuth token in Secrets Manager. Do NOT expose it through
+  // CloudFormation stack outputs: outputs are readable by anyone with stack
+  // describe permissions, which would leak the token.
+  new secretsmanager.Secret(this, 'githubSecret', {
     secretObjectValue: {
       token: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
     },
-  });
-  const githubOAuthToken = SecretValue.secretsManager(githubSecret.secretArn,{jsonField:'token'});
-  new cdk.CfnOutput(this, 'githubOAuthTokenRuntimeOutput1', {
-      //value: SecretValue.secretsManager("githubtoken",{jsonField: "token"}).toString()
-      value: githubSecret.secretValueFromJson('token').toString()
-  });
-  new cdk.CfnOutput(this, 'githubOAuthTokenRuntimeOutput2', {
-      value: SecretValue.secretsManager(githubSecret.secretArn,{jsonField: "token"}).toString()
   });
 
   const base_image_arm_build = new codebuild.Project(this, `BaseImageArmBuild`, {

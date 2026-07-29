@@ -25,7 +25,6 @@ game-server pods can be rescheduled before the instance is reclaimed.
 | `spot-sig-pipeline-stack.ts` / `spot-sig-pipeline.ts` | CDK pipeline that creates the `spotsig` ECR repo in your account and builds/pushes the image via CodeBuild. |
 | `deploy-spot-sig-pipeline.sh` | Deploys the CDK pipeline. |
 | `build.sh` | Builds and pushes the image. Reads `AWS_ACCOUNT_ID`, `AWS_REGION`, `SPOTSIG_REPO`, `SPOTSIG_TAG` (used by the CodeBuild project; falls back to sensible defaults for manual runs). |
-| `ecr-repos.sh` / `ecr-repos.json` | Legacy CloudFormation ECR repository template (superseded by the CDK pipeline). |
 | `spot-sig-handler-ds.yaml` | ServiceAccount, ClusterRole/Binding, and DaemonSet. The image URI is templated with `envsubst`. |
 
 ## Deploy

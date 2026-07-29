@@ -33,7 +33,7 @@ spec:
           serviceAccountName: gs-admin
           initContainers:
           - name: rate-limit
-            image: 441218111557.dkr.ecr.us-west-2.amazonaws.com/stk-ci:stk-server-multiarch
+            image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_SERVER_TAG
             env:
             - name: HASHLIMIT_UPTO
               value: "10"
@@ -77,7 +77,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            image: 441218111557.dkr.ecr.us-west-2.amazonaws.com/stk-ci:stk-server-multiarch
+            image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_SERVER_TAG
             imagePullPolicy: Always
             command: ["/start-server.sh"]
             securityContext:

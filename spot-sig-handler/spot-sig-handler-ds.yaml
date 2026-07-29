@@ -65,7 +65,7 @@ spec:
       #hostNetwork: true
       containers:
       - name: spot-interrupt-handler
-        image: 095974399802.dkr.ecr.us-west-2.amazonaws.com/spotsig:aarch64
+        image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$SPOTSIG_REPO:$SPOTSIG_TAG
         imagePullPolicy: Always
         env:
           - name: AWS_DEFAULT_REGION

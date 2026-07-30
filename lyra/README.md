@@ -29,8 +29,8 @@ export GAME_AMD_ASSETS_TAG=LinuxServer
 export GAME_ARM_SERVER_TAG=lyra_starter_game_arm64
 export GAME_AMD_SERVER_TAG=lyra_starter_game_amd64
 export GAME_ATTACKER_TAG=lyra_attacker
-export GAME_ATTACKER_ARM_IMAGE=lyra_attacker_arm64
-export GAME_ATTACKER_AMD_IMAGE=lyra_attacker_amd64
+export GAME_ARM_ATTACKER_TAG=lyra_attacker_arm64
+export GAME_AMD_ATTACKER_TAG=lyra_attacker_amd64
 export S3_LYRA_ASSETS=lyra-starter-game
 export GITHUB_USER=mygithubusername
 export GITHUB_BRANCH=master, main etc
@@ -69,6 +69,16 @@ cd ./server/stk-game-server-image-multiarch
 #### Automated image deploy steps
 The following will create a CodePipline that copy the build scripts in `server/` folder into a CodeCommit repository and run the steps above in a separate CodeBuild jobs.
 
+The pipelines pull source from GitHub, so create a Secrets Manager secret named
+`githubtoken` once (JSON with a `token` field holding a GitHub classic token
+with `repo` + `admin:repo_hook` scopes). The pipelines read this secret; it is
+intentionally not passed as a CloudFormation parameter.
+
+```bash
+aws secretsmanager create-secret --name githubtoken \
+  --secret-string '{"token":"<GitHub classic token>"}'
+```
+
 1/ deploy the pipeline that creates the base image
 
 ```bash
@@ -104,6 +114,18 @@ FROM stk_base AS lyra_game
 COPY --from=1 /lyra-assets /lyra-assets
 COPY --from=2 /lyra-code /lyra-code
 ```
+
+#### Attacker (DDoS bot) Pipeline
+
+`deploy-lyra-pipeline.sh` also builds the attacker (DDoS bot) image used to
+simulate a network flood against the game server. The source stage includes the
+[code and config](./server/attacker-image-multiarch/), and the `LyraBuildAttackerImage`
+stage builds ARM64 and AMD64 variants and assembles a multi-arch image index,
+pushing them to `GAME_REPO` in your account under the `GAME_ATTACKER_TAG` /
+`GAME_ARM_ATTACKER_TAG` / `GAME_AMD_ATTACKER_TAG` tags exported above. The
+attacker `Dockerfile` is generated from `Dockerfile.template` at build time
+(via `envsubst`), so the base image resolves to your own ECR registry.
+
 ### Deploy the game as k8s deployment
 
 ```bash

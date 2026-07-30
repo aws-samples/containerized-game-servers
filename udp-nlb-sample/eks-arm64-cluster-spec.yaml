@@ -3,7 +3,7 @@ kind: ClusterConfig
 
 metadata:
   name: arm-us-west-2
-  version: "1.21"
+  version: "1.33"
   region: us-west-2
 
 kubernetesNetworkConfig:
@@ -18,17 +18,16 @@ iam:
   withOIDC: true
 
 addons:
+  # Omitting the version lets eksctl select the default add-on version for the
+  # cluster's Kubernetes version. Pin explicit versions only when required.
   - name: vpc-cni
-    version: v1.10.1-eksbuild.1 # optional
   - name: coredns
-    version: v1.8.4-eksbuild.1 # optional
   - name: kube-proxy
-    version: v1.21.2-eksbuild.2 # optional
 
 
 managedNodeGroups:
   - instanceType: "c6g.xlarge"
-    amiFamily: AmazonLinux2
+    amiFamily: AmazonLinux2023
     name: arm-ng-1
     desiredCapacity: 1
     maxSize: 10

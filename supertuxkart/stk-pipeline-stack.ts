@@ -28,7 +28,6 @@ export class StkPipelineStack extends Stack {
   const GITHUB_STK = new CfnParameter(this,"GITHUBSTK",{type:"String"});
   const GITHUB_STK_BRANCH = new CfnParameter(this,"GITHUBSTKBRANCH",{type:"String"});
   const S3_STK_ASSETS = new CfnParameter(this,"S3STKASSETS",{type:"String"});
-  const GITHUB_OAUTH_TOKEN = new CfnParameter(this,"GITHUBOAUTHTOKEN",{type:"String"});
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
@@ -50,8 +49,9 @@ export class StkPipelineStack extends Stack {
   });
   
   buildRole.addToPolicy(new iam.PolicyStatement({
-    resources: ['*'],
-    actions: ['ssm:*'],
+    // Scoped from ssm:* to the read-only parameter actions the build needs.
+    actions: ['ssm:GetParameter', 'ssm:GetParameters', 'ssm:GetParametersByPath'],
+    resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/*`],
   }));
   
   const stk_assets_image_buildx = new codebuild.Project(this, `STKAssetsImageBuildX`, {
@@ -339,7 +339,6 @@ export class StkPipelineStack extends Stack {
         output: sourceOutput,
         oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
         trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
-        //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
       })
       ]
   });
@@ -367,7 +366,6 @@ export class StkPipelineStack extends Stack {
         output: sourceOutput,
         oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
         trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
-        //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
       })
       ]
   });
@@ -395,7 +393,6 @@ export class StkPipelineStack extends Stack {
         output: sourceOutput,
         oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
         trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
-        //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
       })
       ]
   });
@@ -423,7 +420,6 @@ export class StkPipelineStack extends Stack {
         output: sourceOutput,
         oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
         trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
-        //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
       })
       ]
   });
@@ -464,7 +460,6 @@ export class StkPipelineStack extends Stack {
         output: sourceOutput,
         oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
         //trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
-        //oauthToken: SecretValue.unsafePlainText(GITHUB_OAUTH_TOKEN.valueAsString)
       })
       ]
   });

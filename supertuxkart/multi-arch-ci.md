@@ -118,7 +118,7 @@ cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.Lo
 The build trace `Using cache` indicates the layer was pulled from the cache.
 
 ```
-Step 1/12 : FROM 441218111557.dkr.ecr.us-west-2.amazonaws.com/baseimage-ci:multiarch-py3
+Step 1/12 : FROM <account-id>.dkr.ecr.us-west-2.amazonaws.com/baseimage-ci:multiarch-py3
 57	 ---> 1dca65764d2c
 58	Step 2/12 : ARG S3_STK_ASSETS
 59	 ---> Using cache
@@ -200,7 +200,7 @@ To write the cache metadata into the image configuration ('inline') and export l
 ![alt text](./readmeimages/stk-assets-buildx.png "cache test - 1st and 2nd assets buildx")
 
 ```
-#9 importing cache manifest from 441218111557.dkr.ecr.us-west-2.amazonaws.com/stk-ci:stk-assets-multiarch
+#9 importing cache manifest from <account-id>.dkr.ecr.us-west-2.amazonaws.com/stk-ci:stk-assets-multiarch
 920	#9 DONE 0.5s
 921	
 922	#10 [linux/amd64  3/10] RUN wget "https://"supertuxkart-assets".s3.us-west-2.amazonaws.com/stk-assets.part-ab"

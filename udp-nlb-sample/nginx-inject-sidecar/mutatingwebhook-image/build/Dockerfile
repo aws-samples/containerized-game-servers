@@ -1,4 +1,4 @@
-FROM arm64v8/alpine:latest
+FROM arm64v8/alpine:3.20
 
 # set labels for metadata
 LABEL maintainer="Yahav Biran<birayaha@amazon.com>" \

@@ -1,32 +1,42 @@
-apiVersion: karpenter.sh/v1alpha5
-kind: Provisioner
+# Karpenter v1 (NodePool + EC2NodeClass). Migrated from the removed alpha APIs.
+apiVersion: karpenter.sh/v1
+kind: NodePool
 metadata:
   name: ddosbot
 spec:
-  requirements:
-  - key: kubernetes.io/arch
-    operator: In
-    values:
-    - arm64
-    - amd64
-  - key: karpenter.sh/capacity-type
-    operator: In
-    values:
-    - spot
-    - on-demand
+  template:
+    spec:
+      requirements:
+      - key: kubernetes.io/arch
+        operator: In
+        values:
+        - arm64
+        - amd64
+      - key: karpenter.sh/capacity-type
+        operator: In
+        values:
+        - spot
+        - on-demand
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: ddosbot
+      expireAfter: 720h
   limits:
-    resources:
-      cpu: 20k
-  providerRef:
-    name: ddosbot
-  ttlSecondsAfterEmpty: 30
+    cpu: 20k
+  disruption:
+    consolidationPolicy: WhenEmpty
+    consolidateAfter: 30s
 ---
-apiVersion: karpenter.k8s.aws/v1alpha1
-kind: AWSNodeTemplate
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
 metadata:
   name: ddosbot
 spec:
-  amiFamily: AL2
+  # Replace with the IAM role attached to your Karpenter nodes.
+  role: "KarpenterNodeRole-${CLUSTER_NAME}"
+  amiSelectorTerms:
+  - alias: al2023@latest
   blockDeviceMappings:
     - deviceName: /dev/xvda
       ebs:
@@ -35,7 +45,9 @@ spec:
         iops: 10000
         deleteOnTermination: true
         throughput: 125
-  securityGroupSelector:
-    karpenter.sh/discovery: $CLUSTER_NAME
-  subnetSelector:
-    karpenter.sh/discovery: $CLUSTER_NAME
+  securityGroupSelectorTerms:
+  - tags:
+      karpenter.sh/discovery: ${CLUSTER_NAME}
+  subnetSelectorTerms:
+  - tags:
+      karpenter.sh/discovery: ${CLUSTER_NAME}

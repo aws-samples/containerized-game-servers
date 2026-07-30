@@ -8,3 +8,8 @@ node_modules
 *package-lock.json
 supertuxkart/cdk.out
 
+# Kubernetes Secret manifests must never be committed. Render them at deploy
+# time (e.g. from AWS Secrets Manager via the Secrets Store CSI driver) instead.
+*db-creds*
+*-secret.yaml
+*-secret.yml

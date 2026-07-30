@@ -3,7 +3,7 @@
 * git
 * go
 * docker
-* k8s cluster with admissionregistration.k8s.io/v1beta1 API enabled
+* k8s cluster with admissionregistration.k8s.io/v1 API enabled
 
 ### Build
 

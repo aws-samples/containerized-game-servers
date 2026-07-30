@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.12
 RUN apt-get update -y --fix-missing
 RUN apt-get install -y sqlite3 
 RUN apt-get install -y vim net-tools telnet iproute2 jq

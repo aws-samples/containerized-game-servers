@@ -7,7 +7,6 @@ import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as iam from "aws-cdk-lib/aws-iam";
-import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 
 export class LyraPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -22,11 +21,13 @@ export class LyraPipelineStack extends Stack {
   const GAME_SERVER_TAG = new CfnParameter(this,"GAMESERVERTAG",{type:"String"});
   const GAME_ARM_SERVER_TAG = new CfnParameter(this,"GAMEARMSERVERTAG",{type:"String"});
   const GAME_AMD_SERVER_TAG = new CfnParameter(this,"GAMEAMDSERVERTAG",{type:"String"});
+  const GAME_ATTACKER_TAG = new CfnParameter(this,"GAMEATTACKERTAG",{type:"String"});
+  const GAME_ARM_ATTACKER_TAG = new CfnParameter(this,"GAMEARMATTACKERTAG",{type:"String"});
+  const GAME_AMD_ATTACKER_TAG = new CfnParameter(this,"GAMEAMDATTACKERTAG",{type:"String"});
   const S3_LYRA_ASSETS = new CfnParameter(this,"S3LYRAASSETS",{type:"String"});
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
-  const GITHUB_OAUTH_TOKEN = new CfnParameter(this,"GITHUBOAUTHTOKEN",{type:"String"});
 
 
   const base_registry = ecr.Repository.fromRepositoryName(this,`base_repo`,BASE_REPO.valueAsString)
@@ -46,8 +47,9 @@ export class LyraPipelineStack extends Stack {
   });
   
   buildRole.addToPolicy(new iam.PolicyStatement({
-    resources: ['*'],
-    actions: ['ssm:*'],
+    // Scoped from ssm:* to the read-only parameter actions the build needs.
+    actions: ['ssm:GetParameter', 'ssm:GetParameters', 'ssm:GetParametersByPath'],
+    resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/*`],
   }));
   
   const lyra_image_amd_build = new codebuild.Project(this, `LyraAssetsImageAmdBuild`, {
@@ -149,11 +151,116 @@ export class LyraPipelineStack extends Stack {
     ),
   });
 
+  // Attacker (DDoS bot) image build projects. The attacker image is built from
+  // lyra/server/attacker-image-multiarch and pushed to the same GAME_REPO in the
+  // deploying account, mirroring the assets image build/assembly flow above.
+  const lyra_attacker_image_arm_build = new codebuild.Project(this, `LyraAttackerImageArmBuild`, {
+    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
+    role: buildRole,
+    buildSpec: codebuild.BuildSpec.fromObject(
+      {
+        version: "0.2",
+        env: {
+          'exported-variables': [
+            'AWS_ACCOUNT_ID','AWS_REGION','BASE_REPO','BASE_IMAGE_TAG','GAME_REPO','GAME_ATTACKER_TAG','S3_LYRA_ASSETS'
+          ],
+        },
+        phases: {
+          build: {
+            commands: [
+              `export AWS_ACCOUNT_ID="${this.account}"`,
+              `export AWS_REGION="${this.region}"`,
+              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
+              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
+              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
+              `export GAME_ATTACKER_TAG="${GAME_ARM_ATTACKER_TAG.valueAsString}"`,
+              `export S3_LYRA_ASSETS="${S3_LYRA_ASSETS.valueAsString}"`,
+              `cd lyra/server/attacker-image-multiarch`,
+              `chmod +x ./build.sh && ./build.sh`
+            ],
+          }
+        },
+        artifacts: {
+          files: ['imageDetail.json']
+        },
+      }
+    ),
+  });
+  const lyra_attacker_image_amd_build = new codebuild.Project(this, `LyraAttackerImageAmdBuild`, {
+    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_3},
+    role: buildRole,
+    buildSpec: codebuild.BuildSpec.fromObject(
+      {
+        version: "0.2",
+        env: {
+          'exported-variables': [
+            'AWS_ACCOUNT_ID','AWS_REGION','BASE_REPO','BASE_IMAGE_TAG','GAME_REPO','GAME_ATTACKER_TAG','S3_LYRA_ASSETS'
+          ],
+        },
+        phases: {
+          build: {
+            commands: [
+              `export AWS_ACCOUNT_ID="${this.account}"`,
+              `export AWS_REGION="${this.region}"`,
+              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
+              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
+              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
+              `export GAME_ATTACKER_TAG="${GAME_AMD_ATTACKER_TAG.valueAsString}"`,
+              `export S3_LYRA_ASSETS="${S3_LYRA_ASSETS.valueAsString}"`,
+              `cd lyra/server/attacker-image-multiarch`,
+              `chmod +x ./build.sh && ./build.sh`
+            ],
+          }
+        },
+        artifacts: {
+          files: ['imageDetail.json']
+        },
+      }
+    ),
+  });
+  const lyra_attacker_image_assembly = new codebuild.Project(this, `LyraAttackerImageMultiarchAssembly`, {
+    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
+    role: buildRole,
+    buildSpec: codebuild.BuildSpec.fromObject(
+      {
+        version: "0.2",
+        env: {
+          'exported-variables': [
+            'AWS_ACCOUNT_ID','AWS_REGION','GAME_REPO','GAME_ATTACKER_TAG','GAME_AMD_ATTACKER_TAG','GAME_ARM_ATTACKER_TAG'
+          ],
+        },
+        phases: {
+          build: {
+            commands: [
+              `export AWS_ACCOUNT_ID="${this.account}"`,
+              `export AWS_REGION="${this.region}"`,
+              `export GAME_REPO="${GAME_REPO.valueAsString}"`,
+              `export GAME_ATTACKER_TAG="${GAME_ATTACKER_TAG.valueAsString}"`,
+              `export GAME_AMD_ATTACKER_TAG="${GAME_AMD_ATTACKER_TAG.valueAsString}"`,
+              `export GAME_ARM_ATTACKER_TAG="${GAME_ARM_ATTACKER_TAG.valueAsString}"`,
+              `cd lyra/server/attacker-image-multiarch`,
+              `chmod +x ./assemble_multiarch_image.sh && ./assemble_multiarch_image.sh`
+            ],
+          }
+        },
+        artifacts: {
+          files: ['imageDetail.json']
+        },
+      }
+    ),
+  });
+
   base_registry.grantPullPush(lyra_image_amd_build.grantPrincipal);
   base_registry.grantPullPush(lyra_image_arm_build.grantPrincipal);
   lyra_registry.grantPullPush(lyra_image_amd_build.grantPrincipal);
   lyra_registry.grantPullPush(lyra_image_arm_build.grantPrincipal);
   lyra_registry.grantPullPush(lyra_image_assembly.grantPrincipal);
+
+  base_registry.grantPullPush(lyra_attacker_image_amd_build.grantPrincipal);
+  base_registry.grantPullPush(lyra_attacker_image_arm_build.grantPrincipal);
+  lyra_registry.grantPullPush(lyra_attacker_image_amd_build.grantPrincipal);
+  lyra_registry.grantPullPush(lyra_attacker_image_arm_build.grantPrincipal);
+  lyra_registry.grantPullPush(lyra_attacker_image_assembly.grantPrincipal);
 
   const sourceOutput = new codepipeline.Artifact();
 
@@ -192,6 +299,29 @@ export class LyraPipelineStack extends Stack {
           input: sourceOutput,
           runOrder: 2,
           project: lyra_image_assembly
+        })
+      ]
+  });
+  lyrapipeline.addStage({
+      stageName: 'LyraBuildAttackerImage',
+      actions: [
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'BuildARMAttacker',
+          input: sourceOutput,
+          runOrder: 1,
+          project: lyra_attacker_image_arm_build
+        }),
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'BuildAMDAttacker',
+          input: sourceOutput,
+          runOrder: 1,
+          project: lyra_attacker_image_amd_build
+        }),
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'AssembleAttackerBuilds',
+          input: sourceOutput,
+          runOrder: 2,
+          project: lyra_attacker_image_assembly
         })
       ]
   });

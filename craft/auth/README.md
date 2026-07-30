@@ -6,7 +6,7 @@ auth protocol of yahavb/Craft
 ### Database deployment
 follow https://github.com/aws-samples/amazon-aurora-call-to-amazon-sagemaker-sample/tree/master/multiplayer-matchmaker/aurora-pg-cdk
 
-### Export enviroment variables
+### Export environment variables
 ```bash
 export AWS_ACCOUNT_ID=`aws sts get-caller-identity --query Account --output text`
 export AWS_REGION=us-west-2
@@ -15,15 +15,15 @@ export CLUSTER_NAME=craft-auth
 ```
 
 ### Deploy EKS cluster and Karpenter
-Follow https://karpenter.sh/v0.20.0/getting-started/getting-started-with-eksctl/
+Follow https://karpenter.sh/docs/getting-started/getting-started-with-karpenter/
 Use arm instances:
 add to the cluster managed group definition
 ```yaml
 managedNodeGroups:
   - instanceType: t4g.large
-    amiFamily: AmazonLinux2
+    amiFamily: AmazonLinux2023
 ```
-add to the karpneter node provisioner spec
+add to the karpenter NodePool spec
 ```yaml
     - key: kubernetes.io/arch
       operator: In
@@ -46,7 +46,7 @@ eksctl create iamserviceaccount \
   --namespace=kube-system \
   --name=aws-load-balancer-controller \
   --role-name "AmazonEKSLoadBalancerControllerRole" \
-  --attach-policy-arn=arn:aws:iam::953892292675:policy/AWSLoadBalancerControllerIAMPolicy \
+  --attach-policy-arn=arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy \
   --approve
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \

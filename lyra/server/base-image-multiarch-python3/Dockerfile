@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:slim
+FROM public.ecr.aws/docker/library/python:3.12-slim
 RUN apt-get update -y --fix-missing
 RUN apt-get install -y vim net-tools telnet iproute2 jq unzip curl net-tools subversion sqlite3 iptables kmod ulogd2
 RUN apt-get -y install gcc

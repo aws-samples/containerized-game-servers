@@ -1,8 +1,8 @@
 # Containerized game servers
  This repo provides examples for running containerized game-servers on EKS.
 
-> [!CAUTION]
-> This project is in maintenance mode due to the decomission of AWS CodeCommit. The patterns described in these examples will migrate to individual repositories that include a refactored version of the code based on GitHub. 
+> [!NOTE]
+> These examples build their CI/CD pipelines with AWS CodeCommit and/or GitHub as the pipeline source. AWS CodeCommit was closed to new customers in July 2024 but [returned to general availability in November 2025](https://docs.aws.amazon.com/codecommit/latest/userguide/history.html) and is open to new customers again, so the CodeCommit-based examples remain usable. The samples are kept current (pinned container base images, current Kubernetes/Karpenter APIs); see each sample's README for build and deploy steps.
 
  #### [supertuxkart](./supertuxkart) demonstrates dedicated UDP game server that implements the agones SDK
  #### [udp-nlb-sample](./udp-nlb-sample) demonstrate k8s deployment of UDP game servers backed by NLB  

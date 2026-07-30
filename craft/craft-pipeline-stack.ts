@@ -43,8 +43,9 @@ export class CraftPipelineStack extends Stack {
   });
   
   buildRole.addToPolicy(new iam.PolicyStatement({
-    resources: ['*'],
-    actions: ['ssm:*'],
+    // Scoped from ssm:* to the read-only parameter actions the build needs.
+    actions: ['ssm:GetParameter', 'ssm:GetParameters', 'ssm:GetParametersByPath'],
+    resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/*`],
   }));
     
   const craft_code_image_arm_build = new codebuild.Project(this, `CRAFTCodeImageArmBuild`, {

@@ -10,25 +10,39 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def _env_flag(name, default=False):
+    return os.environ.get(name, str(default)).strip().lower() in ('1', 'true', 'yes', 'on')
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-i+t@a)iaj5eo+%k9*^ch5ixe(hhx#g5gq8*2=197wk)%9mx-ri'
+# Provide DJANGO_SECRET_KEY via the environment (e.g. from Secrets Manager).
+# The insecure fallback below exists only for local development.
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-i+t@a)iaj5eo+%k9*^ch5ixe(hhx#g5gq8*2=197wk)%9mx-ri',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Defaults to off; set DJANGO_DEBUG=true only for local development.
+DEBUG = _env_flag('DJANGO_DEBUG', False)
 
-CSRF_COOKIE_SECURE=False
-CSRF_COOKIE_HTTPONLY = False
+# Comma-separated list, e.g. DJANGO_ALLOWED_HOSTS="craft.auth.example.com".
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',') if h.strip()]
 
-ALLOWED_HOSTS = ['*']
+# Enable secure cookies when the service is served over HTTPS (recommended).
+CSRF_COOKIE_SECURE = _env_flag('DJANGO_SECURE_COOKIES', False)
+SESSION_COOKIE_SECURE = _env_flag('DJANGO_SECURE_COOKIES', False)
+CSRF_COOKIE_HTTPONLY = True
 
 
 # Application definition

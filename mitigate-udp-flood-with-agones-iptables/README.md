@@ -67,6 +67,13 @@ cat ./stk-srv-fleet.yaml | envsubst | kubectl apply -f -
 cat ./stk-bot-deploy.yaml | envsubst | kubectl apply -f -
 ```
 
+> All manifests in this folder reference the game-server image by variable
+> (`$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$GAME_REPO:$GAME_SERVER_TAG`),
+> so always render them with `envsubst` before `kubectl apply` (with those
+> variables exported) — this includes the `stk-rate-limit.yaml` (rate-limited
+> server) and `stk-bot.yaml` variants. The image resolves to the registry where
+> the [SuperTuxKart pipeline](../supertuxkart) built and pushed it in your account.
+
 If you deployed Container Insights, look for the game server pod and view the network usage by the pod.
 ![alt text](./3-10min-sessions-7players-rx-tx-bytes.png "ingress/egress of 3 game-sessions, 10 minutes each")
 The simulation runs 7 bots for 10 laps where each lap takes 1 minute. Where each player bot sends ~100 bytes/sec hence ~700 bytes/sec ingress. The game server consolidates the ~700 bytes/sec (green plot) and sends it back to the 7 players i.e., ~6 kb/sec egress (red plot). 

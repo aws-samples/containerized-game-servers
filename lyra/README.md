@@ -104,6 +104,18 @@ FROM stk_base AS lyra_game
 COPY --from=1 /lyra-assets /lyra-assets
 COPY --from=2 /lyra-code /lyra-code
 ```
+
+#### Attacker (DDoS bot) Pipeline
+
+`deploy-lyra-pipeline.sh` also builds the attacker (DDoS bot) image used to
+simulate a network flood against the game server. The source stage includes the
+[code and config](./server/attacker-image-multiarch/), and the `LyraBuildAttackerImage`
+stage builds ARM64 and AMD64 variants and assembles a multi-arch image index,
+pushing them to `GAME_REPO` in your account under the `GAME_ATTACKER_TAG` /
+`GAME_ARM_ATTACKER_TAG` / `GAME_AMD_ATTACKER_TAG` tags exported above. The
+attacker `Dockerfile` is generated from `Dockerfile.template` at build time
+(via `envsubst`), so the base image resolves to your own ECR registry.
+
 ### Deploy the game as k8s deployment
 
 ```bash

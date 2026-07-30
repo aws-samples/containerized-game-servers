@@ -29,9 +29,12 @@ COPY config /root/.aws
 # Install and configure psql
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --fix-missing -y postgresql
 
-#Install kubectl for the simulator pod scaler
-RUN apt-get install -y apt-transport-https ca-certificates
-RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://dl.k8s.io/apt/doc/apt-key.gpg
-RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+#Install kubectl for the simulator pod scaler, from the community-owned
+#pkgs.k8s.io repository. The legacy apt.kubernetes.io / kubernetes-xenial
+#repo was retired in 2023.
+RUN apt-get install -y apt-transport-https ca-certificates curl gnupg
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list
 RUN apt-get update
 RUN apt-get install -y kubectl
+RUN kubectl version --client

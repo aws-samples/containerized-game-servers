@@ -7,7 +7,6 @@ import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as iam from "aws-cdk-lib/aws-iam";
-import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 
 export class LyraPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -29,7 +28,6 @@ export class LyraPipelineStack extends Stack {
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
-  const GITHUB_OAUTH_TOKEN = new CfnParameter(this,"GITHUBOAUTHTOKEN",{type:"String"});
 
 
   const base_registry = ecr.Repository.fromRepositoryName(this,`base_repo`,BASE_REPO.valueAsString)

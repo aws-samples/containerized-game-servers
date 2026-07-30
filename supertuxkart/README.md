@@ -45,7 +45,7 @@ export GITHUB_REPO=containerized-game-servers
 export CLUSTER_NAME=stk-usw-2
 ```
 
-Create a secret in the AWS Secrets Manager. Store New Secret -> Other type of secret -> Key to token and value to be the GitHub classic token - Settings->Developer settings -> Tokens (classic). The name of the secret should be `githubtoken`
+Create an AWS CodeConnections connection to GitHub (Developer Tools -> Settings -> Connections -> Create connection -> GitHub), install/authorize the AWS Connector for GitHub app, and note the connection ARN. Export it as `CONNECTION_ARN` before running the deploy scripts. No personal access token is required.
 
 2/ Build the base image
 

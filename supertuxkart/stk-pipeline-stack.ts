@@ -31,6 +31,7 @@ export class StkPipelineStack extends Stack {
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
+  const CONNECTION_ARN = new CfnParameter(this,"CONNECTIONARN",{type:"String"});
   
   const base_registry = ecr.Repository.fromRepositoryName(this,`base_repo`,BASE_REPO.valueAsString)
   const stk_assets_bucket = s3.Bucket.fromBucketName(this,`game_assets_bucket`,S3_STK_ASSETS.valueAsString)
@@ -331,14 +332,13 @@ export class StkPipelineStack extends Stack {
   buildxcodeamdpipeline.addStage({
     stageName: 'Source',
     actions: [
-      new codepipeline_actions.GitHubSourceAction({
+      new codepipeline_actions.CodeStarConnectionsSourceAction({
         actionName: 'GitHub_Source',
         owner: GITHUB_USER.valueAsString,
         repo: GITHUB_REPO.valueAsString,
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
-        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
-        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        connectionArn: CONNECTION_ARN.valueAsString,
       })
       ]
   });
@@ -358,14 +358,13 @@ export class StkPipelineStack extends Stack {
   buildxcodearmpipeline.addStage({
     stageName: 'Source',
     actions: [
-      new codepipeline_actions.GitHubSourceAction({
+      new codepipeline_actions.CodeStarConnectionsSourceAction({
         actionName: 'GitHub_Source',
         owner: GITHUB_USER.valueAsString,
         repo: GITHUB_REPO.valueAsString,
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
-        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
-        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        connectionArn: CONNECTION_ARN.valueAsString,
       })
       ]
   });
@@ -385,14 +384,13 @@ export class StkPipelineStack extends Stack {
   artistpipeline.addStage({
     stageName: 'Source',
     actions: [
-      new codepipeline_actions.GitHubSourceAction({
+      new codepipeline_actions.CodeStarConnectionsSourceAction({
         actionName: 'GitHub_Source',
         owner: GITHUB_USER.valueAsString,
         repo: GITHUB_REPO.valueAsString,
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
-        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
-        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        connectionArn: CONNECTION_ARN.valueAsString,
       })
       ]
   });
@@ -412,14 +410,13 @@ export class StkPipelineStack extends Stack {
   developerpipeline.addStage({
     stageName: 'Source',
     actions: [
-      new codepipeline_actions.GitHubSourceAction({
+      new codepipeline_actions.CodeStarConnectionsSourceAction({
         actionName: 'GitHub_Source',
         owner: GITHUB_USER.valueAsString,
         repo: GITHUB_REPO.valueAsString,
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
-        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
-        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        connectionArn: CONNECTION_ARN.valueAsString,
       })
       ]
   });
@@ -452,14 +449,13 @@ export class StkPipelineStack extends Stack {
   devopspipeline.addStage({
       stageName: 'Source',
       actions: [
-      new codepipeline_actions.GitHubSourceAction({
+      new codepipeline_actions.CodeStarConnectionsSourceAction({
         actionName: 'GitHub_Source',
         owner: GITHUB_USER.valueAsString,
         repo: GITHUB_REPO.valueAsString,
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
-        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
-        //trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        connectionArn: CONNECTION_ARN.valueAsString,
       })
       ]
   });

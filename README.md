@@ -51,9 +51,10 @@ cd containerized-game-servers
 # 2. Make sure the prerequisites below are in place (EKS cluster with Karpenter,
 #    AWS CLI, CDK v2, Docker buildx, kubectl, envsubst).
 
-# 3. For GitHub-sourced pipelines, create the token secret once:
-aws secretsmanager create-secret --name githubtoken \
-  --secret-string '{"token":"<GitHub token with repo + admin:repo_hook>"}'
+# 3. For GitHub-sourced pipelines, create an AWS CodeConnections connection to
+#    GitHub, then authorize it once in the console (Developer Tools > Settings >
+#    Connections). No personal access token needed. Note the returned ARN.
+aws codeconnections create-connection --provider-type GitHub --connection-name game-servers-gh
 
 # 4. Pick a sample and build its images into your ECR (example: supertuxkart).
 #    Set the environment variables documented in the sample's README, then:
@@ -90,8 +91,9 @@ Most samples assume:
   build pipelines (each sample's `deploy-*.sh` script runs `cdk deploy`).
 - Docker with `buildx` for multi-architecture (arm64/amd64) image builds.
 - `kubectl` and `envsubst` to render and apply the Kubernetes manifests.
-- For GitHub-sourced pipelines, a Secrets Manager secret named `githubtoken`
-  (JSON field `token`, using a token with `repo` and `admin:repo_hook` scopes).
+- For GitHub-sourced pipelines, an AWS CodeConnections connection to GitHub
+  (created once and authorized in the console); its ARN is passed to the
+  pipelines via the `CONNECTIONARN` parameter. No personal access token needed.
 
 Each sample's own README covers its specific build and deploy steps.
 

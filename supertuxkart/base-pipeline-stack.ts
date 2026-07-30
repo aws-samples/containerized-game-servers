@@ -18,6 +18,7 @@ export class BasePipelineStack extends Stack {
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
+  const CONNECTION_ARN = new CfnParameter(this,"CONNECTIONARN",{type:"String"});
   /* uncomment when you test the stack and dont want to manually delete the ecr registry 
   const base_registry = new ecr.Repository(this,`base_repo`,{
     repositoryName:BASE_REPO.valueAsString,
@@ -152,14 +153,13 @@ export class BasePipelineStack extends Stack {
   basebuildpipeline.addStage({
     stageName: 'Source',
     actions: [
-      new codepipeline_actions.GitHubSourceAction({
+      new codepipeline_actions.CodeStarConnectionsSourceAction({
         actionName: 'GitHub_Source',
         owner: GITHUB_USER.valueAsString,
         repo: GITHUB_REPO.valueAsString,
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
-        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
-        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        connectionArn: CONNECTION_ARN.valueAsString,
       })
       ]
   });

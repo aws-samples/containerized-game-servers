@@ -69,14 +69,15 @@ cd ./server/stk-game-server-image-multiarch
 #### Automated image deploy steps
 The following will create a CodePipline that copy the build scripts in `server/` folder into a CodeCommit repository and run the steps above in a separate CodeBuild jobs.
 
-The pipelines pull source from GitHub, so create a Secrets Manager secret named
-`githubtoken` once (JSON with a `token` field holding a GitHub classic token
-with `repo` + `admin:repo_hook` scopes). The pipelines read this secret; it is
-intentionally not passed as a CloudFormation parameter.
+The pipelines pull source from GitHub via AWS CodeConnections. Create a
+connection once and authorize it in the console (Developer Tools > Settings >
+Connections), then export its ARN as `CONNECTION_ARN` before deploying. No
+personal access token is needed.
 
 ```bash
-aws secretsmanager create-secret --name githubtoken \
-  --secret-string '{"token":"<GitHub classic token>"}'
+aws codeconnections create-connection --provider-type GitHub --connection-name game-servers-gh
+# then authorize the connection in the console and:
+export CONNECTION_ARN=<your-codeconnections-arn>
 ```
 
 1/ deploy the pipeline that creates the base image

@@ -14,6 +14,7 @@ export class SpotSigPipelineStack extends Stack {
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
   const GITHUB_BRANCH = new CfnParameter(this,"GITHUBBRANCH",{type:"String"});
+  const CONNECTION_ARN = new CfnParameter(this,"CONNECTIONARN",{type:"String"});
 
   // ECR repository in the DEPLOYING account. The image URI is derived from
   // this.account/this.region so the handler image is always pulled from the
@@ -63,14 +64,13 @@ export class SpotSigPipelineStack extends Stack {
   spotsigpipeline.addStage({
     stageName: 'Source',
     actions: [
-      new codepipeline_actions.GitHubSourceAction({
+      new codepipeline_actions.CodeStarConnectionsSourceAction({
         actionName: 'GitHub_Source',
         owner: GITHUB_USER.valueAsString,
         repo: GITHUB_REPO.valueAsString,
         branch: GITHUB_BRANCH.valueAsString,
         output: sourceOutput,
-        oauthToken: SecretValue.secretsManager("githubtoken",{jsonField: "token"}),
-        trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+        connectionArn: CONNECTION_ARN.valueAsString,
       })
       ]
   });

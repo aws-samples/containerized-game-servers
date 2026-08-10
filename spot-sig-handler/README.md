@@ -42,13 +42,15 @@ export SPOTSIG_TAG=aarch64
 ### Option A: build with CDK (recommended)
 
 Creates the ECR repo and builds/pushes the image via CodeBuild in your account.
-Requires a `githubtoken` secret in AWS Secrets Manager (JSON field `token`), the
-same convention used by the other pipelines in this repo.
+Requires an AWS CodeConnections connection to GitHub, authorized once in the
+console (Developer Tools > Settings > Connections). No personal access token
+needed.
 
 ```bash
 export GITHUB_USER=<your-github-org-or-user>
 export GITHUB_REPO=<your-fork-name>
 export GITHUB_BRANCH=<branch>
+export CONNECTION_ARN=<your-codeconnections-arn>
 ./deploy-spot-sig-pipeline.sh
 ```
 

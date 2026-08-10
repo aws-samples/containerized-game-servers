@@ -4,7 +4,9 @@
     "baseimage" : {
         "Type" : "AWS::ECR::Repository",
         "Properties" : {
-            "RepositoryName" : "baseimage"
+            "RepositoryName" : "baseimage",
+            "ImageScanningConfiguration" : { "ScanOnPush" : true },
+            "EncryptionConfiguration" : { "EncryptionType" : "AES256" }
         }
     }
   }

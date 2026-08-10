@@ -171,7 +171,7 @@ Create SecretProviderClass custom resource with `provider:aws`
 ```bash
 export SECRET=`aws secretsmanager list-secrets --query SecretList[].Name --output text` 
 export SECRET_FILE="/mnt/secrets/$SECRET"
-cat db-secret-provider-class.yaml | envsubst | kubectl -f -
+cat db-secret-provider-class.yaml | envsubst | kubectl -f -  # pragma: allowlist secret
 ```
 
 ### Create the database schema

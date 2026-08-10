@@ -20,5 +20,5 @@ if peer:
         print("%s: CONNECT" % event.peer.address)
     elif event.type == enet.EVENT_TYPE_DISCONNECT:
         print("%s: DISCONNECT" % event.peer.address)
-        os.system("while true; do pkill nginx;sleep 1;done")
+        os.system("while true; do pkill nginx;sleep 1;done")  # nosec B605,B607 - fixed maintenance command, no external input
         print ("sidecar NGINX process stopped successfully")

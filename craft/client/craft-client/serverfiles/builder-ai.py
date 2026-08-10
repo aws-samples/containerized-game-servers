@@ -189,7 +189,7 @@ class Client(object):
             'username': username,
             'identity_token': identity_token,
         }
-        response = requests.post(url, data=payload)
+        response = requests.post(url, data=payload, timeout=30)
         if response.status_code == 200 and response.text.isalnum():
             access_token = response.text
             self.conn.sendall('A,%s,%s\n' % (username, access_token))

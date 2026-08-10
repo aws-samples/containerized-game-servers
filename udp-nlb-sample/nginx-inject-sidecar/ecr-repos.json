@@ -4,7 +4,9 @@
     "sidecarinjector" : {
         "Type" : "AWS::ECR::Repository",
         "Properties" : {
-            "RepositoryName" : "sidecar-injector"
+            "RepositoryName" : "sidecar-injector",
+            "ImageScanningConfiguration" : { "ScanOnPush" : true },
+            "EncryptionConfiguration" : { "EncryptionType" : "AES256" }
         }
     }
   }

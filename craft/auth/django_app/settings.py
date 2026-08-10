@@ -92,14 +92,17 @@ WSGI_APPLICATION = 'django_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# Database credentials are read from the environment (e.g. injected from a
+# Kubernetes Secret / AWS Secrets Manager via the Secrets Store CSI driver).
+# No credentials are hardcoded here.
 DATABASES = {
     'default': {
         'ENGINE': 'psqlextra.backend',
-        'NAME': 'PGDATABASE',
-        'USER': 'PGUSER',
-        'PASSWORD': 'PGPASSWORD',
-        'HOST': 'PGHOST',
-        'PORT': 'PGPORT',
+        'NAME': os.environ.get('PGDATABASE', 'postgres'),
+        'USER': os.environ.get('PGUSER', 'postgres'),
+        'PASSWORD': os.environ.get('PGPASSWORD', ''),
+        'HOST': os.environ.get('PGHOST', 'localhost'),
+        'PORT': os.environ.get('PGPORT', '5432'),
     }
 }
 

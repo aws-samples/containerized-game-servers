@@ -13,3 +13,9 @@ supertuxkart/cdk.out
 *db-creds*
 *-secret.yaml
 *-secret.yml
+
+# ASH security scanner output
+.ash/
+# Python venvs
+.venv/
+venv/

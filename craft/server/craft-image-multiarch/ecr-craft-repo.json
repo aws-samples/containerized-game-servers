@@ -4,7 +4,9 @@
     "craft" : {
         "Type" : "AWS::ECR::Repository",
         "Properties" : {
-            "RepositoryName" : "craft"
+            "RepositoryName" : "craft",
+            "ImageScanningConfiguration" : { "ScanOnPush" : true },
+            "EncryptionConfiguration" : { "EncryptionType" : "AES256" }
         }
     }
   }

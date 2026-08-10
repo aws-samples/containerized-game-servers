@@ -4,7 +4,9 @@
     "authapp" : {
         "Type" : "AWS::ECR::Repository",
         "Properties" : {
-            "RepositoryName" : "authapp"
+            "RepositoryName" : "authapp",
+            "ImageScanningConfiguration" : { "ScanOnPush" : true },
+            "EncryptionConfiguration" : { "EncryptionType" : "AES256" }
         }
     }
   }

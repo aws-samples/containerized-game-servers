@@ -33,7 +33,7 @@ require (
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 	gopkg.in/inf.v0 v0.9.0 // indirect
-	gopkg.in/yaml.v2 v2.2.2 // indirect
+	gopkg.in/yaml.v2 v2.2.8 // indirect
 	k8s.io/apiextensions-apiserver v0.0.0-20180314073733-9f7d28e4a66f // indirect
 	k8s.io/apiserver v0.0.0-20180313225939-8e2fdf029740 // indirect
 	k8s.io/kube-openapi v0.0.0-20180216212618-50ae88d24ede // indirect

@@ -6,7 +6,8 @@
         "Properties" : {
             "RepositoryName" : "stk",
             "ImageScanningConfiguration" : { "ScanOnPush" : true },
-            "EncryptionConfiguration" : { "EncryptionType" : "AES256" }
+            "ImageTagMutability" : "IMMUTABLE",
+            "EncryptionConfiguration" : { "EncryptionType" : "KMS" }
         }
     }
   }

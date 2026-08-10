@@ -1,5 +1,13 @@
 # A sandbox UDP multiplayer video game 
 
+## Overview
+
+[SuperTuxKart](https://supertuxkart.net/) is an open-source kart-racing game. This sample runs it as a **dedicated UDP game server** on Amazon EKS and uses the **Agones** SDK to manage the game-server lifecycle (ready → allocated → shutdown) and player tracking. Multi-architecture (arm64/amd64) images are built by a CodePipeline/CodeBuild pipeline into your own Amazon ECR, and Karpenter provisions right-sized nodes. Players connect over UDP through a Network Load Balancer.
+
+## Architecture
+
+![SuperTuxKart architecture](images/architecture.png)
+
 ### How to use this sample?
 * Build the game image ([manually](./README.md#Manual-image-build-steps) or with [AWS Developer automation](./README.md#Automated-image-deploy-steps). [More about multi-arch image CI](./multi-arch-ci.md)
 * Create an [EKS cluster with Karpenter](https://karpenter.sh/v0.27.0/getting-started/getting-started-with-eksctl/)

@@ -1,5 +1,15 @@
 # A sandbox stateful multiplayer video game 
 
+## Overview
+
+This sample runs a **stateful** game server on Amazon EKS: world and player state persist in **Amazon Aurora PostgreSQL**, and a **Django auth service** issues player tokens. Database credentials are delivered to pods via the Secrets Store CSI driver from AWS Secrets Manager, and images are built to your own Amazon ECR.
+
+## Architecture
+
+![Craft architecture](images/architecture.png)
+
+## Details
+
 We use the [Craft](https://www.michaelfogleman.com/projects/craft/) game. A simple Minecraft clone written in C using modern OpenGL (shaders)
 
 ## Deploy steps

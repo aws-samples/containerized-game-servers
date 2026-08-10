@@ -17,29 +17,17 @@ exposure, and multi-architecture (arm64/amd64) image pipelines.
 
 ## Architecture
 
-Each sample follows the same two-part shape: a CI/CD pipeline that builds images
-into **your own** Amazon ECR, and a runtime deployment on Amazon EKS.
+Every sample shares the same CI/CD shape: source (GitHub via AWS CodeConnections,
+or AWS CodeCommit) → AWS CodePipeline → AWS CodeBuild (multi-arch `buildx`) → an
+Amazon ECR repository in **your own** account.
 
-**Image pipeline (per sample)**
+![CI/CD image pipeline](docs/images/cicd-pipeline.png)
 
-```mermaid
-flowchart LR
-  src["Source<br/>(GitHub or CodeCommit)"] --> cp["AWS CodePipeline"]
-  cp --> cb["AWS CodeBuild<br/>docker buildx (arm64/amd64)"]
-  cb --> ecr[("Amazon ECR<br/>your account")]
-```
-
-**Runtime on Amazon EKS**
-
-```mermaid
-flowchart TB
-  players(["Players"]) -->|UDP| entry["NLB / NodePort + Elastic IP"]
-  subgraph eks["Amazon EKS + Karpenter"]
-    entry --> gs["Game server pods<br/>(Agones-managed)"]
-    gs --> db[("Aurora PostgreSQL<br/>game state / auth")]
-  end
-  ecr[("Amazon ECR")] -. image pull .-> gs
-```
+Each sample then runs its game servers on Amazon EKS with Karpenter for node
+autoscaling. The runtime architecture differs per pattern — each sample's README
+has its own **Architecture** section with a dedicated diagram (see the table
+below). Diagrams are generated from [`docs/generate_diagrams.py`](docs/generate_diagrams.py)
+using AWS architecture icons.
 
 ## Quick start
 

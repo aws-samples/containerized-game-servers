@@ -5,6 +5,10 @@ a DaemonSet on Spot nodes, uses IMDSv2 to watch for EC2 rebalance
 recommendations / Spot interruption notices, and gracefully drains the node so
 game-server pods can be rescheduled before the instance is reclaimed.
 
+## Architecture
+
+![Spot interruption handler architecture](images/architecture.png)
+
 ## How it works
 
 `start.sh` (the container entrypoint):

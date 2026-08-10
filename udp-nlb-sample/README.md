@@ -1,5 +1,15 @@
 # Deploy highly availible UDP containerized game servers on EKS using NLB
 
+## Overview
+
+A Network Load Balancer can't health-check a **UDP** target the way it does TCP. This pattern fronts UDP game servers with an **NLB** and injects an **nginx sidecar** that answers a **TCP health check**, so the NLB only routes players to healthy pods. A **mutating admission webhook** injects the sidecar automatically. The same approach works for any connectionless UDP workload behind an NLB.
+
+## Architecture
+
+![UDP-over-NLB architecture](images/architecture.png)
+
+## Details
+
 In this project we will demonstrate how to deploy a connectionless (UDP) multiplayer online game server, leveraging Amazon Elastic Kubernetes Service (EKS) (https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html), AWS Load Balancer Controller (https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/), and AWS Network Load Balancer (NLB) (https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html). Additionally, you will learn how to enable and configure TCP health checks when running a connectionless UDP gaming server behind a load balancer. You can use this approach to deploy any connectionless IoT, streaming, media transfer, or native UDP applications behind a Network Load Balancer benefiting from its low latency, scale, and reliability.
 
 The architecture used to deploy a sample connectionless UDP based game server is comprised of the following components:

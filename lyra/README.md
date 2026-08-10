@@ -1,5 +1,15 @@
 # A Unreal Engine 5 (UE5)-based game 
 
+## Overview
+
+[Lyra](https://docs.unrealengine.com/5.0/en-US/lyra-sample-game-in-unreal-engine/) is Epic's Unreal Engine 5 sample game. This pattern runs the **UE5 dedicated server** on Amazon EKS and exposes **each server pod on its own NodePort**, with a **public Elastic IP per node**, giving clients a predictable public IPv4 endpoint per game server rather than a shared load balancer. That enables custom DNS and layer-3 protection with AWS Shield.
+
+## Architecture
+
+![Lyra architecture](images/architecture.png)
+
+## Details
+
 Dedicated game server deployment method for Unreal engine-based games on EKS. It demonstrates (1) Dynamic port allocation with kubernetes-native networking (v1/Service); and (2) public IPv4 IP with Elastic IP or EC2 public IPv4. Dedicated servers that run in a pod like game servers, require public IPv4 access via EIP for predictable IPv4 address allocation. This is to mask public IPv4 addresses with customer DNS rather than .compute.amazonaws.com or mitigate network volumetric attacks (layer 3) with AWS Shield. 
 
 ### How to use this sample?

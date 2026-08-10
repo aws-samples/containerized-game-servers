@@ -1,5 +1,15 @@
 # Mitigating UDP flood attacks with Agones and iptables
 
+## Overview
+
+Dedicated UDP servers are exposed to UDP flood / DDoS attacks. This pattern combines **Agones** (to cap the number of players per session and bound the server's lifespan) with **iptables `hashlimit`** rules applied in an init container (with the `NET_ADMIN` capability) to **rate-limit ingress per source IP** — blunting a flood while legitimate players keep playing.
+
+## Architecture
+
+![UDP flood mitigation architecture](images/architecture.png)
+
+## Details
+
 We show how to minimize UDP flood attacks on dedicated game servers by limiting the game server lifespan and rate-limit players network ingress to the game server.
 The sample shows an implementation of the Agones SDK including [Player Tracking](https://agones.dev/site/docs/guides/client-sdks/rest/#player-tracking). It also demonstrates how to rate-limit ingress to the game-server using iptables rules. 
 

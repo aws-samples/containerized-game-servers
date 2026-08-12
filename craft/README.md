@@ -169,9 +169,9 @@ kubectl apply -f https://raw.githubusercontent.com/aws/secrets-store-csi-driver-
 Create SecretProviderClass custom resource with `provider:aws`
 
 ```bash
-export SECRET=`aws secretsmanager list-secrets --query SecretList[].Name --output text` 
-export SECRET_FILE="/mnt/secrets/$SECRET"
-cat db-secret-provider-class.yaml | envsubst | kubectl -f -
+export SECRET=`aws secretsmanager list-secrets --query SecretList[].Name --output text`  # pragma: allowlist secret 
+export SECRET_FILE="/mnt/secrets/$SECRET"  # pragma: allowlist secret
+cat db-secret-provider-class.yaml | envsubst | kubectl -f -  # pragma: allowlist secret
 ```
 
 ### Create the database schema

@@ -4,7 +4,10 @@
     "nginx" : {
         "Type" : "AWS::ECR::Repository",
         "Properties" : {
-            "RepositoryName" : "nginx"
+            "RepositoryName" : "nginx",
+            "ImageScanningConfiguration" : { "ScanOnPush" : true },
+            "ImageTagMutability" : "IMMUTABLE",
+            "EncryptionConfiguration" : { "EncryptionType" : "KMS" }
         }
     }
   }

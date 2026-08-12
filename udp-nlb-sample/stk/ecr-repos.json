@@ -4,7 +4,10 @@
     "stk" : {
         "Type" : "AWS::ECR::Repository",
         "Properties" : {
-            "RepositoryName" : "stk"
+            "RepositoryName" : "stk",
+            "ImageScanningConfiguration" : { "ScanOnPush" : true },
+            "ImageTagMutability" : "IMMUTABLE",
+            "EncryptionConfiguration" : { "EncryptionType" : "KMS" }
         }
     }
   }

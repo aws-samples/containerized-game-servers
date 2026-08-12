@@ -4,7 +4,7 @@ import time
 import random
 import socket
 
-time.sleep(random.randint(0,10))
+time.sleep(random.randint(0,10))  # nosec B311 - startup jitter only, not security-sensitive
 try:
   s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   #print("socket created")

@@ -4,7 +4,10 @@
     "sidecarinjector" : {
         "Type" : "AWS::ECR::Repository",
         "Properties" : {
-            "RepositoryName" : "sidecar-injector"
+            "RepositoryName" : "sidecar-injector",
+            "ImageScanningConfiguration" : { "ScanOnPush" : true },
+            "ImageTagMutability" : "IMMUTABLE",
+            "EncryptionConfiguration" : { "EncryptionType" : "KMS" }
         }
     }
   }

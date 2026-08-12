@@ -9,7 +9,7 @@ import psycopg2
 import requests
 from datetime import datetime as dt
 
-os.system(". /root/.bashrc")
+os.system(". /root/.bashrc")  # nosec B605 - fixed command, no external input
 
 user=os.environ['PGUSER']
 password=os.environ['PGPASSWORD']
@@ -71,7 +71,7 @@ if peer:
     if IS_AGONES == 'True':
       headers={'Content-Type':'application/json'}
       url='http://localhost:'+AGONES_SDK_HTTP_PORT+'/health'
-      r=requests.post(url,headers=headers,json={})
+      r=requests.post(url,headers=headers,json={}, timeout=5)
       print("%s: CONNECT - report health to agones %s" %(event.peer.address,r))
       sys.stdout.flush()
   else:
@@ -80,4 +80,4 @@ if peer:
     sql = """update servers set updated_at=%s,is_ready=0 where endpoint=%s returning id"""
     params=[dt.now(),endpoint]
     db_write(sql,params)
-    os.system("/srv-sigstop.sh")
+    os.system("/srv-sigstop.sh")  # nosec B605 - fixed internal script path

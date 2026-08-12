@@ -34,7 +34,7 @@ spec:
       volumes:
       - name: webhook-certs
         secret:
-          secretName: sidecar-injector-webhook-certs
+          secretName: sidecar-injector-webhook-certs  # pragma: allowlist secret
       - name: webhook-config
         configMap:
           name: sidecar-injector-webhook-configmap
